@@ -1,0 +1,17 @@
+*{
+  margin: 0;
+  padding: 0;
+}
+
+.bar_array{ 
+  border: 1px solid black;
+  width: 100vw;
+  height: 70vh;
+  overflow: hidden;
+}
+
+.bar{
+  display: inline-block;
+  width: 5px;
+  margin: 0 1px;
+}
