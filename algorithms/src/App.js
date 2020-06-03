@@ -23,16 +23,17 @@ class App extends Component{
   }
 
   mergeSort = () => {
+    console.log(this.state.array)
     let array = merge_sort(this.state.array)
-    console.log(array)
     let bars = document.getElementsByClassName('bar_container')[0].childNodes
-    for(let i = 0; i <= bars.length ; i ++ ){
+    for(let i = 0; i <= array.length ; i ++ ){
       setTimeout(() => {
-        if(bars[i]){
-          bars[i].style.backgroundColor = 'red'
+        if(i !== array.length){
+          bars[array[i].index].style.backgroundColor = 'red'
+          bars[array[i].index].style.height = `${array[i].height}px`
         }
         if(i > 0){
-          bars[i - 1].style.backgroundColor = 'blue'
+          bars[array[i - 1].index].style.backgroundColor = 'blue'
         } 
       },i * 20);
     }
