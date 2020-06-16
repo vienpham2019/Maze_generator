@@ -60,8 +60,6 @@ const Node = function(x , y , c , size , neighbor_node = [], prev_node = null){
 const Block = function(x , y , c , size, color = "red", prev_node = null){
     this.x = x 
     this.y = y 
-    this.dx = size
-    this.dy = size
     this.prev_node  = prev_node
     this.color = color
   
@@ -71,6 +69,6 @@ const Block = function(x , y , c , size, color = "red", prev_node = null){
         c.fillStyle = this.color
         c.fill()
     }
-  }
+}
 
 export {Node , Block}

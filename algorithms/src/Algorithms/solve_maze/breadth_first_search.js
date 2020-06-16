@@ -30,6 +30,10 @@ const breadth_first_search = (props) => {
     run_solve_maze()
 }
 
+const stop_breadth_first_search = () => {
+    cancelAnimationFrame(myReq)
+}
+
 const run_solve_maze = () => {
     myReq = requestAnimationFrame(run_solve_maze)
     c.clearRect(0,0,canvas.width, canvas.height)
@@ -146,5 +150,5 @@ const find_path = () => {
     current_node = current_node.prev_node
 }
 
-export { breadth_first_search }
+export { breadth_first_search ,  stop_breadth_first_search}
 
