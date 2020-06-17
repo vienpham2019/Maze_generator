@@ -1,16 +1,7 @@
 import {Block} from '../helper_method'
-let 
-    c , 
-    canvas , 
-    size , 
-    visited_nodes , 
-    nodes , 
-    quere , 
-    current_node , 
-    start_node , 
-    end_node , 
-    finish_path , 
-    myReq
+let c , canvas , size , nodes , start_node , end_node 
+    
+let visited_nodes ,  quere , current_node , finish_path , myReq
 
 const breadth_first_search = (props) => {
     c = props.c

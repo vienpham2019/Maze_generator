@@ -1,6 +1,7 @@
 import { Node , Block } from './helper_method'
 import { breadth_first_search , stop_breadth_first_search }from './solve_maze/breadth_first_search'
 import { depth_first_search , stop_depth_first_search }from './solve_maze/depth_first_search'
+import { a_star , stop_a_star }from './solve_maze/a_star'
 import { recursive_dividion_maze } from './draw_maze/recursive_division_maze_generation'
 import { prims_maze } from './draw_maze/prims_maze_generation'
 import { depth_first_search_maze } from './draw_maze/depth_first_search_maze_generation'
@@ -11,7 +12,8 @@ let delay , speed , canvas , c , start_node, end_node , nodes , stack , frame_pe
 
 const setUp = (props) => {
   // stop_breadth_first_search()
-  stop_depth_first_search()
+  // stop_depth_first_search()
+  stop_a_star()
   c = props.c
   canvas = props.canvas 
   nodes = []
@@ -66,19 +68,22 @@ const draw_divide_maze = () => {
 
   start_node = new Block(size / 2,size / 2 , c , size , "blue")
   end_node = new Block((cols - 1) * size + (size / 2),( rows - 1 ) * size + (size / 2) , c , size , "green" )
-  depth_first_search_maze({nodes , canvas , c , start_node , end_node , stack , size 
-  , cols , rows , frame_per_second , speed })
+  // depth_first_search_maze({nodes , canvas , c , start_node , end_node , stack , size 
+  // , cols , rows , frame_per_second , speed })
   // prims_maze({size , nodes , cols , rows , canvas , c , frame_per_second , speed})
   // let draw_delay = recursive_dividion_maze({delay , speed , size , cols , rows , nodes})
   // if(draw_delay){
   //   myTimeOut = setTimeout(() => {
-  //     depth_first_search({nodes , start_node , end_node , c , canvas , size})
+  //     // depth_first_search({nodes , start_node , end_node , c , canvas , size})
+  //     a_star({start_node , end_node , nodes , c , canvas , size})
   //   }, draw_delay * speed);
   // }
 }
 
 const run_depth_first_search = () => {
-  depth_first_search({nodes , start_node , end_node , c , canvas , size})
+  // depth_first_search({nodes , start_node , end_node , c , canvas , size})
+  a_star({start_node , end_node , nodes , c , canvas , size})
+  // breadth_first_search({c , canvas , size , nodes , start_node , end_node })
 }
 
 export {setUp , run_depth_first_search}
