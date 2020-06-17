@@ -17,7 +17,7 @@ class App extends Component{
     const canvas = this.refs.maze
     const c = canvas.getContext('2d');
 
-    setUp({c , canvas , cols , rows , size})
+    setUp({c , canvas , cols , rows , size , draw_maze: true })
   }
 
   render(){
@@ -26,7 +26,9 @@ class App extends Component{
       <div className="container">
         <canvas ref="maze" style={{width: size * cols , height: size * rows}}></canvas>
         <button onClick={() => this.updateCanvas()}>Generate Array</button>
-        <button onClick={() => run_depth_first_search()}>solve maze</button>
+        <button onClick={() => {
+          run_depth_first_search()
+          }}>solve maze</button>
       </div>
     )
   }

@@ -22,6 +22,8 @@ const depth_first_search = (props) => {
     start_node = props.start_node
     end_node = props.end_node
 
+    end_node.prev_node = null
+
     stack = [start_node]
     visited_nodes = [start_node]
     current_node = start_node 

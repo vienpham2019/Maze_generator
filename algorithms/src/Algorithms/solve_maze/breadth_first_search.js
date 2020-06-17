@@ -16,6 +16,8 @@ const breadth_first_search = (props) => {
     start_node = props.start_node
     end_node = props.end_node
 
+    end_node.prev_node = null
+
     quere.push(start_node)
     cancelAnimationFrame(myReq)
     run_solve_maze()

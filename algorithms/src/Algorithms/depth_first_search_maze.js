@@ -2,26 +2,29 @@ import { Node , Block } from './helper_method'
 import { breadth_first_search , stop_breadth_first_search }from './solve_maze/breadth_first_search'
 import { depth_first_search , stop_depth_first_search }from './solve_maze/depth_first_search'
 import { a_star , stop_a_star }from './solve_maze/a_star'
+import { best_first_search , stop_best_first_search }from './solve_maze/best_first_search'
+
 import { recursive_dividion_maze } from './draw_maze/recursive_division_maze_generation'
 import { prims_maze } from './draw_maze/prims_maze_generation'
 import { depth_first_search_maze } from './draw_maze/depth_first_search_maze_generation'
 
 let size , width , height , cols , rows 
 
-let delay , speed , canvas , c , start_node, end_node , nodes , stack , frame_per_second , maze_speed , myTimeOut
+let delay , speed , canvas , c , start_node, end_node , nodes , stack , frame_per_second , maze_speed , myTimeOut , draw_maze
 
 const setUp = (props) => {
   // stop_breadth_first_search()
   // stop_depth_first_search()
   stop_a_star()
+  // stop_best_first_search()
   c = props.c
   canvas = props.canvas 
-  nodes = []
   stack = []
 
   cols = props.cols 
   rows = props.rows 
   size = props.size 
+  draw_maze = props.draw_maze
   width = size * cols 
   height = size * rows
 
@@ -35,9 +38,12 @@ const setUp = (props) => {
   canvas.height = height
 
   clearTimeout(myTimeOut)
-  setTimeout(() => {
-    draw_divide_maze()
-  }, 300);
+  if(draw_maze){
+    nodes = []
+    setTimeout(() => {
+      draw_divide_maze()
+    }, 300);
+  }
 
 }
 
@@ -71,7 +77,7 @@ const draw_divide_maze = () => {
   // depth_first_search_maze({nodes , canvas , c , start_node , end_node , stack , size 
   // , cols , rows , frame_per_second , speed })
   // prims_maze({size , nodes , cols , rows , canvas , c , frame_per_second , speed})
-  // let draw_delay = recursive_dividion_maze({delay , speed , size , cols , rows , nodes})
+  let draw_delay = recursive_dividion_maze({delay , speed , size , cols , rows , nodes})
   // if(draw_delay){
   //   myTimeOut = setTimeout(() => {
   //     // depth_first_search({nodes , start_node , end_node , c , canvas , size})
@@ -81,8 +87,12 @@ const draw_divide_maze = () => {
 }
 
 const run_depth_first_search = () => {
+  // stop_best_first_search()
+  stop_a_star()
   // depth_first_search({nodes , start_node , end_node , c , canvas , size})
   a_star({start_node , end_node , nodes , c , canvas , size})
+
+  // best_first_search({start_node , end_node , nodes , c , canvas , size})
   // breadth_first_search({c , canvas , size , nodes , start_node , end_node })
 }
 
