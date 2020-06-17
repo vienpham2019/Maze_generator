@@ -4,7 +4,7 @@ let start_node , end_node , nodes , c , canvas , size
 
 let open_list , close_list , current_node , myReq , finish_path
 
-const best_first_search = props => {
+const greedy_best_first_search = props => {
     start_node = props.start_node
     end_node = props.end_node 
     nodes = props.nodes
@@ -23,7 +23,7 @@ const best_first_search = props => {
     run_solve_maze()
 }
 
-const stop_best_first_search = () => {
+const stop_greedy_best_first_search = () => {
     cancelAnimationFrame(myReq)
 }
 
@@ -144,4 +144,4 @@ const get_top_right_bottom_left = (node , array ) => {
     return {top , right , bottom , left }
 }
 
-export {best_first_search , stop_best_first_search}
+export {greedy_best_first_search , stop_greedy_best_first_search}

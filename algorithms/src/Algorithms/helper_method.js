@@ -57,7 +57,7 @@ const Node = function(x , y , c , size , neighbor_node = [], prev_node = null){
     }
 }
 
-const Block = function(x , y , c , size, color = "red", prev_node = null , g = null , h = null , f = null ){
+const Block = function(x , y , c , size, color = "red", prev_node = null , g = null , h = null , f = null , distance = Infinity){
     this.x = x 
     this.y = y 
     this.prev_node  = prev_node
@@ -65,6 +65,7 @@ const Block = function(x , y , c , size, color = "red", prev_node = null , g = n
     this.g = g 
     this.h = h 
     this.f = f
+    this.distance = distance
   
     this.draw = () => {
         c.beginPath()
