@@ -5,8 +5,8 @@ const Node = function(x , y , c , size , neighbor_node = [], prev_node = null){
     this.y = y
     this.neighbor_node = neighbor_node
     this.prev_node = prev_node 
-    // this.walls = [true,true,true,true] // [top, right , bottom , left ]
-    this.walls = [false, false , false , false]
+    this.walls = [true,true,true,true] // [top, right , bottom , left ]
+    // this.walls = [false, false , false , false]
 
     this.draw = (color = "white") => {
         let x = this.x - (size / 2)

@@ -1,14 +1,14 @@
-let delay , maze_speed , size , cols , rows , nodes
+let delay , speed , size , cols , rows , nodes
 
 const recursive_dividion_maze = (props) => {
     delay = props.delay
-    maze_speed = props.maze_speed 
+    speed = props.speed 
     size = props.size 
     cols = props.cols 
     rows = props.rows
     nodes = props.nodes
 
-    return draw_maze(nodes , cols , rows , 0, 0 , delay , maze_speed , size)
+    return draw_maze(nodes , cols , rows , 0, 0 , delay , speed , size)
 }
 
 const draw_maze = (nodes_array , x_max, y_max, x_min , y_min) => {
@@ -57,7 +57,7 @@ const draw_maze = (nodes_array , x_max, y_max, x_min , y_min) => {
           }
             nodes_array[i].draw()
         }
-    }, delay * maze_speed)
+    }, delay * speed)
   
     if(x_or_y > 0){ 
       draw_maze(nodes_array, random_x, y_max, x_min, y_min) // right 

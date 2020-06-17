@@ -39,11 +39,7 @@ const draw_maze = () => {
     }
 
     if(stack.length === 0){
-        start_node.draw()
-        end_node.draw()
-       if(finish_path){
-            clearInterval(myReq)
-        }
+        clearInterval(myReq)
     }else{ 
         move_block()  
     }

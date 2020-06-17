@@ -1,5 +1,5 @@
 import React , {Component} from 'react'
-import {setUp} from './Algorithms/depth_first_search_maze'
+import {setUp , run_depth_first_search} from './Algorithms/depth_first_search_maze'
 
 
 class App extends Component{
@@ -26,6 +26,7 @@ class App extends Component{
       <div className="container">
         <canvas ref="maze" style={{width: size * cols , height: size * rows}}></canvas>
         <button onClick={() => this.updateCanvas()}>Generate Array</button>
+        <button onClick={() => run_depth_first_search()}>solve maze</button>
       </div>
     )
   }

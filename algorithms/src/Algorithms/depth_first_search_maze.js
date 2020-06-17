@@ -1,15 +1,17 @@
 import { Node , Block } from './helper_method'
 import { breadth_first_search , stop_breadth_first_search }from './solve_maze/breadth_first_search'
+import { depth_first_search , stop_depth_first_search }from './solve_maze/depth_first_search'
 import { recursive_dividion_maze } from './draw_maze/recursive_division_maze_generation'
-// import { prims_maze } from './draw_maze/prims_maze_generation'
-// import { depth_first_search_maze } from './draw_maze/depth_first_search_maze_generation'
+import { prims_maze } from './draw_maze/prims_maze_generation'
+import { depth_first_search_maze } from './draw_maze/depth_first_search_maze_generation'
 
 let size , width , height , cols , rows 
 
 let delay , speed , canvas , c , start_node, end_node , nodes , stack , frame_per_second , maze_speed , myTimeOut
 
 const setUp = (props) => {
-  stop_breadth_first_search()
+  // stop_breadth_first_search()
+  stop_depth_first_search()
   c = props.c
   canvas = props.canvas 
   nodes = []
@@ -22,8 +24,8 @@ const setUp = (props) => {
   height = size * rows
 
   delay = 0 
-  speed = 100
-  maze_speed = 500
+  speed = 40
+  maze_speed = 700
 
   frame_per_second = 1000
 
@@ -64,15 +66,19 @@ const draw_divide_maze = () => {
 
   start_node = new Block(size / 2,size / 2 , c , size , "blue")
   end_node = new Block((cols - 1) * size + (size / 2),( rows - 1 ) * size + (size / 2) , c , size , "green" )
-  // depth_first_search_maze({nodes , canvas , c , start_node , end_node , stack , size 
-  // , cols , rows , frame_per_second , speed })
+  depth_first_search_maze({nodes , canvas , c , start_node , end_node , stack , size 
+  , cols , rows , frame_per_second , speed })
   // prims_maze({size , nodes , cols , rows , canvas , c , frame_per_second , speed})
-  let draw_delay = recursive_dividion_maze({delay , maze_speed , size , cols , rows , nodes})
-  if(draw_delay){
-    myTimeOut = setTimeout(() => {
-      breadth_first_search({nodes , start_node , end_node , c , canvas , size})
-    }, draw_delay * maze_speed);
-  }
+  // let draw_delay = recursive_dividion_maze({delay , speed , size , cols , rows , nodes})
+  // if(draw_delay){
+  //   myTimeOut = setTimeout(() => {
+  //     depth_first_search({nodes , start_node , end_node , c , canvas , size})
+  //   }, draw_delay * speed);
+  // }
 }
 
-export {setUp}
+const run_depth_first_search = () => {
+  depth_first_search({nodes , start_node , end_node , c , canvas , size})
+}
+
+export {setUp , run_depth_first_search}
