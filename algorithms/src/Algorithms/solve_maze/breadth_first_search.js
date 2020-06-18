@@ -65,77 +65,49 @@ const solve_maze = () => {
 }
   
 const check_neighbor_node = (node) => {
-    let x = node.x
-    let y = node.y
-    let color = "MidnightBlue"
     let current_find_node = nodes.find(c_n => c_n.x === node.x && c_n.y === node.y )
+    let { top , right , bottom , left } = get_top_right_bottom_left(node , nodes )
     // top 
-    let top = nodes.find(n => n.x === x && n.y === y - size)
-    if(top && !current_find_node.walls[0] && !visited_nodes.find(n => n.x === top.x && n.y === top.y)){
-        let top_x = top.x
-        let top_y = top.y
-        if(top_x === end_node.x && top_y === end_node.y){
-            end_node.prev_node = node 
-            current_node = node 
-            return 
-        }else{
-            let top_block = new Block(top_x, top_y , c , size , color, node)
-            quere.push(top_block)
-            visited_nodes.push(top_block)
-        }
-    }
+    add_node(top , node , 0 , current_find_node)
 
     // right
-    let right = nodes.find(n => n.x === x + size && n.y === y )
-    if(right && !current_find_node.walls[1] && !visited_nodes.find(n => n.x === right.x  && n.y === right.y)){
-        let right_x = right.x 
-        let right_y = right.y 
-        if(right_x === end_node.x && right_y === end_node.y){
-            end_node.prev_node = node 
-            current_node = node 
-            return 
-        }else{
-            let right_block = new Block(right_x, right_y, c , size , color ,node)
-            quere.push(right_block)
-            visited_nodes.push(right_block)
-        }
-    }
+    add_node(right , node , 1 , current_find_node)
 
     // bottom
-    let bottom = nodes.find(n => n.x === x && n.y === y + size ) 
-    if(bottom && !current_find_node.walls[2] && !visited_nodes.find(n => n.x === bottom.x  && n.y === bottom.y )){
-        let bottom_x = bottom.x 
-        let bottom_y = bottom.y 
-        if(bottom_x === end_node.x && bottom_y === end_node.y){
-            end_node.prev_node = node 
-            current_node = node 
-            return 
-        }else{
-            let bottom_block = new Block(bottom_x, bottom_y, c , size ,color ,node)
-            quere.push(bottom_block)
-            visited_nodes.push(bottom_block)
-        }
-    }
+    add_node(bottom , node , 2 , current_find_node)
 
     // left 
-    let left = nodes.find(n => n.x === x - size && n.y === y)
-    if(left && !current_find_node.walls[3] && !visited_nodes.find(n => n.x === left.x && n.y === left.y)){
-        let left_x = left.x 
-        let left_y = left.y 
-        if(left_x === end_node.x && left_y === end_node.y){
+    add_node(left , node , 3 , current_find_node)
+}
+
+const get_top_right_bottom_left = (node , array ) => {
+    let {x , y} = node
+    let top = array.find(n => n.x === x && n.y === y - size)
+    let right = array.find(n => n.x === x + size && n.y === y)
+    let bottom = array.find(n => n.x === x && n.y === y + size)
+    let left = array.find(n => n.x === x - size && n.y === y)
+
+    return {top , right , bottom , left }
+}
+
+const add_node = (neighbor_node , node , wall_num , current_find_node) => {
+    let color = "MidnightBlue"
+    if(neighbor_node && !current_find_node.walls[wall_num] && !visited_nodes.find(n => n.x === neighbor_node.x && n.y === neighbor_node.y)){
+        let {x , y} = neighbor_node
+        if(x === end_node.x && y === end_node.y){
             end_node.prev_node = node 
             current_node = node 
-            return 
         }else{
-            let left_block = new Block(left_x,left_y, c, size , color , node)
-            quere.push(left_block)
-            visited_nodes.push(left_block)
+            let new_block = new Block(x, y , c , size , color, node)
+            quere.push(new_block)
+            visited_nodes.push(new_block)
         }
     }
+    return 
 }
   
 const find_path = () => {
-    current_node.color = "green"
+    current_node.color = "LimeGreen"
     if(current_node.x === start_node.x && current_node.y === start_node.y){
         finish_path = true
         return

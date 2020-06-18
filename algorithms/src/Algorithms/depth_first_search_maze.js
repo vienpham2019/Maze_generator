@@ -5,6 +5,7 @@ import { a_star , stop_a_star }from './solve_maze/a_star'
 import { greedy_best_first_search , stop_greedy_best_first_search }from './solve_maze/greedy_best_first_search'
 import { dijkstra , stop_dijkstra }from './solve_maze/dijkstra'
 import { bidirectional_dijkstra , stop_bidirectional_dijkstra }from './solve_maze/bidirectional_dijkstra'
+import { bidirectional_a_star , stop_bidirectional_a_star }from './solve_maze/bidirectional_a_star'
 
 import { recursive_dividion_maze } from './draw_maze/recursive_division_maze_generation'
 import { prims_maze } from './draw_maze/prims_maze_generation'
@@ -21,6 +22,7 @@ const setUp = (props) => {
   stop_dijkstra()
   stop_bidirectional_dijkstra()
   stop_greedy_best_first_search()
+  stop_bidirectional_a_star()
 
   c = props.c
   canvas = props.canvas 
@@ -98,13 +100,15 @@ const run_depth_first_search = () => {
   stop_breadth_first_search()
   stop_depth_first_search()
   stop_bidirectional_dijkstra()
+  stop_bidirectional_a_star()
 
   // depth_first_search({nodes , start_node , end_node , c , canvas , size})
   // a_star({start_node , end_node , nodes , c , canvas , size})
   // dijkstra({start_node , end_node , nodes , c , canvas , size})
-  bidirectional_dijkstra({start_node , end_node , nodes , c , canvas , size})
+  // bidirectional_dijkstra({start_node , end_node , nodes , c , canvas , size})
+  // bidirectional_a_star({start_node , end_node , nodes , c , canvas , size})
   // greedy_best_first_search({start_node , end_node , nodes , c , canvas , size})
-  // breadth_first_search({c , canvas , size , nodes , start_node , end_node })
+  breadth_first_search({c , canvas , size , nodes , start_node , end_node })
 }
 
 export {setUp , run_depth_first_search}

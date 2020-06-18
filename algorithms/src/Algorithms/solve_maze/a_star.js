@@ -76,48 +76,40 @@ const find_child_node = () => {
     if(right && !right.walls[3] && !close_list.find(node => node.x === right.x  && node.y === right.y)){
         let right_in_open = open_list.find(n => n.x === right.x  && n.y === right.y)
         let r_g = current_node.g + size
-        if(right_in_open && r_g < right_in_open.g){
-            update_node(right_in_open, r_g , current_node )
-        }else{
-            let right_node = set_node(right, r_g)
-            open_list.push(right_node)
-        }
+
+        right_in_open && r_g < right_in_open.g 
+            ? update_node(right_in_open, r_g , current_node )   
+            : open_list.push(set_node(right, r_g))
     }
 
     // top (x , y - size)
     if(top && !top.walls[2] && !close_list.find(node => node.x === top.x && node.y === top.y)){
         let top_in_open = open_list.find(n => n.x === top.x  && n.y === top.y)
         let t_g = current_node.g + size 
-        if(top_in_open && t_g < top_in_open.g){
-            update_node(top_in_open, t_g , current_node )
-        }else{
-            let top_node = set_node(top, t_g)
-            open_list.push(top_node)
-        }
+
+        top_in_open && t_g < top_in_open.g
+            ? update_node(top_in_open, t_g , current_node )
+            : open_list.push(set_node(top, t_g))
     }
 
     // left (x - size , y )
     if(left && !left.walls[1] && !close_list.find(node => node.x === left.x && node.y === left.y)){
         let left_in_open = open_list.find(n => n.x === left.x  && n.y === left.y)
         let l_g = current_node.g + size
-        if(left_in_open && l_g < left_in_open.g){
-            update_node(left_in_open, l_g , current_node )
-        }else{
-            let left_node = set_node(left, l_g)
-            open_list.push(left_node)
-        }
+
+        left_in_open && l_g < left_in_open.g
+            ? update_node(left_in_open, l_g , current_node )
+            : open_list.push(set_node(left, l_g))
     }
 
     // bottom (x , y + size)
     if(bottom && !bottom.walls[0] &&!close_list.find(node => node.x === bottom.x && node.y === bottom.y)){
         let bottom_in_open = open_list.find(n => n.x === bottom.x  && n.y === bottom.y)
         let b_g = current_node.g + size 
-        if(bottom_in_open && b_g < bottom_in_open.g){
-            update_node(bottom_in_open, b_g , current_node )
-        }else{
-            let bottom_node = set_node(bottom, b_g)
-            open_list.push(bottom_node)
-        }
+
+        bottom_in_open && b_g < bottom_in_open.g
+            ? update_node(bottom_in_open, b_g , current_node )
+            : open_list.push(set_node(bottom, b_g))
     }
 
     open_list = open_list.filter(node => node.x === current_node.x && node.y === current_node.y ? false : true )
