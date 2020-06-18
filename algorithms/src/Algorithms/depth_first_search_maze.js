@@ -104,11 +104,11 @@ const run_depth_first_search = () => {
 
   // depth_first_search({nodes , start_node , end_node , c , canvas , size})
   // a_star({start_node , end_node , nodes , c , canvas , size})
-  // dijkstra({start_node , end_node , nodes , c , canvas , size})
+  dijkstra({start_node , end_node , nodes , c , canvas , size})
   // bidirectional_dijkstra({start_node , end_node , nodes , c , canvas , size})
   // bidirectional_a_star({start_node , end_node , nodes , c , canvas , size})
   // greedy_best_first_search({start_node , end_node , nodes , c , canvas , size})
-  breadth_first_search({c , canvas , size , nodes , start_node , end_node })
+  // breadth_first_search({c , canvas , size , nodes , start_node , end_node })
 }
 
 export {setUp , run_depth_first_search}

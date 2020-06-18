@@ -1,16 +1,9 @@
 import {Block} from '../helper_method'
-let 
-    c , 
-    canvas , 
-    size , 
-    visited_nodes , 
-    nodes , 
-    stack , 
-    current_node , 
-    start_node , 
-    end_node , 
-    finish_path , 
-    myReq
+import {get_top_right_bottom_left} from './helper_method/algorithms_helper_method'
+
+let c , canvas , size ,  nodes , start_node , end_node 
+    
+let visited_nodes , stack , current_node ,  finish_path , myReq
 
 const depth_first_search = (props) => {
     c = props.c
@@ -61,8 +54,7 @@ const run_solve_maze = () => {
 
     if(stack.length > 0 && !end_node.prev_node){
         current_node = stack[0]
-        let is_neighbor = check_neighbor_node()
-        if(!is_neighbor){
+        if(!check_neighbor_node()){
             stack.shift()
         }
     }
@@ -89,73 +81,42 @@ const find_path = () => {
 
 const check_neighbor_node = () => {
     let {x , y} = current_node // block 
-    let color = "MidnightBlue"
+    // let color = "MidnightBlue"
     let current_find_node = nodes.find(c_n => c_n.x === x && c_n.y === y )
+    let {top , right , bottom , left } = get_top_right_bottom_left(current_node , nodes , size)
 
     // bottom
-    let bottom = nodes.find(n => n.x === x && n.y === y + size ) 
-    if(bottom && !current_find_node.walls[2] && !visited_nodes.find(n => n.x === bottom.x  && n.y === bottom.y )){
-        let bottom_x = bottom.x 
-        let bottom_y = bottom.y 
-        if(bottom_x === end_node.x && bottom_y === end_node.y){
-            end_node.prev_node = current_node
-        }else{
-            let bottom_block = new Block(bottom_x, bottom_y, c , size ,color , current_node)
-            stack = [bottom_block,...stack]
-            visited_nodes.push(bottom_block)
-            // current_node = bottom_block
-        }
-        return true 
-    }
+    if(add_node(bottom , current_find_node , 2)) return true 
 
     // right
-    let right = nodes.find(n => n.x === x + size && n.y === y )
-    if(right && !current_find_node.walls[1] && !visited_nodes.find(n => n.x === right.x  && n.y === right.y)){
-        let right_x = right.x 
-        let right_y = right.y 
-        if(right_x === end_node.x && right_y === end_node.y){
-            end_node.prev_node = current_node 
-        }else{
-            let right_block = new Block(right_x, right_y, c , size , color ,current_node)
-            stack = [right_block,...stack]
-            visited_nodes.push(right_block)
-            // current_node = right_block
-        }
-        return true 
-    }
+    if(add_node(right , current_find_node , 1)) return true 
 
     // top 
-    let top = nodes.find(n => n.x === x && n.y === y - size)
-    if(top && !current_find_node.walls[0] && !visited_nodes.find(n => n.x === top.x && n.y === top.y)){
-        let top_x = top.x
-        let top_y = top.y
-        if(top_x === end_node.x && top_y === end_node.y){
-            end_node.prev_node = current_node
-        }else{
-            let top_block = new Block(top_x, top_y , c , size , color, current_node)
-            stack = [top_block,...stack]
-            visited_nodes.push(top_block)
-            // current_node = top_block
-        }
-        return true
-    }
+    if(add_node(top , current_find_node , 0)) return true 
 
     // left 
-    let left = nodes.find(n => n.x === x - size && n.y === y)
-    if(left && !current_find_node.walls[3] && !visited_nodes.find(n => n.x === left.x && n.y === left.y)){
-        let left_x = left.x 
-        let left_y = left.y 
-        if(left_x === end_node.x && left_y === end_node.y){
-            end_node.prev_node = current_node 
+    if(add_node(left , current_find_node , 3)) return true 
+
+    return false 
+}
+
+const add_node = (neighbor_node , current_find_node , wall_num) => {
+    let color = "MidnightBlue"
+    if(
+        neighbor_node 
+        && !current_find_node.walls[wall_num] 
+        && !visited_nodes.find(n => n.x === neighbor_node.x  && n.y === neighbor_node.y)
+    ){
+        let {x , y} = neighbor_node
+        if(x === end_node.x && y === end_node.y){
+            end_node.prev_node = current_node
         }else{
-            let left_block = new Block(left_x,left_y, c, size , color , current_node)
-            stack = [left_block,...stack]
-            visited_nodes.push(left_block)
-            // current_node = left_block
+            let new_block = new Block(x, y, c , size ,color , current_node)
+            stack = [new_block,...stack]
+            visited_nodes.push(new_block)
         }
         return true 
     }
-
     return false 
 }
 
