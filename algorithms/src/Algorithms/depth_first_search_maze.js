@@ -3,6 +3,8 @@ import { breadth_first_search , stop_breadth_first_search }from './solve_maze/br
 import { depth_first_search , stop_depth_first_search }from './solve_maze/depth_first_search'
 import { a_star , stop_a_star }from './solve_maze/a_star'
 import { greedy_best_first_search , stop_greedy_best_first_search }from './solve_maze/greedy_best_first_search'
+import { dijkstra , stop_dijkstra }from './solve_maze/dijkstra'
+import { bidirectional_dijkstra , stop_bidirectional_dijkstra }from './solve_maze/bidirectional_dijkstra'
 
 import { recursive_dividion_maze } from './draw_maze/recursive_division_maze_generation'
 import { prims_maze } from './draw_maze/prims_maze_generation'
@@ -13,10 +15,13 @@ let size , width , height , cols , rows
 let delay , speed , canvas , c , start_node, end_node , nodes , stack , frame_per_second , maze_speed , myTimeOut , draw_maze
 
 const setUp = (props) => {
-  // stop_breadth_first_search()
-  // stop_depth_first_search()
+  stop_breadth_first_search()
+  stop_depth_first_search()
   stop_a_star()
-  // stop_best_first_search()
+  stop_dijkstra()
+  stop_bidirectional_dijkstra()
+  stop_greedy_best_first_search()
+
   c = props.c
   canvas = props.canvas 
   stack = []
@@ -72,7 +77,7 @@ const draw_divide_maze = () => {
     }
   }
 
-  start_node = new Block(size / 2,size / 2 , c , size , "blue")
+  start_node = new Block((size / 2) ,(size / 2) , c , size , "blue")
   end_node = new Block((cols - 1) * size + (size / 2),( rows - 1 ) * size + (size / 2) , c , size , "green" )
   // depth_first_search_maze({nodes , canvas , c , start_node , end_node , stack , size 
   // , cols , rows , frame_per_second , speed })
@@ -87,11 +92,17 @@ const draw_divide_maze = () => {
 }
 
 const run_depth_first_search = () => {
-  // stop_greedy_best_first_search()
+  stop_greedy_best_first_search()
   stop_a_star()
-  // depth_first_search({nodes , start_node , end_node , c , canvas , size})
-  a_star({start_node , end_node , nodes , c , canvas , size})
+  stop_dijkstra()
+  stop_breadth_first_search()
+  stop_depth_first_search()
+  stop_bidirectional_dijkstra()
 
+  // depth_first_search({nodes , start_node , end_node , c , canvas , size})
+  // a_star({start_node , end_node , nodes , c , canvas , size})
+  // dijkstra({start_node , end_node , nodes , c , canvas , size})
+  bidirectional_dijkstra({start_node , end_node , nodes , c , canvas , size})
   // greedy_best_first_search({start_node , end_node , nodes , c , canvas , size})
   // breadth_first_search({c , canvas , size , nodes , start_node , end_node })
 }

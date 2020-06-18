@@ -4,8 +4,9 @@ let start_node , end_node , nodes , c , canvas , size
 
 let open_list , close_list , current_node , myReq , finish_path
 
-const a_star = props => {
+const dijkstra = props => {
     start_node = props.start_node
+    start_node.distance = 0
     end_node = props.end_node 
     nodes = props.nodes
     c = props.c 
@@ -13,7 +14,7 @@ const a_star = props => {
     size = props.size 
 
     end_node.prev_node = null
-
+    
     open_list = [start_node]
     close_list = []
     current_node = null 
@@ -23,7 +24,7 @@ const a_star = props => {
     run_solve_maze()
 }
 
-const stop_a_star = () => {
+const stop_dijkstra = () => {
     cancelAnimationFrame(myReq)
 }
 
@@ -52,17 +53,16 @@ const run_solve_maze = () => {
     }
 
     if(open_list.length > 0 && !end_node.prev_node){
-        current_node = open_list.sort((a,b) => a.f - b.f)[0]
+        current_node = open_list.sort((a,b) => a.distance - b.distance)[0] 
         close_list.push(current_node)
         find_child_node()
     }
 
-    if(end_node.prev_node && !finish_path){
+    if(end_node.prev_node){
         start_node.draw()
         end_node.draw()
         find_path() 
     }
-
     if(finish_path){
         cancelAnimationFrame(myReq)
     }
@@ -75,49 +75,29 @@ const find_child_node = () => {
     // Right (x + size , y)
     if(right && !right.walls[3] && !close_list.find(node => node.x === right.x  && node.y === right.y)){
         let right_in_open = open_list.find(n => n.x === right.x  && n.y === right.y)
-        let r_g = current_node.g + size
-        if(right_in_open && r_g < right_in_open.g){
-            update_node(right_in_open, r_g , current_node )
-        }else{
-            let right_node = set_node(right, r_g)
-            open_list.push(right_node)
-        }
+
+        right_in_open ? update_node(right_in_open) : open_list.push(create_new_node(right))
     }
 
     // top (x , y - size)
     if(top && !top.walls[2] && !close_list.find(node => node.x === top.x && node.y === top.y)){
         let top_in_open = open_list.find(n => n.x === top.x  && n.y === top.y)
-        let t_g = current_node.g + size 
-        if(top_in_open && t_g < top_in_open.g){
-            update_node(top_in_open, t_g , current_node )
-        }else{
-            let top_node = set_node(top, t_g)
-            open_list.push(top_node)
-        }
+
+        top_in_open ? update_node(top_in_open) : open_list.push(create_new_node(top))
     }
 
     // left (x - size , y )
     if(left && !left.walls[1] && !close_list.find(node => node.x === left.x && node.y === left.y)){
         let left_in_open = open_list.find(n => n.x === left.x  && n.y === left.y)
-        let l_g = current_node.g + size
-        if(left_in_open && l_g < left_in_open.g){
-            update_node(left_in_open, l_g , current_node )
-        }else{
-            let left_node = set_node(left, l_g)
-            open_list.push(left_node)
-        }
+        
+        left_in_open ? update_node(left_in_open) : open_list.push(create_new_node(left))
     }
 
     // bottom (x , y + size)
     if(bottom && !bottom.walls[0] &&!close_list.find(node => node.x === bottom.x && node.y === bottom.y)){
         let bottom_in_open = open_list.find(n => n.x === bottom.x  && n.y === bottom.y)
-        let b_g = current_node.g + size 
-        if(bottom_in_open && b_g < bottom_in_open.g){
-            update_node(bottom_in_open, b_g , current_node )
-        }else{
-            let bottom_node = set_node(bottom, b_g)
-            open_list.push(bottom_node)
-        }
+        
+        bottom_in_open ? update_node(bottom_in_open) : open_list.push(create_new_node(bottom))
     }
 
     open_list = open_list.filter(node => node.x === current_node.x && node.y === current_node.y ? false : true )
@@ -133,22 +113,26 @@ const find_path = () => {
     return 
 }
 
-const set_node = (node, g) => {
-    let color = "MidnightBlue"
-    let x_1 = node.x 
-    let y_1 = node.y 
-    let x_2 = end_node.x 
-    let y_2 = end_node.y    
-    let h = (Math.abs(x_1 - x_2) + Math.abs(y_1 - y_2)) * size 
-    let f = h + g 
-    let new_node = new Block(x_1 , y_1 , c , size , color , current_node , g , h , f)
-    return new_node 
+const create_new_node = (node) => {
+    let distance = find_distance(node)
+    return new Block(node.x , node.y , c , size , 'MidnightBlue' , current_node , null , null , null , distance)
 }
 
-const update_node = (node , g , parent) => {
-    node.g = g 
-    node.f = g + node.h 
-    node.parent = parent 
+const find_distance = (node) => {
+    // find distance from current node to next node 
+    let x_1 = current_node.x 
+    let y_1 = current_node.y 
+
+    let x_2 = node.x 
+    let y_2 = node.y
+
+   return ((Math.abs(x_1 - x_2) + Math.abs(y_1 - y_2)) * size ) + current_node.distance
+}
+
+const update_node = node => {
+    if(current_node.distance + size < node.distance){
+        node.distance = find_distance(node)
+    }
 }
 
 const get_top_right_bottom_left = (node , array ) => {
@@ -161,4 +145,4 @@ const get_top_right_bottom_left = (node , array ) => {
     return {top , right , bottom , left }
 }
 
-export {a_star , stop_a_star}
+export {dijkstra , stop_dijkstra}

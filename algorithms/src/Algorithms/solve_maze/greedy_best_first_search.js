@@ -44,7 +44,6 @@ const run_solve_maze = () => {
 
     for(let i = 0 ; i < open_list.length ; i ++){
         open_list[i].color = 'DeepSkyBlue'
-        console.log('open_list')
         open_list[i].draw()
     }
 
@@ -64,7 +63,6 @@ const run_solve_maze = () => {
         end_node.draw()
         find_path() 
     }
-    console.log('run solve maze')
     if(finish_path){
         cancelAnimationFrame(myReq)
     }
@@ -129,7 +127,7 @@ const set_node = (node) => {
     let y_1 = node.y 
     let x_2 = end_node.x 
     let y_2 = end_node.y    
-    let h = (Math.abs(x_1 - x_2) + Math.abs(y_1 - y_2)) * 10
+    let h = (Math.abs(x_1 - x_2) + Math.abs(y_1 - y_2)) * size
     let new_node = new Block(x_1 , y_1 , c , size , color , current_node , null , h )
     return new_node 
 }
