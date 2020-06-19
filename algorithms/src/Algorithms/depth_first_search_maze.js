@@ -32,8 +32,10 @@ const setUp = (props) => {
   rows = props.rows 
   size = props.size 
   draw_maze = props.draw_maze
-  width = size * cols 
-  height = size * rows
+  width = props.width
+  height = props.height
+
+  size = Math.floor(width / cols)
 
   delay = 0 
   speed = 40
@@ -81,10 +83,10 @@ const draw_divide_maze = () => {
 
   start_node = new Block((size / 2) ,(size / 2) , c , size , "blue")
   end_node = new Block((cols - 1) * size + (size / 2),( rows - 1 ) * size + (size / 2) , c , size , "green" )
-  
-  depth_first_search_maze({nodes , canvas , c , stack , size , cols , rows , frame_per_second , speed })
+
+  // depth_first_search_maze({nodes , canvas , c , stack , size , cols , rows , frame_per_second , speed })
   // prims_maze({size , nodes , cols , rows , canvas , c , frame_per_second , speed})
-  // let draw_delay = recursive_dividion_maze({delay , speed , size , cols , rows , nodes})
+  let draw_delay = recursive_dividion_maze({delay , speed , size , cols , rows , nodes})
   // if(draw_delay){
   //   myTimeOut = setTimeout(() => {
   //     // depth_first_search({nodes , start_node , end_node , c , canvas , size})
