@@ -81,10 +81,10 @@ const draw_divide_maze = () => {
 
   start_node = new Block((size / 2) ,(size / 2) , c , size , "blue")
   end_node = new Block((cols - 1) * size + (size / 2),( rows - 1 ) * size + (size / 2) , c , size , "green" )
-  // depth_first_search_maze({nodes , canvas , c , start_node , end_node , stack , size 
-  // , cols , rows , frame_per_second , speed })
+  
+  depth_first_search_maze({nodes , canvas , c , stack , size , cols , rows , frame_per_second , speed })
   // prims_maze({size , nodes , cols , rows , canvas , c , frame_per_second , speed})
-  let draw_delay = recursive_dividion_maze({delay , speed , size , cols , rows , nodes})
+  // let draw_delay = recursive_dividion_maze({delay , speed , size , cols , rows , nodes})
   // if(draw_delay){
   //   myTimeOut = setTimeout(() => {
   //     // depth_first_search({nodes , start_node , end_node , c , canvas , size})
@@ -103,10 +103,10 @@ const run_depth_first_search = () => {
   stop_bidirectional_a_star()
 
   // depth_first_search({nodes , start_node , end_node , c , canvas , size})
-  a_star({start_node , end_node , nodes , c , canvas , size})
+  // a_star({start_node , end_node , nodes , c , canvas , size})
   // dijkstra({start_node , end_node , nodes , c , canvas , size})
   // bidirectional_dijkstra({start_node , end_node , nodes , c , canvas , size})
-  // bidirectional_a_star({start_node , end_node , nodes , c , canvas , size})
+  bidirectional_a_star({start_node , end_node , nodes , c , canvas , size})
   // greedy_best_first_search({start_node , end_node , nodes , c , canvas , size})
   // breadth_first_search({c , canvas , size , nodes , start_node , end_node })
 }

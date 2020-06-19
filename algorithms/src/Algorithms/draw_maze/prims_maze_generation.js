@@ -1,3 +1,5 @@
+import {get_top_right_bottom_left} from '../solve_maze/helper_method/algorithms_helper_method'
+
 let size , nodes , cols , rows , canvas , c , frame_per_second , speed 
 let neighbors_node , visited_neighbors_node , current_neighbor_node , myReqDraw 
 const prims_maze = props => {
@@ -49,55 +51,41 @@ const draw_prims_maze = () => {
 
 const add_neighbor_node = () => {
     let {x , y} = current_neighbor_node
-    
-    let {top , right , bottom , left} = get_top_right_bottom_left(current_neighbor_node , nodes) 
+    let {top , right , bottom , left} = get_top_right_bottom_left(current_neighbor_node , nodes , size) 
 
-    if(
-        top 
-        && !visited_neighbors_node.find(node => node.x === x && node.y === y - size)
-        && !neighbors_node.find(node => node.x === x && node.y === y - size)
-    ){
-        neighbors_node.push(top)
-        top.prev_node = current_neighbor_node
-    }
+    // top 
+    create_neighbor_node(top)
 
-    if(
-        right 
-        && !visited_neighbors_node.find(node => node.x === x + size && node.y === y)
-        && !neighbors_node.find(node => node.x === x + size && node.y === y)
-    ){
-        neighbors_node.push(right)
-        right.prev_node = current_neighbor_node
-    }
+    // right 
+    create_neighbor_node(right)
 
-    if(
-        bottom 
-        && !visited_neighbors_node.find(node => node.x === x && node.y === y + size)
-        && !neighbors_node.find(node => node.x === x && node.y === y + size)
-    ){
-        neighbors_node.push(bottom)
-        bottom.prev_node = current_neighbor_node
-    }
+    //bottom 
+    create_neighbor_node(bottom)
 
-    if(
-        left 
-        && !visited_neighbors_node.find(node => node.x === x - size && node.y === y)
-        && !neighbors_node.find(node => node.x === x - size && node.y === y)
-    ){
-        neighbors_node.push(left)
-        left.prev_node = current_neighbor_node
-    }
+    //left 
+    create_neighbor_node(left)
 
     neighbors_node = neighbors_node.filter(node => node.x === x && node.y === y ? false : true )
 
     link_node_with_random_neighbor()
 }
 
+const create_neighbor_node = (neighbor_node) => {
+    if(
+        neighbor_node 
+        && !visited_neighbors_node.find(node => node.x === neighbor_node.x && node.y === neighbor_node.y)
+        && !neighbors_node.find(node => node.x === neighbor_node.x && node.y === neighbor_node.y)
+    ){
+        neighbors_node.push(neighbor_node)
+        neighbor_node.prev_node = current_neighbor_node
+    }
+}
+
 const link_node_with_random_neighbor = () => {
     if(neighbors_node.length === 0) return
     let random_num = getRandom(0 , neighbors_node.length)
     let random_neighbor = neighbors_node[random_num]
-    let {top , right , bottom , left} = get_top_right_bottom_left(random_neighbor,visited_neighbors_node)
+    let {top , right , bottom , left} = get_top_right_bottom_left(random_neighbor,visited_neighbors_node , size)
 
     if(top && top.x === random_neighbor.prev_node.x && top.y === random_neighbor.prev_node.y){
         random_neighbor.walls[0] = false 
@@ -121,16 +109,6 @@ const link_node_with_random_neighbor = () => {
 
     current_neighbor_node = random_neighbor
     visited_neighbors_node.push(random_neighbor)
-}
-
-const get_top_right_bottom_left = (node , array ) => {
-    let {x , y} = node
-    let top = array.find(n => n.x === x && n.y === y - size)
-    let right = array.find(n => n.x === x + size && n.y === y)
-    let bottom = array.find(n => n.x === x && n.y === y + size)
-    let left = array.find(n => n.x === x - size && n.y === y)
-
-    return {top , right , bottom , left }
 }
 
 const getRandom = (min,max) => {

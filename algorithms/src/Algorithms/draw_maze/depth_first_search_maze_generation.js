@@ -1,5 +1,5 @@
 import {Block} from '../helper_method'
-let nodes , canvas , c , start_node , end_node , stack , size , cols , rows , frame_per_second , speed 
+let nodes , canvas , c , stack , size , cols , rows , frame_per_second , speed 
 
 let block , finish_path , myReq , visited_nodes , width , height 
 
@@ -7,8 +7,6 @@ const depth_first_search_maze = props => {
     nodes = props.nodes 
     canvas = props.canvas 
     c = props.c 
-    start_node = props.start_node  
-    end_node = props.end_node
     stack = props.stack
     size = props.size
     cols = props.cols 
