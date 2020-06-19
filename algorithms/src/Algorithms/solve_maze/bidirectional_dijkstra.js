@@ -1,8 +1,9 @@
 import { Block } from '../helper_method'
+import {get_top_right_bottom_left} from './helper_method/algorithms_helper_method'
 
 let start_node , end_node , nodes , c , canvas , size 
 
-let close_list_1 , close_list_2 , open_list_1 , current_node_1 , open_list_2, current_node_2 , myReq , finish_path , finish_search , current_node 
+let close_list_1 , close_list_2 , open_list_1 , current_node_1 , open_list_2, current_node_2 , myReq , finish_path , finish_search 
 
 const bidirectional_dijkstra = props => {
     start_node = props.start_node
@@ -23,9 +24,9 @@ const bidirectional_dijkstra = props => {
 
     current_node_1 = start_node
     current_node_2 = end_node 
+
     finish_path = false 
     finish_search = false 
-    current_node = null 
 
     cancelAnimationFrame(myReq)
     run_solve_maze()
@@ -105,7 +106,7 @@ const check_for_mix_node = (next_close_list , x , y) => {
 }
 
 const find_child_node = (c_node , open_list , close_list , next_close_list) => {
-    let {top , right , bottom , left} = get_top_right_bottom_left(c_node , nodes )
+    let {top , right , bottom , left} = get_top_right_bottom_left(c_node , nodes , size)
 
     // Right (x + size , y)
     if(right && !right.walls[3] && !close_list.find(node => node.x === right.x  && node.y === right.y)){
@@ -187,16 +188,6 @@ const update_node = (node , c_node) => {
         node.distance = find_distance(node , c_node)
     }
     return node
-}
-
-const get_top_right_bottom_left = (node , array ) => {
-    let {x , y} = node
-    let top = array.find(n => n.x === x && n.y === y - size)
-    let right = array.find(n => n.x === x + size && n.y === y)
-    let bottom = array.find(n => n.x === x && n.y === y + size)
-    let left = array.find(n => n.x === x - size && n.y === y)
-
-    return {top , right , bottom , left }
 }
 
 export {bidirectional_dijkstra , stop_bidirectional_dijkstra}

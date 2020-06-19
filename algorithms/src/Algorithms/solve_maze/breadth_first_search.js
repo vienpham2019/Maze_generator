@@ -1,4 +1,6 @@
 import {Block} from '../helper_method'
+import {get_top_right_bottom_left} from './helper_method/algorithms_helper_method'
+
 let c , canvas , size , nodes , start_node , end_node 
     
 let visited_nodes ,  quere , current_node , finish_path , myReq
@@ -66,7 +68,7 @@ const solve_maze = () => {
   
 const check_neighbor_node = (node) => {
     let current_find_node = nodes.find(c_n => c_n.x === node.x && c_n.y === node.y )
-    let { top , right , bottom , left } = get_top_right_bottom_left(node , nodes )
+    let { top , right , bottom , left } = get_top_right_bottom_left(node , nodes , size)
     // top 
     add_node(top , node , 0 , current_find_node)
 
@@ -78,16 +80,6 @@ const check_neighbor_node = (node) => {
 
     // left 
     add_node(left , node , 3 , current_find_node)
-}
-
-const get_top_right_bottom_left = (node , array ) => {
-    let {x , y} = node
-    let top = array.find(n => n.x === x && n.y === y - size)
-    let right = array.find(n => n.x === x + size && n.y === y)
-    let bottom = array.find(n => n.x === x && n.y === y + size)
-    let left = array.find(n => n.x === x - size && n.y === y)
-
-    return {top , right , bottom , left }
 }
 
 const add_node = (neighbor_node , node , wall_num , current_find_node) => {

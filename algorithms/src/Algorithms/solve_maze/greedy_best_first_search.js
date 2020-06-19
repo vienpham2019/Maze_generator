@@ -1,4 +1,5 @@
 import { Block } from '../helper_method'
+import {get_top_right_bottom_left} from './helper_method/algorithms_helper_method'
 
 let start_node , end_node , nodes , c , canvas , size 
 
@@ -70,45 +71,33 @@ const run_solve_maze = () => {
 
 const find_child_node = () => {
 
-    let {top , right , bottom , left} = get_top_right_bottom_left(current_node , nodes )
+    let {top , right , bottom , left} = get_top_right_bottom_left(current_node , nodes , size)
 
-    // Right (x + size , y)
-    if(right && !right.walls[3] && !close_list.find(node => node.x === right.x  && node.y === right.y)){
-        let right_in_open = open_list.find(n => n.x === right.x  && n.y === right.y)
-        if(!right_in_open){
-            let right_node = set_node(right)
-            open_list.push(right_node)
-        }
-    }
+    // right (x + size , y)
+    add_node(right , 3)
 
     // top (x , y - size)
-    if(top && !top.walls[2] && !close_list.find(node => node.x === top.x && node.y === top.y)){
-        let top_in_open = open_list.find(n => n.x === top.x  && n.y === top.y)
-        if(!top_in_open){
-            let top_node = set_node(top)
-            open_list.push(top_node)
-        }
-    }
+    add_node(top , 2)
 
     // left (x - size , y )
-    if(left && !left.walls[1] && !close_list.find(node => node.x === left.x && node.y === left.y)){
-        let left_in_open = open_list.find(n => n.x === left.x  && n.y === left.y)
-        if(!left_in_open){
-            let left_node = set_node(left)
-            open_list.push(left_node)
-        }
-    }
+    add_node(left , 1)
 
     // bottom (x , y + size)
-    if(bottom && !bottom.walls[0] &&!close_list.find(node => node.x === bottom.x && node.y === bottom.y)){
-        let bottom_in_open = open_list.find(n => n.x === bottom.x  && n.y === bottom.y)
-        if(!bottom_in_open){
-            let bottom_node = set_node(bottom)
-            open_list.push(bottom_node)
-        }
-    }
+    add_node(bottom , 0)
 
     open_list = open_list.filter(node => node.x === current_node.x && node.y === current_node.y ? false : true )
+}
+
+const add_node = (neighbor_node , wall_num) => {
+    if(
+        neighbor_node 
+        && !neighbor_node.walls[wall_num] 
+        &&!close_list.find(node => node.x === neighbor_node.x && node.y === neighbor_node.y)
+    ){
+        let {x , y} = neighbor_node
+        let node_in_open = open_list.find(n => n.x === x  && n.y === y)
+        if(!node_in_open) open_list.push(set_node(neighbor_node))
+    }
 }
 
 const find_path = () => {
@@ -130,16 +119,6 @@ const set_node = (node) => {
     let h = (Math.abs(x_1 - x_2) + Math.abs(y_1 - y_2)) * size
     let new_node = new Block(x_1 , y_1 , c , size , color , current_node , null , h )
     return new_node 
-}
-
-const get_top_right_bottom_left = (node , array ) => {
-    let {x , y} = node
-    let top = array.find(n => n.x === x && n.y === y - size)
-    let right = array.find(n => n.x === x + size && n.y === y)
-    let bottom = array.find(n => n.x === x && n.y === y + size)
-    let left = array.find(n => n.x === x - size && n.y === y)
-
-    return {top , right , bottom , left }
 }
 
 export {greedy_best_first_search , stop_greedy_best_first_search}
