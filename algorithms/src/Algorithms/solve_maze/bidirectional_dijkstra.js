@@ -44,8 +44,8 @@ const run_solve_maze = () => {
         nodes[i].draw()
     }
 
-    print_close_and_open_list(close_list_1 , open_list_1 , 'MidnightBlue' , 'DeepSkyBlue')
-    print_close_and_open_list(close_list_2 , open_list_2 , 'DarkCyan' , 'Cyan')
+    print_close_and_open_list(close_list_1 , open_list_1 , 'MediumBlue' , 'LightSkyBlue' )
+    print_close_and_open_list(close_list_2 , open_list_2 , 'CadetBlue' , 'LightCyan')
 
     if(open_list_2.length > 0 && !finish_search){
         current_node_2 = open_list_2.sort((a,b) => a.distance - b.distance)[0] 

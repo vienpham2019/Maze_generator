@@ -38,13 +38,13 @@ const run_solve_maze = () => {
 
     for(let i = 0 ; i < close_list.length ; i ++){
         if(!end_node.prev_node){
-            close_list[i].color = 'MidnightBlue'
+            close_list[i].color = 'MediumBlue'
         }
         close_list[i].draw()
     }
 
     for(let i = 0 ; i < open_list.length ; i ++){
-        open_list[i].color = 'DeepSkyBlue'
+        open_list[i].color = 'LightSkyBlue' 
         open_list[i].draw()
     }
 
@@ -111,7 +111,7 @@ const find_path = () => {
 }
 
 const set_node = (node) => {
-    let color = "MidnightBlue"
+    let color = 'MediumBlue'
     let x_1 = node.x 
     let y_1 = node.y 
     let x_2 = end_node.x 

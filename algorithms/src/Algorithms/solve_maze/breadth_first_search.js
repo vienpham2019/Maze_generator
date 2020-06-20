@@ -83,7 +83,7 @@ const check_neighbor_node = (node) => {
 }
 
 const add_node = (neighbor_node , node , wall_num , current_find_node) => {
-    let color = "MidnightBlue"
+    let color = 'MediumBlue' 
     if(neighbor_node && !current_find_node.walls[wall_num] && !visited_nodes.find(n => n.x === neighbor_node.x && n.y === neighbor_node.y)){
         let {x , y} = neighbor_node
         if(x === end_node.x && y === end_node.y){

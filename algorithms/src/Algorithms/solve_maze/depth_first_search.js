@@ -40,14 +40,14 @@ const run_solve_maze = () => {
 
     for(let i = 0 ; i < visited_nodes.length; i ++){
         if(!end_node.prev_node){
-            visited_nodes[i].color = "MidnightBlue"
+            visited_nodes[i].color = 'MediumBlue' 
         }
         visited_nodes[i].draw()
     }
 
     if(!end_node.prev_node){
         for(let i = 0 ; i < stack.length ; i ++){
-            stack[i].color = 'DeepSkyBlue' 
+            stack[i].color = 'LightSkyBlue' 
             stack[i].draw()
         }
     }
@@ -101,7 +101,7 @@ const check_neighbor_node = () => {
 }
 
 const add_node = (neighbor_node , current_find_node , wall_num) => {
-    let color = "MidnightBlue"
+    let color = 'MediumBlue'
     if(
         neighbor_node 
         && !current_find_node.walls[wall_num] 

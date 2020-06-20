@@ -40,13 +40,13 @@ const run_solve_maze = () => {
 
     for(let i = 0 ; i < close_list.length ; i ++){
         if(!end_node.prev_node){
-            close_list[i].color = 'MidnightBlue'
+            close_list[i].color = 'MediumBlue'
         }
         close_list[i].draw()
     }
 
     for(let i = 0 ; i < open_list.length ; i ++){
-        open_list[i].color = 'DeepSkyBlue'
+        open_list[i].color = 'LightSkyBlue' 
         open_list[i].draw()
     }
 
@@ -114,7 +114,7 @@ const find_path = () => {
 
 const create_new_node = (node) => {
     let distance = find_distance(node)
-    return new Block(node.x , node.y , c , size , 'MidnightBlue' , current_node , null , null , null , distance)
+    return new Block(node.x , node.y , c , size , 'MediumBlue' , current_node , null , null , null , distance)
 }
 
 const find_distance = (node) => {
