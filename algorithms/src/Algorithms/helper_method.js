@@ -8,7 +8,7 @@ const Node = function(x , y , c , size , neighbor_node = [], prev_node = null){
     // this.walls = [true,true,true,true] // [top, right , bottom , left ]
     this.walls = [false, false , false , false]
 
-    this.draw = (color = "white") => {
+    this.draw = (color = "black") => {
         let x = this.x - (size / 2)
         let y = this.y - (size / 2)
         // Top 
@@ -69,7 +69,7 @@ const Block = function(x , y , c , size, color = "red", prev_node = null , g = n
   
     this.draw = () => {
         c.beginPath()
-        c.rect(this.x - (size / 2), this.y - (size / 2), size - 3, size - 3)
+        c.rect(this.x - (size / 3), this.y - (size / 3), size * 2/3, size * 2/3)
         c.fillStyle = this.color
         c.fill()
     }

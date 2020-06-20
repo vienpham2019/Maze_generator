@@ -41,8 +41,8 @@ const run_solve_maze = () => {
         nodes[i].draw()
     }
 
-    print_close_and_open_list(close_list_1 , open_list_1 , 'MidnightBlue' , 'DeepSkyBlue' )
-    print_close_and_open_list(close_list_2 , open_list_2 , 'DarkCyan' , 'Cyan')
+    print_close_and_open_list(close_list_1 , open_list_1 , 'MediumBlue' , 'LightSkyBlue' )
+    print_close_and_open_list(close_list_2 , open_list_2 , 'CadetBlue' , 'LightCyan')
 
     if(open_list_1.length > 0 && !finish_search){
         current_node_1= open_list_1.sort((a,b) => a.f - b.f)[0]
@@ -107,53 +107,15 @@ const find_child_node = (c_node , target_node , open_list , close_list , target_
 
     // right (x + size , y)
     open_list = add_node(c_node , right , 3 , close_list , open_list , target_close_list , target_node)
-    // if(right && !right.walls[3] && !close_list.find(node => node.x === right.x  && node.y === right.y)){
-    //     let right_in_open = open_list.find(n => n.x === right.x  && n.y === right.y)
-    //     let r_g = c_node.g + size
-
-    //     if(!check_for_mix_node(target_close_list , right.x , right.y)){
-    //         right_in_open && r_g < right_in_open.g 
-    //             ? update_node(right_in_open, r_g , c_node )
-    //             : open_list.push(set_node(right , r_g , c_node , target_node))
-    //     }
-    // }
 
     // top (x , y - size)
     open_list = add_node(c_node , top , 2 , close_list , open_list , target_close_list , target_node)
-    // if(top && !top.walls[2] && !close_list.find(node => node.x === top.x && node.y === top.y)){
-    //     let top_in_open = open_list.find(n => n.x === top.x  && n.y === top.y)
-    //     let t_g = c_node.g + size 
-
-    //     if(!check_for_mix_node(target_close_list , top.x , top.y)){
-    //         top_in_open && t_g < top_in_open.g 
-    //             ? update_node(top_in_open , c_node)
-    //             : open_list.push(set_node(top , t_g , c_node , target_node))
-    //     }
-    // }
 
     // left (x - size , y )
     open_list = add_node(c_node , left , 1 , close_list , open_list , target_close_list , target_node)
-    // if(left && !left.walls[1] && !close_list.find(node => node.x === left.x && node.y === left.y)){
-    //     let left_in_open = open_list.find(n => n.x === left.x  && n.y === left.y)
-    //     let l_g = c_node.g + size
-    //     if(!check_for_mix_node(target_close_list , left.x , left.y)){
-    //         left_in_open && l_g < left_in_open.g 
-    //             ? update_node(left_in_open , c_node)
-    //             : open_list.push(set_node(left , l_g , c_node , target_node))
-    //     }
-    // }
 
     // bottom (x , y + size)
     open_list = add_node(c_node , bottom , 0 , close_list , open_list , target_close_list , target_node)
-    // if(bottom && !bottom.walls[0] &&!close_list.find(node => node.x === bottom.x && node.y === bottom.y)){
-    //     let bottom_in_open = open_list.find(n => n.x === bottom.x  && n.y === bottom.y)
-    //     let b_g = c_node.g + size 
-    //     if(!check_for_mix_node(target_close_list , bottom.x , bottom.y)){
-    //         bottom_in_open && b_g < bottom_in_open.g 
-    //             ? update_node(bottom_in_open , c_node)
-    //             : open_list.push(set_node(bottom , b_g , c_node , target_node))
-    //     }
-    // }
 
     return open_list.filter(node => node.x === c_node.x && node.y === c_node.y ? false : true ) 
 }
@@ -178,7 +140,7 @@ const add_node = (c_node , neighbor_node , wall_num , close_list , open_list , t
 }
 
 const find_path = () => {
-    let color = "LimeGreen"
+    let color = "SpringGreen"
     if(current_node_1){
         current_node_1.color = color
         current_node_1 = current_node_1.prev_node
@@ -190,7 +152,7 @@ const find_path = () => {
 }
 
 const set_node = (node, g , c_node , target_node) => {
-    let color = "MidnightBlue"
+    let color = "MediumBlue"
     let x_1 = node.x 
     let y_1 = node.y 
     let x_2 = target_node.x 
