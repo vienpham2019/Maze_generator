@@ -21,6 +21,10 @@ const prims_maze = props => {
     setup_prims_maze(nodes , cols , rows)
 }
 
+const stop_prims_draw_maze = () => {
+    clearInterval(myReqDraw)
+}
+
 const setup_prims_maze = (nodes_array , w , h) => {
     let midd_x =  Math.floor(w / 2) * size + (size / 2)
     let midd_y =  Math.floor(h / 2) * size + (size / 2)
@@ -115,5 +119,5 @@ const getRandom = (min,max) => {
     return Math.floor(Math.random() * (max - min) + min)
 }
 
-export {prims_maze}
+export {prims_maze , stop_prims_draw_maze}
 

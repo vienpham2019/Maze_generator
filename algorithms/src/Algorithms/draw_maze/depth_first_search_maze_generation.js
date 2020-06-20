@@ -19,11 +19,17 @@ const depth_first_search_maze = props => {
     width = cols * size 
     height = rows * size  
 
+    let start_node = nodes.find(n => n.x === (size / 2) && n.y === (size / 2))
+
     finish_path = false   
-    visited_nodes = []
+    visited_nodes = [start_node]
 
     clearInterval(myReq)
     draw_maze()
+}
+
+const stop_depth_first_search_draw_maze = () => {
+    clearInterval(myReq)
 }
 
 const draw_maze = () => {
@@ -105,4 +111,4 @@ const move_block = () => {
     block.draw()
 }
 
-export {depth_first_search_maze}
+export {depth_first_search_maze , stop_depth_first_search_draw_maze}

@@ -1,5 +1,5 @@
 import React , {Component} from 'react'
-import {setUp , run_depth_first_search} from './Algorithms/depth_first_search_maze'
+import {setUp , run_solve_maze} from './Algorithms/mazeController'
 import {connect} from 'react-redux'
 import swal from '@sweetalert/with-react'
 
@@ -10,19 +10,29 @@ class App extends Component{
     this.state = {
       width: (window.innerWidth * .95),
       height: (window.innerHeight * .92),
-      select_draw_algorithim: "Depth first search", 
+      select_draw_algorithims: "Depth first search", 
       select_solve_algorithims: "A star",
-      rows: 15
+      rows: 15, 
+      dispay_draw_button: true , 
+      speed: "Normal"
     }
+  }
+
+  check_recursive_delay = (value) => {
+    this.setState({dispay_draw_button: value})
   }
 
   updateCanvas = () => {
     // rows == min 15 and max 50
-    let rows = this.state.rows 
+    let {rows , height , width , select_draw_algorithims} = this.state
+
+    let speed = this.props.speed[select_draw_algorithims][this.state.speed]
+
+    if(select_draw_algorithims === "Recursive Division"){
+      this.check_recursive_delay(false)
+    }
 
     let cols = Math.floor(rows * ((window.innerWidth * .95) / (window.innerHeight * .9))) 
-    let width = (window.innerWidth * .95)
-    let height = (window.innerHeight * .92)
 
     const canvas = this.refs.maze
     const c = canvas.getContext('2d');
@@ -39,11 +49,12 @@ class App extends Component{
       return
     }
 
-    setUp({c , canvas , cols , rows, width , height , draw_maze: true })
+    setUp({c , canvas , cols , rows, width , height , draw_maze: true , select_draw_algorithims , check_recursive_delay: this.check_recursive_delay , speed})
   }
   render(){
-    let {width , height} = this.state
+    let {width , height , select_solve_algorithims , dispay_draw_button} = this.state
     let {draw_maze_algorithims , solve_maze_algorithims} = this.props
+    let speed = ["Slow", "Normal", "Fast" , "Supper fast"]
     return(
       <div className="mt-1">
         <nav className="navbar">
@@ -57,6 +68,7 @@ class App extends Component{
                 id="inputGroupSelect04" 
                 aria-label="Example select with button addon"
                 style={{minWidth: 250}}
+                onChange={(e) => this.setState({select_draw_algorithims: e.target.value})}
               >
                 {draw_maze_algorithims.map(algorithm => 
                   <option value={algorithm}>{algorithm}</option>
@@ -69,10 +81,14 @@ class App extends Component{
                 class="custom-select" 
                 id="inputGroupSelect04" 
                 aria-label="Example select with button addon"
-                style={{maxWidth: 100}}
+                style={{maxWidth: 150}}
+                onChange={(e) => this.setState({speed: e.target.value})}
               >
-                <option value="fast">Fast</option>
-                <option value="slow">Slow</option>
+                {speed.map(s => 
+                  s === "Normal"
+                    ? <option value={s} selected>{s}</option>
+                    : <option value={s} >{s}</option>
+                )}
               </select>
               <div class="input-group-prepend">
                 <span class="input-group-text">Size(rows)</span>
@@ -90,13 +106,15 @@ class App extends Component{
                 }}
               ></input>
             <div class="input-group-append">
-              <button 
-                class="btn btn-outline-light" 
-                type="submit"
-                onClick={() => this.updateCanvas()}
-              >
-                Generate Maze
-              </button>
+              {dispay_draw_button ? 
+                <button 
+                  class="btn btn-outline-light" 
+                  type="submit"
+                  onClick={() => this.updateCanvas()}
+                >
+                  Generate Maze
+                </button>
+              : null }
             </div>
           </div>
             <div class="input-group p-2" style={{maxWidth: 500}}>
@@ -107,6 +125,7 @@ class App extends Component{
                 class="custom-select" 
                 id="inputGroupSelect04" 
                 aria-label="Example select with button addon"
+                onChange={(e) => this.setState({select_solve_algorithims: e.target.value})}
               >
                 {solve_maze_algorithims.map(algorithm => 
                   <option value={algorithm}>{algorithm}</option>
@@ -116,7 +135,7 @@ class App extends Component{
                 <button 
                   class="btn btn-outline-light" 
                   type="button"
-                  onClick={() => run_depth_first_search()}
+                  onClick={() => run_solve_maze(select_solve_algorithims)}
                 >
                   Solve Maze
                 </button>
@@ -135,7 +154,8 @@ class App extends Component{
 const mapStateToProps = state => {
   return {
     draw_maze_algorithims: state.draw_maze_algorithims,
-    solve_maze_algorithims: state.solve_maze_algorithims
+    solve_maze_algorithims: state.solve_maze_algorithims,
+    speed: state.speed 
   }
 }
 

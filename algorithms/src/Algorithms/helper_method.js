@@ -1,12 +1,11 @@
 
 
-const Node = function(x , y , c , size , neighbor_node = [], prev_node = null){
+const Node = function(x , y , c , size , walls , neighbor_node = [], prev_node = null){
     this.x = x
     this.y = y
     this.neighbor_node = neighbor_node
     this.prev_node = prev_node 
-    // this.walls = [true,true,true,true] // [top, right , bottom , left ]
-    this.walls = [false, false , false , false]
+    this.walls = walls// [top, right , bottom , left ]
 
     this.draw = (color = "black") => {
         let x = this.x - (size / 2)
@@ -60,7 +59,7 @@ const Node = function(x , y , c , size , neighbor_node = [], prev_node = null){
 const Block = function(x , y , c , size, color = "red", prev_node = null , g = null , h = null , f = null , distance = Infinity){
     this.x = x 
     this.y = y 
-    this.prev_node  = prev_node
+    this.prev_node = prev_node
     this.color = color
     this.g = g 
     this.h = h 
