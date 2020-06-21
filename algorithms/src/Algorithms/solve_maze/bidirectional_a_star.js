@@ -1,5 +1,5 @@
 import { Block } from '../helper_method'
-import {get_top_right_bottom_left} from './helper_method/algorithms_helper_method'
+import {get_top_right_bottom_left , add_to_heap , remove_from_heap} from './helper_method/algorithms_helper_method'
 
 let start_node , end_node , nodes , c , canvas , size 
 
@@ -45,13 +45,13 @@ const run_solve_maze = () => {
     print_close_and_open_list(close_list_2 , open_list_2 , 'CadetBlue' , 'LightCyan')
 
     if(open_list_1.length > 0 && !finish_search){
-        current_node_1= open_list_1.sort((a,b) => a.f - b.f)[0]
+        current_node_1= open_list_1[0]
         close_list_1.push(current_node_1)
         open_list_1 = find_child_node(current_node_1 , end_node, open_list_1 , close_list_1 , close_list_2)
     }
 
     if(open_list_2.length > 0 && !finish_search){
-        current_node_2= open_list_2.sort((a,b) => a.f - b.f)[0]
+        current_node_2= open_list_2[0]
         close_list_2.push(current_node_2)
         open_list_2 = find_child_node(current_node_2 , start_node, open_list_2 , close_list_2 , close_list_1)
     }
@@ -66,7 +66,7 @@ const run_solve_maze = () => {
         find_path() 
     }
 
-    if(finish_path){
+    if(finish_path || !open_list_1.length && !open_list_2.length){
         cancelAnimationFrame(myReq)
     }
 }
@@ -102,7 +102,7 @@ const check_for_mix_node = (target_close_list , x , y) => {
 }
 
 const find_child_node = (c_node , target_node , open_list , close_list , target_close_list) => {
-
+    open_list = remove_from_heap(open_list , (a,b) => a.f < b.f)
     let {top , right , bottom , left} = get_top_right_bottom_left(c_node , nodes , size)
 
     // right (x + size , y)
@@ -117,7 +117,7 @@ const find_child_node = (c_node , target_node , open_list , close_list , target_
     // bottom (x , y + size)
     open_list = add_node(c_node , bottom , 0 , close_list , open_list , target_close_list , target_node)
 
-    return open_list.filter(node => node.x === c_node.x && node.y === c_node.y ? false : true ) 
+    return open_list
 }
 
 const add_node = (c_node , neighbor_node , wall_num , close_list , open_list , target_close_list , target_node) => {
@@ -131,9 +131,12 @@ const add_node = (c_node , neighbor_node , wall_num , close_list , open_list , t
         let n_g = c_node.g + size
 
         if(!check_for_mix_node(target_close_list , x , y)){
-            node_in_open && n_g < node_in_open.g 
-                ? update_node(node_in_open, n_g , c_node )
-                : open_list.push(set_node(neighbor_node , n_g , c_node , target_node))
+            if(node_in_open && n_g < node_in_open.g){ 
+                update_node(node_in_open, n_g , c_node )
+            }else{
+                let new_node = set_node(neighbor_node , n_g , c_node , target_node)
+                open_list = add_to_heap(new_node , open_list , (a,b) => a.f < b.f)
+            }
         }
     }
     return open_list

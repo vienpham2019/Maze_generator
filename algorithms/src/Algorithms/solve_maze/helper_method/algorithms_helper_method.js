@@ -17,7 +17,7 @@ const add_to_heap = (node, array, method) => {
       array[Math.floor(i / 2) - 1] = current_node
       i = Math.floor(i / 2)
     }
-    return 
+    return array 
   }
   
   const remove_from_heap = (array , method) => {
@@ -33,7 +33,7 @@ const add_to_heap = (node, array, method) => {
       if(left_child && right_child){
         max_child_index = method(left_child,right_child) ? 2 * i : 2 * i + 1
       }else if(left_child || right_child){
-        max_child = left_child ? 2 * i : 2 * i + 1
+        max_child_index = left_child ? 2 * i : 2 * i + 1
       }
   
       if(max_child_index && method(array[max_child_index - 1] ,current_node)){
@@ -45,6 +45,7 @@ const add_to_heap = (node, array, method) => {
         stop = true
       }
     }
+    return array 
   }
 
 export {get_top_right_bottom_left , add_to_heap , remove_from_heap}

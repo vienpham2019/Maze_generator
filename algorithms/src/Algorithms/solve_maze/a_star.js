@@ -15,7 +15,7 @@ const a_star = props => {
 
     end_node.prev_node = null
 
-    open_list = add_to_heap(start_node , [] , (a,b) => a < b)
+    open_list = add_to_heap(start_node , [] , (a,b) => a.f < b.f)
     close_list = []
     current_node = null 
     finish_path = false 
@@ -53,7 +53,7 @@ const run_solve_maze = () => {
     }
 
     if(open_list.length > 0 && !end_node.prev_node){
-        current_node = open_list.sort((a,b) => a.f - b.f)[0]
+        current_node = open_list[0]
         close_list.push(current_node)
         find_child_node()
     }
@@ -64,13 +64,14 @@ const run_solve_maze = () => {
         find_path() 
     }
 
-    if(finish_path){
+    if(finish_path || open_list.length === 0){
         cancelAnimationFrame(myReq)
     }
 }
 
 const find_child_node = () => {
 
+    open_list = remove_from_heap(open_list , (a,b) => a.f < b.f)
     let {top , right , bottom , left} = get_top_right_bottom_left(current_node , nodes , size)
 
     // right (x + size , y)
@@ -84,8 +85,6 @@ const find_child_node = () => {
 
     // bottom (x , y + size)
     add_node(bottom , 0)
-
-    open_list = open_list.filter(node => node.x === current_node.x && node.y === current_node.y ? false : true )
 }
 
 const add_node = (neighbor_node , wall_num) => {
@@ -98,9 +97,12 @@ const add_node = (neighbor_node , wall_num) => {
         let node_in_open = open_list.find(n => n.x === x  && n.y === y)
         let n_g = current_node.g + size 
 
-        node_in_open && n_g < node_in_open.g
-            ? update_node(node_in_open, n_g , current_node )
-            : open_list.push(set_node(neighbor_node, n_g))
+        if(node_in_open && n_g < node_in_open.g){
+            update_node(node_in_open, n_g , current_node )
+        }else{
+            let new_node = set_node(neighbor_node, n_g)
+            open_list = add_to_heap(new_node, open_list , (a,b) => a.f < b.f)
+        }
     }
 }
 

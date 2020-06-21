@@ -1,5 +1,5 @@
 import { Block } from '../helper_method'
-import {get_top_right_bottom_left} from './helper_method/algorithms_helper_method'
+import {get_top_right_bottom_left , add_to_heap , remove_from_heap} from './helper_method/algorithms_helper_method'
 
 let start_node , end_node , nodes , c , canvas , size 
 
@@ -13,8 +13,6 @@ const bidirectional_dijkstra = props => {
     c = props.c 
     canvas = props.canvas 
     size = props.size 
-
-    // end_node.prev_node = null
     
     open_list_1 = [start_node]
     close_list_1 = []
@@ -48,13 +46,13 @@ const run_solve_maze = () => {
     print_close_and_open_list(close_list_2 , open_list_2 , 'CadetBlue' , 'LightCyan')
 
     if(open_list_2.length > 0 && !finish_search){
-        current_node_2 = open_list_2.sort((a,b) => a.distance - b.distance)[0] 
+        current_node_2 = open_list_2[0] 
         close_list_2.push(current_node_2)
         open_list_2 = find_child_node(current_node_2 , open_list_2 , close_list_2 , close_list_1)
     }
 
     if(open_list_1.length > 0 && !finish_search){
-        current_node_1 = open_list_1.sort((a,b) => a.distance - b.distance)[0] 
+        current_node_1 = open_list_1[0] 
         close_list_1.push(current_node_1)
         open_list_1 = find_child_node(current_node_1 , open_list_1 , close_list_1 , close_list_2)
     }
@@ -70,7 +68,7 @@ const run_solve_maze = () => {
         find_path() 
     }
 
-    if(finish_path){
+    if(finish_path || !open_list_1.length && !open_list_2.length){
         cancelAnimationFrame(myReq)
     }
 }
@@ -106,53 +104,39 @@ const check_for_mix_node = (next_close_list , x , y) => {
 }
 
 const find_child_node = (c_node , open_list , close_list , next_close_list) => {
+    open_list = remove_from_heap(open_list , (a,b) => a.distance < b.distance)
     let {top , right , bottom , left} = get_top_right_bottom_left(c_node , nodes , size)
 
     // Right (x + size , y)
-    if(right && !right.walls[3] && !close_list.find(node => node.x === right.x  && node.y === right.y)){
-        let right_in_open = open_list.find(n => n.x === right.x  && n.y === right.y)
-
-        if(!check_for_mix_node(next_close_list , right.x , right.y)){
-            right_in_open 
-                ? update_node(right_in_open , c_node) 
-                :  open_list.push(create_new_node(right , c_node))
-        }
-    }
+    open_list = add_node(right , c_node , 3 , close_list , open_list , next_close_list)
 
     // top (x , y - size)
-    if(top && !top.walls[2] && !close_list.find(node => node.x === top.x && node.y === top.y)){
-        let top_in_open = open_list.find(n => n.x === top.x  && n.y === top.y)
-        
-        if(!check_for_mix_node(next_close_list , top.x , top.y)){
-            top_in_open 
-                ? update_node(top_in_open , c_node) 
-                : open_list.push(create_new_node(top , c_node))
-        }
-    }
+    open_list = add_node(top , c_node , 2 , close_list , open_list , next_close_list)
 
     // left (x - size , y )
-    if(left && !left.walls[1] && !close_list.find(node => node.x === left.x && node.y === left.y)){
-        let left_in_open = open_list.find(n => n.x === left.x  && n.y === left.y)
-        
-        if(!check_for_mix_node(next_close_list , left.x , left.y)){
-            left_in_open 
-                ? update_node(left_in_open , c_node) 
-                : open_list.push(create_new_node(left , c_node))
-        }
-    }
+    open_list = add_node(left , c_node , 1 , close_list , open_list , next_close_list)
 
     // bottom (x , y + size)
-    if(bottom && !bottom.walls[0] &&!close_list.find(node => node.x === bottom.x && node.y === bottom.y)){
-        let bottom_in_open = open_list.find(n => n.x === bottom.x  && n.y === bottom.y)
-        
-        if(!check_for_mix_node(next_close_list , bottom.x , bottom.y)){
-            bottom_in_open 
-                ? update_node(bottom_in_open , c_node) 
-                :  open_list.push(create_new_node(bottom , c_node))
-        }
-    }
+    open_list = add_node(bottom , c_node , 0 , close_list , open_list , next_close_list)
 
     return open_list.filter(node => node.x === c_node.x && node.y === c_node.y ? false : true )
+}
+
+const add_node = (neighbor_node , c_node , wall_num , close_list , open_list , neighbor_close_list) => {
+    if(neighbor_node && !neighbor_node.walls[wall_num] &&!close_list.find(node => node.x === neighbor_node.x && node.y === neighbor_node.y)){
+        let {x , y} = neighbor_node
+        let node_in_open = open_list.find(n => n.x === x  && n.y === y)
+        
+        if(!check_for_mix_node(neighbor_close_list , x , y)){
+            if(node_in_open){
+                update_node(node_in_open , c_node) 
+            } else{
+                let new_node = create_new_node(neighbor_node , c_node)
+                open_list = add_to_heap(new_node , open_list , (a,b) => a.distance < b.distance)
+            }
+        }
+    }
+    return open_list
 }
 
 const find_path = () => {

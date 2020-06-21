@@ -1,6 +1,6 @@
 import { Block } from '../helper_method'
 
-import {get_top_right_bottom_left} from './helper_method/algorithms_helper_method'
+import {get_top_right_bottom_left , add_to_heap , remove_from_heap} from './helper_method/algorithms_helper_method'
 
 let start_node , end_node , nodes , c , canvas , size 
 
@@ -55,7 +55,8 @@ const run_solve_maze = () => {
     }
 
     if(open_list.length > 0 && !end_node.prev_node){
-        current_node = open_list.sort((a,b) => a.distance - b.distance)[0] 
+        // current_node = open_list.sort((a,b) => a.distance - b.distance)[0] 
+        current_node = open_list[0] 
         close_list.push(current_node)
         find_child_node()
     }
@@ -65,13 +66,14 @@ const run_solve_maze = () => {
         end_node.draw()
         find_path() 
     }
-    if(finish_path){
+
+    if(finish_path || open_list.length === 0){
         cancelAnimationFrame(myReq)
     }
 }
 
 const find_child_node = () => {
-
+    open_list = remove_from_heap(open_list , (a,b) => a.distance < b.distance)
     let {top , right , bottom , left} = get_top_right_bottom_left(current_node , nodes , size)
 
     // right (x + size , y)
@@ -98,7 +100,13 @@ const add_node = (neighbor_node , wall_num) => {
         let {x , y} = neighbor_node
         let node_in_open = open_list.find(n => n.x === x  && n.y === y)
         
-        node_in_open ? update_node(node_in_open) : open_list.push(create_new_node(neighbor_node))
+        if(node_in_open){
+            update_node(node_in_open)
+        }else{
+            let new_node = create_new_node(neighbor_node)
+            open_list = add_to_heap(new_node , open_list , (a,b) => a.distance < b.distance)
+        }
+            
     }
 }
 

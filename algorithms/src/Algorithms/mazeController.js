@@ -66,16 +66,23 @@ const draw_divide_maze = (props) => {
       let x = j * size + (size / 2)
       let y = i * size + (size / 2)
       let node = new Node(x, y , c , size , walls)
-      if(i === 0 && j !== 0) {
-          node.walls[0] = true
+      if(i === 0){
+        node.walls[0] = true
       }else if(i === rows - 1){
-          node.walls[2] = true
+        node.walls[2] = true
       }
 
       if(j === 0){
-          node.walls[3] = true 
-      }else if(j === cols - 1 && i !== rows - 1){
-          node.walls[1] = true
+        node.walls[3] = true
+      }else if(j === cols - 1){
+        node.walls[1] = true
+      }
+
+      if(i === 0 && j === 0) {
+          node.walls[0] = false 
+      }
+      if(j === cols - 1 && i === rows - 1){
+        node.walls[1] = false
       }
 
       if(i === 0 && j === 0){
