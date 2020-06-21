@@ -1,5 +1,5 @@
 import { Block } from '../helper_method'
-import {get_top_right_bottom_left} from './helper_method/algorithms_helper_method'
+import {get_top_right_bottom_left , add_to_heap , remove_from_heap} from './helper_method/algorithms_helper_method'
 
 let start_node , end_node , nodes , c , canvas , size 
 
@@ -15,7 +15,7 @@ const a_star = props => {
 
     end_node.prev_node = null
 
-    open_list = [start_node]
+    open_list = add_to_heap(start_node , [] , (a,b) => a < b)
     close_list = []
     current_node = null 
     finish_path = false 
