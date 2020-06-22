@@ -8,7 +8,10 @@ let close_list_1 , close_list_2 , open_list_1 , current_node_1 , open_list_2, cu
 const bidirectional_dijkstra = props => {
     start_node = props.start_node
     start_node.distance = 0
+    
     end_node = props.end_node 
+    end_node.distance = 0
+
     nodes = props.nodes
     c = props.c 
     canvas = props.canvas 
@@ -108,18 +111,18 @@ const find_child_node = (c_node , open_list , close_list , next_close_list) => {
     let {top , right , bottom , left} = get_top_right_bottom_left(c_node , nodes , size)
 
     // Right (x + size , y)
-    open_list = add_node(right , c_node , 3 , close_list , open_list , next_close_list)
+    open_list = add_node(right , c_node , 3 , close_list , open_list , next_close_list) // 3
 
     // top (x , y - size)
-    open_list = add_node(top , c_node , 2 , close_list , open_list , next_close_list)
+    open_list = add_node(top , c_node , 2 , close_list , open_list , next_close_list) // 2
 
     // left (x - size , y )
-    open_list = add_node(left , c_node , 1 , close_list , open_list , next_close_list)
+    open_list = add_node(left , c_node , 1 , close_list , open_list , next_close_list) // 1
 
     // bottom (x , y + size)
-    open_list = add_node(bottom , c_node , 0 , close_list , open_list , next_close_list)
+    open_list = add_node(bottom , c_node , 0 , close_list , open_list , next_close_list) // 0
 
-    return open_list.filter(node => node.x === c_node.x && node.y === c_node.y ? false : true )
+    return open_list
 }
 
 const add_node = (neighbor_node , c_node , wall_num , close_list , open_list , neighbor_close_list) => {

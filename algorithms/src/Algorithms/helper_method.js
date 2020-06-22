@@ -53,6 +53,7 @@ const Node = function(x , y , c , size , walls , neighbor_node = [], prev_node =
             c.strokeStyle = color
             c.stroke()
         }
+
     }
 }
 
