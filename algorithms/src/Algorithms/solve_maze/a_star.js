@@ -3,7 +3,7 @@ import {get_top_right_bottom_left , add_to_heap , remove_from_heap} from './help
 
 let start_node , end_node , nodes , c , canvas , size 
 
-let open_list , close_list , current_node , myReq , finish_path
+let open_list , close_list , current_node , myReq
 
 const a_star = props => {
     start_node = props.start_node
@@ -18,7 +18,6 @@ const a_star = props => {
     open_list = add_to_heap(start_node , [] , (a,b) => a.f < b.f)
     close_list = []
     current_node = null 
-    finish_path = false 
 
     cancelAnimationFrame(myReq)
     run_solve_maze()
@@ -58,13 +57,13 @@ const run_solve_maze = () => {
         find_child_node()
     }
 
-    if(end_node.prev_node && !finish_path){
-        start_node.draw()
-        end_node.draw()
-        find_path() 
+    if(end_node.prev_node && current_node){
+        current_node.color = "LimeGreen"
+        current_node.draw()
+        current_node = current_node.prev_node
     }
 
-    if(finish_path || open_list.length === 0){
+    if(!current_node || open_list.length === 0){
         cancelAnimationFrame(myReq)
     }
 }
@@ -104,16 +103,6 @@ const add_node = (neighbor_node , wall_num) => {
             open_list = add_to_heap(new_node, open_list , (a,b) => a.f < b.f)
         }
     }
-}
-
-const find_path = () => {
-    current_node.color = "LimeGreen"
-    if(current_node.x === start_node.x && current_node.y === start_node.y){
-        finish_path = true
-        return
-    }
-    current_node = current_node.prev_node
-    return 
 }
 
 const set_node = (node, g) => {
