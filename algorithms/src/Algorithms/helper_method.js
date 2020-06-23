@@ -6,6 +6,7 @@ const Node = function(x , y , c , size , walls , neighbor_node = [], prev_node =
     this.neighbor_node = neighbor_node
     this.prev_node = prev_node 
     this.walls = walls// [top, right , bottom , left ]
+    this.grid = false 
 
     this.draw = (color = "black") => {
         let x = this.x - (size / 2)
@@ -54,6 +55,12 @@ const Node = function(x , y , c , size , walls , neighbor_node = [], prev_node =
             c.stroke()
         }
 
+        if(this.walls.every( e => e === true) && this.grid){
+            c.beginPath()
+            c.rect(x, y, size, size)
+            c.fillStyle = 'black'
+            c.fill()
+        }
     }
 }
 

@@ -10,11 +10,10 @@ import { bidirectional_a_star , stop_bidirectional_a_star }from './solve_maze/bi
 import { recursive_dividion_maze } from './draw_maze/recursive_division_maze_generation'
 import { prims_maze , stop_prims_draw_maze} from './draw_maze/prims_maze_generation'
 import { depth_first_search_maze , stop_depth_first_search_draw_maze } from './draw_maze/depth_first_search_maze_generation'
-import { grid , stop_grid} from './draw_maze/grid'
 
-let size , width , height , cols , rows , draw_maze , select_draw_algorithims , speed 
+let size , width , height , cols , rows , select_draw_algorithims , speed 
 
-let delay, canvas , c , start_node, end_node , nodes , stack , frame_per_second , maze_speed , myTimeOut 
+let delay, canvas , c , start_node, end_node , nodes , stack , frame_per_second , maze_speed , myTimeOut , start_location , end_location 
 
 const setUp = (props) => {
   stop_breadth_first_search()
@@ -27,7 +26,6 @@ const setUp = (props) => {
 
   stop_depth_first_search_draw_maze()
   stop_prims_draw_maze()
-  stop_grid()
 
   c = props.c
   canvas = props.canvas 
@@ -36,12 +34,14 @@ const setUp = (props) => {
   cols = props.cols 
   rows = props.rows 
   size = props.size 
-  draw_maze = props.draw_maze
   width = props.width
   height = props.height
   select_draw_algorithims = props.select_draw_algorithims
 
   size = Math.floor(width / cols)
+
+  start_location = {x: size / 2 , y: size / 2}
+  end_location = {x: (cols - 1) * size + (size / 2) , y: (rows - 1) * size + (size / 2)}
 
   delay = 0 
   speed = props.speed
@@ -55,38 +55,36 @@ const setUp = (props) => {
   nodes = []
   draw_divide_maze(props)
   clearTimeout(myTimeOut)
-
+  return nodes
 }
 
 const draw_divide_maze = (props) => {
   for(let i = 0; i < rows ; i ++){
     for(let j = 0; j < cols ; j ++){
-      let walls = select_draw_algorithims === "Recursive Division"
+      let walls = select_draw_algorithims === "Recursive Division" 
         ? [false , false , false ,false] 
         : [true , true , true , true]
 
       let x = j * size + (size / 2)
       let y = i * size + (size / 2)
       let node = new Node(x, y , c , size , walls)
-      if(draw_maze){
-        if(i === 0){
-          node.walls[0] = true
-        }else if(i === rows - 1){
-          node.walls[2] = true
-        }
+      if(i === 0){
+        node.walls[0] = true
+      }else if(i === rows - 1){
+        node.walls[2] = true
+      }
 
-        if(j === 0){
-          node.walls[3] = true
-        }else if(j === cols - 1){
-          node.walls[1] = true
-        }
+      if(j === 0){
+        node.walls[3] = true
+      }else if(j === cols - 1){
+        node.walls[1] = true
+      }
 
-        if(i === 0 && j === 0) {
-            node.walls[0] = false 
-        }
-        if(j === cols - 1 && i === rows - 1){
-          node.walls[1] = false
-        }
+      if(i === 0 && j === 0) {
+          node.walls[0] = false 
+      }
+      if(j === cols - 1 && i === rows - 1){
+        node.walls[1] = false
       }
 
       if(i === 0 && j === 0){
@@ -96,8 +94,8 @@ const draw_divide_maze = (props) => {
     }
   }
 
-  start_node = new Block((size / 2) ,(size / 2) , c , size , "blue")
-  end_node = new Block((cols - 1) * size + (size / 2) ,( rows - 1 ) * size + (size / 2) , c , size , "green" )
+  start_node = new Block(start_location.x , start_location.y , c , size , "blue")
+  end_node = new Block(end_location.x , end_location.y , c , size , "green" )
 
   switch (select_draw_algorithims) {
     case "Depth first search":
@@ -115,7 +113,6 @@ const draw_divide_maze = (props) => {
         }
       break 
     default:
-      grid({size , nodes , cols , rows , canvas , c})
       break 
   }
 }
@@ -128,8 +125,6 @@ const run_solve_maze = (algorithms) => {
   stop_depth_first_search()
   stop_bidirectional_dijkstra()
   stop_bidirectional_a_star()
-
-  // stop_grid()
 
   switch (algorithms) {
     case "A star":
@@ -156,4 +151,16 @@ const run_solve_maze = (algorithms) => {
   }
 }
 
-export {setUp , run_solve_maze}
+const update_info = props => {
+  if(props.start_location){
+    start_location = props.start_location
+    start_node = new Block(start_location.x , start_location.y , c , size , "blue")
+  }
+
+  if(props.end_location){
+    end_location = props.end_location
+    end_node = new Block(end_location.x , end_location.y , c , size , "green" )
+  }
+}
+
+export {setUp , run_solve_maze , update_info}

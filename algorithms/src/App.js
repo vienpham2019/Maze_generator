@@ -1,11 +1,11 @@
 import React , {Component} from 'react'
-import {setUp , run_solve_maze} from './Algorithms/mazeController'
+import {setUp , run_solve_maze , update_info} from './Algorithms/mazeController'
 import {connect} from 'react-redux'
 import swal from '@sweetalert/with-react'
 
 let select_start = false
 let select_end = false 
-let select_wall = false 
+let display_points = false 
 
 class App extends Component{
   constructor(){
@@ -24,11 +24,9 @@ class App extends Component{
     }
   }
 
-  componentDidMount(){
-    this.updateCanvas(false)
+  run_set_point = () => {
     let canvas = this.refs.maze
-    let rows = 25
-    let {width} = this.state 
+    let {width , rows } = this.state 
     let cols = Math.floor(rows * ((window.innerWidth * .95) / (window.innerHeight * .9))) 
     let size = Math.floor(width / cols)
     let {offsetLeft , offsetTop} = canvas
@@ -43,11 +41,13 @@ class App extends Component{
         if(select_end){
           end_location = {x , y}
           this.setState({end_location})
+          update_info({end_location: {x: x - offsetLeft ,y: y - offsetTop}})
         }
 
         if(select_start){
           start_location = {x , y}
           this.setState({start_location})
+          update_info({start_location: {x: x - offsetLeft ,y: y - offsetTop}})
         }
       }
     })
@@ -57,8 +57,9 @@ class App extends Component{
     this.setState({dispay_draw_button: value})
   }
 
-  updateCanvas = (draw_maze = true) => {
+  updateCanvas = () => {
     // rows == min 15 and max 50
+    display_points = true
     let {rows , height , width , select_draw_algorithims} = this.state
 
     let speed = this.props.speed[select_draw_algorithims][this.state.speed]
@@ -83,15 +84,10 @@ class App extends Component{
       })
       return
     }
-
-    if(draw_maze){
-      setUp({c , canvas , cols , rows, width , height , draw_maze , select_draw_algorithims , check_recursive_delay: this.check_recursive_delay , speed})
-    }else{
-      let grid_rows = 25
-      let grid_cols = Math.floor(grid_rows * ((window.innerWidth * .95) / (window.innerHeight * .9)))
-      setUp({c , canvas , cols: grid_cols, rows: grid_rows, width , height , draw_maze , select_draw_algorithims: "" , check_recursive_delay: this.check_recursive_delay , speed})
-    }
+    setUp({c , canvas , cols , rows, width , height , select_draw_algorithims , 
+    check_recursive_delay: this.check_recursive_delay , speed})
   }
+
   render(){
     let {width , height , select_solve_algorithims , dispay_draw_button} = this.state
     let {draw_maze_algorithims , solve_maze_algorithims} = this.props
@@ -156,7 +152,10 @@ class App extends Component{
                 <button 
                   className="btn btn-outline-light" 
                   type="submit"
-                  onClick={() => this.updateCanvas()}
+                  onClick={() => {
+                    this.updateCanvas()
+                    this.run_set_point()
+                  }}
                 >
                   Generate Maze
                 </button>
@@ -190,7 +189,10 @@ class App extends Component{
           <button 
             className="btn btn-outline-light m-2" 
             type="button"
-            onClick={() => this.updateCanvas(false)}
+            onClick={() => {
+              this.updateCanvas(false)
+              this.run_set_point()
+            }}
             style={{width: 100}}
           >
             Grid
@@ -199,8 +201,7 @@ class App extends Component{
             className="btn m-2" 
             style={{color: select_start ? 'black' :'white'}}
             onClick={() => {
-              select_end = select_start
-              select_wall = select_start
+              select_end = false
               select_start = !select_start
               this.setState({})
             }}
@@ -211,32 +212,26 @@ class App extends Component{
             className="btn m-2" 
             style={{color: select_end ? 'black' :'white'}}
             onClick={() => {
-              select_start = select_end
-              select_wall = select_end
+              select_start = false
               select_end = !select_end 
               this.setState({})
             }}
           >
             <i class="fas fa-bullseye" style={{color: select_end ? 'black' :'white'}}></i> End Point
           </button>
-          <button 
-            className="btn m-2" 
-            style={{color: select_wall ? 'black' :'white'}}
-            onClick={() => {
-              select_start = select_wall
-              select_end = select_wall
-              select_wall = !select_wall
-              this.setState({})
-            }}
-          >
-            <i class="fas fa-square" style={{color: select_wall ? 'black' :'white'}}></i> Walls
-          </button>
           </div>
         </nav>
         <div className="m-5">
-          <i class="fas fa-star" style={{position: "absolute", width: 10 , height: 10, top: start_y - 10, left: start_x - 10}}></i>
-
-          <i class="fas fa-bullseye" style={{position: "absolute", width: 6, height: 6, top: end_y - 6, left: end_x - 6}}></i>
+          {display_points ? 
+            <i 
+              class="fas fa-star" 
+              style={{position: "absolute", width: 10 , height: 10, top: start_y - 10, left: start_x - 10 , backgroundColor: 'transparent'}}></i>
+          : null } 
+          {display_points ? 
+            <i 
+              class="fas fa-bullseye" 
+              style={{position: "absolute", width: 6, height: 6, top: end_y - 6, left: end_x - 6 , backgroundColor: 'transparent'}}></i>
+          : null }
           <canvas ref="maze" style={{width, height}}></canvas>
         </div> 
       </div>
