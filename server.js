@@ -1,7 +1,11 @@
 const express = require('express')
 const path = require('path')
+const cors = require('cors')
 
 const app = express()
+
+app.use(cors())
+app.use(express.json())
 
 // Serve static assets if in production 
 if(process.env.NODE_ENV === "production"){
