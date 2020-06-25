@@ -187,17 +187,6 @@ class App extends Component{
             </div>
           </div>
           <button 
-            className="btn btn-outline-light m-2" 
-            type="button"
-            onClick={() => {
-              this.updateCanvas(false)
-              this.run_set_point()
-            }}
-            style={{width: 100}}
-          >
-            Grid
-          </button>
-          <button 
             className="btn m-2" 
             style={{color: select_start ? 'black' :'white'}}
             onClick={() => {
