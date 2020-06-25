@@ -58,7 +58,7 @@ const run_solve_maze = () => {
     }
 
     if(end_node.prev_node && current_node){
-        current_node.color = "LimeGreen"
+        current_node.color = "SpringGreen"
         current_node.draw()
         current_node = current_node.prev_node
     }

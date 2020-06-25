@@ -1,7 +1,7 @@
 import {Block} from '../helper_method'
 let nodes , canvas , c , stack , size , cols , rows , frame_per_second , speed 
 
-let block , finish_path , myReq , visited_nodes , width , height 
+let block , myReq , visited_nodes , width , height 
 
 const depth_first_search_maze = props => {
     nodes = props.nodes 
@@ -21,7 +21,6 @@ const depth_first_search_maze = props => {
 
     let start_node = nodes.find(n => n.x === (size / 2) && n.y === (size / 2))
 
-    finish_path = false   
     visited_nodes = [start_node]
 
     clearInterval(myReq)

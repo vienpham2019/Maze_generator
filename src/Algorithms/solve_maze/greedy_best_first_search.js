@@ -60,7 +60,7 @@ const run_solve_maze = () => {
     }
 
     if(end_node.prev_node){
-        start_node.draw()
+        end_node.color = "SpringGreen"
         end_node.draw()
         find_path() 
     }
@@ -101,8 +101,10 @@ const add_node = (neighbor_node , wall_num) => {
 }
 
 const find_path = () => {
-    current_node.color = "LimeGreen"
-    if(current_node.x === start_node.x && current_node.y === start_node.y){
+    current_node.color = "SpringGreen"
+    if(!current_node.prev_node){
+        start_node.color = "SpringGreen"
+        start_node.draw()
         finish_path = true
         return
     }

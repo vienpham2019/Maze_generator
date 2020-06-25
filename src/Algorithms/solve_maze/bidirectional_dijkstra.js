@@ -143,7 +143,7 @@ const add_node = (neighbor_node , c_node , wall_num , close_list , open_list , n
 }
 
 const find_path = () => {
-    let color = "LimeGreen"
+    let color = "SpringGreen"
     if(current_node_1){
         current_node_1.color = color
         current_node_1 = current_node_1.prev_node
