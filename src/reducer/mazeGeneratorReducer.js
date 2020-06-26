@@ -20,6 +20,12 @@ let init_state = {
             "Fast": 50, 
             "Normal": 150, 
             "Slow": 300
+        },
+        "": {
+            "Supper fast": 0, 
+            "Fast": 0, 
+            "Normal": 0, 
+            "Slow": 0
         }
     }
 }

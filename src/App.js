@@ -24,6 +24,10 @@ class App extends Component{
     }
   }
 
+  componentDidMount(){
+    this.updateCanvas("")
+  }
+
   run_set_point = () => {
     let canvas = this.refs.maze
     let {width , rows } = this.state 
@@ -57,10 +61,10 @@ class App extends Component{
     this.setState({dispay_draw_button: value})
   }
 
-  updateCanvas = () => {
+  updateCanvas = (select_draw_algorithims = this.state.select_draw_algorithims) => {
     // rows == min 15 and max 50
     display_points = true
-    let {rows , height , width , select_draw_algorithims} = this.state
+    let {rows , height , width } = this.state
 
     let speed = this.props.speed[select_draw_algorithims][this.state.speed]
 
@@ -85,7 +89,7 @@ class App extends Component{
       return
     }
     setUp({c , canvas , cols , rows, width , height , select_draw_algorithims , 
-    check_recursive_delay: this.check_recursive_delay , speed})
+    check_recursive_delay: this.check_recursive_delay , speed })
   }
 
   render(){

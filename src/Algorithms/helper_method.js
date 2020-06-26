@@ -75,10 +75,19 @@ const Block = function(x , y , c , size, color = "red", prev_node = null , g = n
     this.distance = distance
   
     this.draw = () => {
+        let x = this.x - (size / 3) 
+        let y = this.y - (size / 3)
+        let rect_size = size * 2/3
+        let r = rect_size * 1/4
         c.beginPath()
-        c.rect(this.x - (size / 3), this.y - (size / 3), size * 2/3, size * 2/3)
+        c.moveTo(x+r, y)
+        c.arcTo(x+rect_size, y,   x+rect_size, y+rect_size, r)
+        c.arcTo(x+rect_size, y+rect_size, x,   y+rect_size, r)
+        c.arcTo(x,   y+rect_size, x,   y,   r)
+        c.arcTo(x,   y,   x+rect_size, y,   r)
         c.fillStyle = this.color
         c.fill()
+        c.closePath()
     }
 }
 

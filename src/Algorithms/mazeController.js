@@ -62,33 +62,35 @@ const draw_divide_maze = (props) => {
   for(let i = 0; i < rows ; i ++){
     for(let j = 0; j < cols ; j ++){
       let walls = select_draw_algorithims === "Recursive Division" 
-        ? [false , false , false ,false] 
+        ? [false , false , false ,false]  
         : [true , true , true , true]
 
       let x = j * size + (size / 2)
       let y = i * size + (size / 2)
       let node = new Node(x, y , c , size , walls)
-      if(i === 0){
-        node.walls[0] = true
-      }else if(i === rows - 1){
-        node.walls[2] = true
-      }
+      if(select_draw_algorithims !== ""){
+        if(i === 0){
+          node.walls[0] = true
+        }else if(i === rows - 1){
+          node.walls[2] = true
+        }
 
-      if(j === 0){
-        node.walls[3] = true
-      }else if(j === cols - 1){
-        node.walls[1] = true
-      }
+        if(j === 0){
+          node.walls[3] = true
+        }else if(j === cols - 1){
+          node.walls[1] = true
+        }
 
-      if(i === 0 && j === 0) {
-          node.walls[0] = false 
-      }
-      if(j === cols - 1 && i === rows - 1){
-        node.walls[1] = false
-      }
+        if(i === 0 && j === 0) {
+            node.walls[0] = false 
+        }
+        if(j === cols - 1 && i === rows - 1){
+          node.walls[1] = false
+        }
 
-      if(i === 0 && j === 0){
-          stack.push(node)
+        if(i === 0 && j === 0){
+            stack.push(node)
+        }
       }
       nodes.push(node)
     }
@@ -113,7 +115,14 @@ const draw_divide_maze = (props) => {
         }
       break 
     default:
+      default_grid()
       break 
+  }
+}
+
+const default_grid = () => {
+  for(let i = 0 ; i < nodes.length ; i ++){
+    nodes[i].draw()
   }
 }
 
