@@ -46,7 +46,9 @@ const run_solve_maze = () => {
     }
 
     for(let i = 0 ; i < open_list.length ; i ++){
-        open_list[i].color = 'LightSkyBlue' 
+        if(!end_node.prev_node){
+            open_list[i].color = 'LightSkyBlue' 
+        }
         open_list[i].draw()
     }
 
@@ -55,7 +57,6 @@ const run_solve_maze = () => {
     }
 
     if(open_list.length > 0 && !end_node.prev_node){
-        // current_node = open_list.sort((a,b) => a.distance - b.distance)[0] 
         current_node = open_list[0] 
         close_list.push(current_node)
         find_child_node()
@@ -67,7 +68,7 @@ const run_solve_maze = () => {
         find_path() 
     }
 
-    if(finish_path || open_list.length === 0){
+    if(finish_path){
         cancelAnimationFrame(myReq)
     }
 }

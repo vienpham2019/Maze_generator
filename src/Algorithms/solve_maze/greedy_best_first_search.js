@@ -64,7 +64,7 @@ const run_solve_maze = () => {
         end_node.draw()
         find_path() 
     }
-    if(finish_path || !open_list.length){
+    if(finish_path){
         cancelAnimationFrame(myReq)
     }
 }

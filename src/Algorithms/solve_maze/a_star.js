@@ -63,7 +63,7 @@ const run_solve_maze = () => {
         current_node = current_node.prev_node
     }
 
-    if(!current_node || open_list.length === 0){
+    if(!current_node){
         cancelAnimationFrame(myReq)
     }
 }

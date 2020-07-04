@@ -71,7 +71,7 @@ const run_solve_maze = () => {
         find_path() 
     }
 
-    if(finish_path || (!open_list_1.length && !open_list_2.length)){
+    if(finish_path){
         cancelAnimationFrame(myReq)
     }
 }
