@@ -81,8 +81,8 @@ class App extends Component{
       swal({
         button: false, 
         content: (
-          <div style={{color: 'black'}}>
-            <h3>Rows should be minimum 15 and maximum 50.</h3>
+          <div className="p-2 bg-white">
+            <h3 className="bg-white">Rows should be minimum 15 and maximum 50.</h3>
           </div>
         )
       })
@@ -95,7 +95,7 @@ class App extends Component{
   render(){
     let {width , height , select_solve_algorithims , dispay_draw_button} = this.state
     let {draw_maze_algorithims , solve_maze_algorithims} = this.props
-    let speed = ["Slow", "Normal", "Fast" , "Supper fast"]
+    let speed = ["Slow", "Normal", "Fast" , "Very Fast"]
     let start_x = this.state.start_location.x
     let start_y = this.state.start_location.y
 
@@ -103,117 +103,6 @@ class App extends Component{
     let end_y = this.state.end_location.y
     return(
       <div className="mt-3">
-        {/* <nav className="navbar">
-          <div className="d-flex flex-wrap">
-            <div className="input-group p-2" style={{minWidth: 600}}>
-              <div className="input-group-prepend">
-                <span className="input-group-text">Algorithms</span>
-              </div>
-              <select 
-                className="custom-select" 
-                id="inputGroupSelect04" 
-                aria-label="Example select with button addon"
-                style={{minWidth: 250}}
-                onChange={(e) => this.setState({select_draw_algorithims: e.target.value})}
-              >
-                {draw_maze_algorithims.map(algorithm => 
-                  <option value={algorithm}>{algorithm}</option>
-                )}
-              </select>
-              <div className="input-group-prepend">
-                <span className="input-group-text">Speed</span>
-              </div>
-              <select 
-                className="custom-select" 
-                id="inputGroupSelect04" 
-                aria-label="Example select with button addon"
-                style={{maxWidth: 150}}
-                onChange={(e) => this.setState({speed: e.target.value})}
-              >
-                {speed.map(s => 
-                  s === "Normal"
-                    ? <option value={s} selected>{s}</option>
-                    : <option value={s} >{s}</option>
-                )}
-              </select>
-              <div className="input-group-prepend">
-                <span className="input-group-text">Size(rows)</span>
-              </div>
-              <input 
-                type="number" 
-                className="form-control" 
-                min='15'
-                max='50'
-                placeholder="Minimum 15 and Maximum 50"
-                style={{minWidth: 100}}
-                onChange={(e) => {
-                  let rows = Math.floor(e.target.value)
-                  this.setState({rows})
-                }}
-              ></input>
-            <div className="input-group-append">
-              {dispay_draw_button ? 
-                <button 
-                  className="btn btn-outline-light" 
-                  type="submit"
-                  onClick={() => {
-                    this.updateCanvas()
-                    this.run_set_point()
-                  }}
-                >
-                  Generate Maze
-                </button>
-              : null }
-            </div>
-          </div>
-          <div className="input-group p-2" style={{maxWidth: 500}}>
-            <div className="input-group-prepend">
-              <span className="input-group-text">Algorithms</span>
-            </div>
-            <select 
-              className="custom-select" 
-              id="inputGroupSelect04" 
-              aria-label="Example select with button addon"
-              onChange={(e) => this.setState({select_solve_algorithims: e.target.value})}
-            >
-              {solve_maze_algorithims.map(algorithm => 
-                <option value={algorithm}>{algorithm}</option>
-              )}
-            </select>
-            <div className="input-group-append">
-              <button 
-                className="btn btn-outline-light" 
-                type="button"
-                onClick={() => run_solve_maze(select_solve_algorithims)}
-              >
-                Solve Maze
-              </button>
-            </div>
-          </div>
-          <button 
-            className="btn m-2" 
-            style={{color: select_start ? 'black' :'white'}}
-            onClick={() => {
-              select_end = false
-              select_start = !select_start
-              this.setState({})
-            }}
-            >
-            <i class="fas fa-star" style={{color: select_start ? 'black' :'white'}}></i> Start Point
-          </button>
-          <button 
-            className="btn m-2" 
-            style={{color: select_end ? 'black' :'white'}}
-            onClick={() => {
-              select_start = false
-              select_end = !select_end 
-              this.setState({})
-            }}
-          >
-            <i class="fas fa-bullseye" style={{color: select_end ? 'black' :'white'}}></i> End Point
-          </button>
-          </div>
-        </nav> */}
         <div className="container border-right border-bottom p-3 border-secondary shadow-sm p-3 mb-5">
           <h2 className="ml-2">The Maze Generatetor</h2>
           <div className="row">
@@ -258,17 +147,17 @@ class App extends Component{
                 ></input>
               </div>
               <div className="input-group-append">
-              {dispay_draw_button ? 
                 <button 
-                  className="btn btn-outline-light w-100" 
+                  className="btn btn-outline-dark w-100" 
                   onClick={() => {
-                    this.updateCanvas()
-                    this.run_set_point()
+                    if(dispay_draw_button){
+                      this.updateCanvas()
+                      this.run_set_point()
+                    }
                   }}
                 >
                   Generate Maze
                 </button>
-              : null }
             </div>
             </div>
             <div className="col">
@@ -310,7 +199,7 @@ class App extends Component{
               </div>
               <div className="input-group-append">
                 <button 
-                  className="btn btn-outline-light w-100" 
+                  className="btn btn-outline-dark w-100" 
                   type="button"
                   onClick={() => run_solve_maze(select_solve_algorithims)}
                 >

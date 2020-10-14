@@ -73,11 +73,14 @@ const Block = function(x , y , c , size, color = "red", prev_node = null , g = n
     this.h = h 
     this.f = f
     this.distance = distance
+    this.size = size 
+    this.star_size = Math.floor(this.size * (10 / 100))
   
     this.draw = () => {
-        let x = this.x - (size / 3) 
-        let y = this.y - (size / 3)
-        let rect_size = size * 2/3
+        if(this.star_size <= this.size ) this.star_size += 3
+        let x = this.x - (this.star_size / 3) 
+        let y = this.y - (this.star_size / 3)
+        let rect_size = this.star_size * 2/3
         let r = rect_size * 1/4
         c.beginPath()
         c.moveTo(x+r, y)
