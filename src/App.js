@@ -102,7 +102,7 @@ class App extends Component{
     let end_x = this.state.end_location.x
     let end_y = this.state.end_location.y
     return(
-      <div className="mt-1">
+      <div className="mt-3">
         {/* <nav className="navbar">
           <div className="d-flex flex-wrap">
             <div className="input-group p-2" style={{minWidth: 600}}>
@@ -214,15 +214,14 @@ class App extends Component{
           </button>
           </div>
         </nav> */}
-        <div className="container">
+        <div className="container border-right border-bottom p-3 border-secondary shadow-sm p-3 mb-5">
+          <h2 className="ml-2">The Maze Generatetor</h2>
           <div className="row">
-            <div className="col">
+            <div className="col border-right">
               <div class="form-group">
                 <label>Algorithms</label>
                 <select 
                   className="custom-select" 
-                  id="inputGroupSelect04" 
-                  aria-label="Example select with button addon"
                   style={{minWidth: 250}}
                   onChange={(e) => this.setState({select_draw_algorithims: e.target.value})}
                 >
