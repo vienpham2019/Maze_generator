@@ -124,3 +124,4 @@ const set_node = (node) => {
 }
 
 export {greedy_best_first_search , stop_greedy_best_first_search}
+

@@ -103,7 +103,7 @@ class App extends Component{
     let end_y = this.state.end_location.y
     return(
       <div className="mt-1">
-        <nav className="navbar">
+        {/* <nav className="navbar">
           <div className="d-flex flex-wrap">
             <div className="input-group p-2" style={{minWidth: 600}}>
               <div className="input-group-prepend">
@@ -213,7 +213,114 @@ class App extends Component{
             <i class="fas fa-bullseye" style={{color: select_end ? 'black' :'white'}}></i> End Point
           </button>
           </div>
-        </nav>
+        </nav> */}
+        <div className="container">
+          <div className="row">
+            <div className="col">
+              <div class="form-group">
+                <label>Algorithms</label>
+                <select 
+                  className="custom-select" 
+                  id="inputGroupSelect04" 
+                  aria-label="Example select with button addon"
+                  style={{minWidth: 250}}
+                  onChange={(e) => this.setState({select_draw_algorithims: e.target.value})}
+                >
+                  {draw_maze_algorithims.map(algorithm => 
+                    <option value={algorithm}>{algorithm}</option>
+                  )}
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="exampleInputPassword1">Speed</label>
+                <select 
+                  className="custom-select" 
+                  onChange={(e) => this.setState({speed: e.target.value})}
+                >
+                  {speed.map(s => 
+                    s === "Normal"
+                      ? <option value={s} selected>{s}</option>
+                      : <option value={s} >{s}</option>
+                  )}
+                </select>
+              </div>
+              <div className="form-group">
+                <label for="exampleInputPassword1">Rows</label>
+                <input 
+                  type="number" 
+                  className="form-control" 
+                  min='15' max='50'
+                  placeholder="Minimum 15 and Maximum 50"
+                  style={{minWidth: 100}}
+                  onChange={(e) => {
+                    let rows = Math.floor(e.target.value)
+                    this.setState({rows})
+                  }}
+                ></input>
+              </div>
+              <div className="input-group-append">
+              {dispay_draw_button ? 
+                <button 
+                  className="btn btn-outline-light w-100" 
+                  onClick={() => {
+                    this.updateCanvas()
+                    this.run_set_point()
+                  }}
+                >
+                  Generate Maze
+                </button>
+              : null }
+            </div>
+            </div>
+            <div className="col">
+              <div class="form-group">
+                <label>Algorithms</label>
+                <select 
+                  className="custom-select" 
+                  onChange={(e) => this.setState({select_solve_algorithims: e.target.value})}
+                >
+                  {solve_maze_algorithims.map(algorithm => 
+                    <option value={algorithm}>{algorithm}</option>
+                  )}
+                </select>
+              </div>
+              <div className = "form-group">
+                <label>Select start and end points</label><br/>
+                <button 
+                  className="btn m-2" 
+                  style={{color: select_start ? 'black' :'white'}}
+                  onClick={() => {
+                    select_end = false
+                    select_start = !select_start
+                    this.setState({})
+                  }}
+                >
+                  <i class="fas fa-star" style={{color: select_start ? 'black' :'white'}}></i> Start Point
+                </button>
+                <button 
+                  className="btn m-2" 
+                  style={{color: select_end ? 'black' :'white'}}
+                  onClick={() => {
+                    select_start = false
+                    select_end = !select_end 
+                    this.setState({})
+                  }}
+                >
+                  <i class="fas fa-bullseye" style={{color: select_end ? 'black' :'white'}}></i> End Point
+                </button>
+              </div>
+              <div className="input-group-append">
+                <button 
+                  className="btn btn-outline-light w-100" 
+                  type="button"
+                  onClick={() => run_solve_maze(select_solve_algorithims)}
+                >
+                  Solve Maze
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
         <div className="m-5">
           {display_points ? 
             <i 
