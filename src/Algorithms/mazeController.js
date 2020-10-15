@@ -7,6 +7,8 @@ import { dijkstra , stop_dijkstra }from './solve_maze/dijkstra'
 import { bidirectional_dijkstra , stop_bidirectional_dijkstra }from './solve_maze/bidirectional_dijkstra'
 import { bidirectional_a_star , stop_bidirectional_a_star }from './solve_maze/bidirectional_a_star'
 
+import {self_solve} from './self_solve'
+
 import { recursive_dividion_maze } from './draw_maze/recursive_division_maze_generation'
 import { prims_maze , stop_prims_draw_maze} from './draw_maze/prims_maze_generation'
 import { depth_first_search_maze , stop_depth_first_search_draw_maze } from './draw_maze/depth_first_search_maze_generation'
@@ -118,6 +120,7 @@ const draw_divide_maze = (props) => {
       default_grid()
       break 
   }
+
 }
 
 const default_grid = () => {
@@ -135,29 +138,31 @@ const run_solve_maze = (algorithms) => {
   stop_bidirectional_dijkstra()
   stop_bidirectional_a_star()
 
-  switch (algorithms) {
-    case "A star":
-      a_star({start_node , end_node , nodes , c , canvas , size})
-      break
-    case "Depth first search": 
-      depth_first_search({nodes , start_node , end_node , c , canvas , size})
-      break
-    case "Breadth first search": 
-      breadth_first_search({c , canvas , size , nodes , start_node , end_node })
-      break 
-    case "Dijkstra's": 
-      dijkstra({start_node , end_node , nodes , c , canvas , size})
-      break 
-    case "Greedy best first search": 
-      greedy_best_first_search({start_node , end_node , nodes , c , canvas , size})
-      break 
-    case "Bidirectional a star": 
-      bidirectional_a_star({start_node , end_node , nodes , c , canvas , size})
-      break 
-    case "Bidirectional dijkstra's": 
-      bidirectional_dijkstra({start_node , end_node , nodes , c , canvas , size})
-      break 
-  }
+  // switch (algorithms) {
+  //   case "A star":
+  //     a_star({start_node , end_node , nodes , c , canvas , size})
+  //     break
+  //   case "Depth first search": 
+  //     depth_first_search({nodes , start_node , end_node , c , canvas , size})
+  //     break
+  //   case "Breadth first search": 
+  //     breadth_first_search({c , canvas , size , nodes , start_node , end_node })
+  //     break 
+  //   case "Dijkstra's": 
+  //     dijkstra({start_node , end_node , nodes , c , canvas , size})
+  //     break 
+  //   case "Greedy best first search": 
+  //     greedy_best_first_search({start_node , end_node , nodes , c , canvas , size})
+  //     break 
+  //   case "Bidirectional a star": 
+  //     bidirectional_a_star({start_node , end_node , nodes , c , canvas , size})
+  //     break 
+  //   case "Bidirectional dijkstra's": 
+  //     bidirectional_dijkstra({start_node , end_node , nodes , c , canvas , size})
+  //     break 
+
+    self_solve({nodes , start_node , end_node , c , canvas , size})
+  // }
 }
 
 const update_info = props => {

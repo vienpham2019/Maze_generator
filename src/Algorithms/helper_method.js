@@ -72,6 +72,7 @@ const Block = function(x , y , c , size, color = "red", prev_node = null , g = n
     this.g = g 
     this.h = h 
     this.f = f
+    this.c = c 
     this.distance = distance
     this.size = size 
     this.star_size = Math.floor(this.size * (10 / 100))
@@ -82,16 +83,53 @@ const Block = function(x , y , c , size, color = "red", prev_node = null , g = n
         let y = this.y - (this.star_size / 3)
         let rect_size = this.star_size * 2/3
         let r = rect_size * 1/4
-        c.beginPath()
-        c.moveTo(x+r, y)
-        c.arcTo(x+rect_size, y,   x+rect_size, y+rect_size, r)
-        c.arcTo(x+rect_size, y+rect_size, x,   y+rect_size, r)
-        c.arcTo(x,   y+rect_size, x,   y,   r)
-        c.arcTo(x,   y,   x+rect_size, y,   r)
-        c.fillStyle = this.color
-        c.fill()
-        c.closePath()
+        this.c.beginPath()
+        this.c.moveTo(x+r, y)
+        this.c.arcTo(x+rect_size, y,   x+rect_size, y+rect_size, r)
+        this.c.arcTo(x+rect_size, y+rect_size, x,   y+rect_size, r)
+        this.c.arcTo(x,   y+rect_size, x,   y,   r)
+        this.c.arcTo(x,   y,   x+rect_size, y,   r)
+        this.c.fillStyle = this.color
+        this.c.fill()
+        this.c.closePath()
     }
 }
 
-export {Node , Block}
+class Stack {
+    constructor() {
+      this.items = {};
+      this.count = 0;
+      this.keys = []
+    }
+    
+    getLength() {
+      return this.count;
+    }
+    
+    push(key , val) {
+        this.items[key] = val; 
+        this.count += 1;
+        this.keys.push(key) 
+    }
+    
+    pop() {
+      if(this.count > 0) {
+        delete this.items[this.keys[--this.count]]
+        this.keys.pop()
+      }
+    }
+    
+    peek() {
+      return this.items[this.keys[this.count - 1]];
+    }
+
+    has(key){
+        return this.items[key]
+    }
+
+    values(){
+        return Object.values(this.items)
+    }
+}
+
+export {Node , Block , Stack}
