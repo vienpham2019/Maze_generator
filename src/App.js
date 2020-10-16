@@ -197,6 +197,9 @@ class App extends Component{
                   <i class="fas fa-bullseye" style={{color: select_end ? 'black' :'white'}}></i> End Point
                 </button>
               </div>
+              <label className="mb-3 text-info">
+                {select_solve_algorithims === "★ Self-Solve ★" ? "Use W / S to control forward and backward A / D for left and right." : ""}
+              </label>
               <div className="input-group-append">
                 <button 
                   className="btn btn-outline-dark w-100" 
