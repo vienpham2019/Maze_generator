@@ -20,12 +20,16 @@ const self_solve = props => {
     set_up()
 }
 
+const stop_self_solve = () => {
+    window.removeEventListener("keydown" , run_solve_maze)
+}
+
 const set_up = () => {
     c.clearRect(0,0,canvas.width, canvas.height)
     for(let node of nodes){
         node.draw()
     }
-    window.removeEventListener("keydown" , run_solve_maze)
+    stop_self_solve()
     window.addEventListener("keydown" , run_solve_maze)
 }
 
@@ -52,12 +56,12 @@ const run_solve_maze = e => {
         }
         for(let path of current_path.values()){
             path.star_size = size 
-            path.color = "LightSkyBlue"
-            current_path.peek().color = "MediumBlue"
+            path.color = "MediumBlue"
+            current_path.peek().color = "LightSkyBlue"
             path.draw()
         }
         if(find_path) {
-            window.removeEventListener("keydown" , run_solve_maze)
+            stop_self_solve()
             current_node = current_path.peek()
             draw_finish_path()
         }
@@ -87,10 +91,10 @@ const find_next_step = (node , wall_number) => {
 }
 
 const set_node = (node) => {
-    let color = "LightSkyBlue"
+    let color = "MediumBlue"
     let {x , y} = node 
     let new_node = new Block(x, y , c , size , color , current_path.peek())
     return new_node 
 }
 
-export {self_solve}
+export {self_solve , stop_self_solve}
