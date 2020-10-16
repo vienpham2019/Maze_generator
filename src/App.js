@@ -7,6 +7,8 @@ let select_start = false
 let select_end = false 
 let display_points = false 
 
+let myReg 
+
 class App extends Component{
   constructor(){
     super()
@@ -19,8 +21,9 @@ class App extends Component{
       dispay_draw_button: true , 
       speed: "Normal", 
       start_location: {x: 40 , y: 170}, 
-
       end_location: {x: 40 , y: 170}, 
+
+      time: "00 min : 00 sec"
     }
   }
 
@@ -92,8 +95,23 @@ class App extends Component{
     check_recursive_delay: this.check_recursive_delay , speed })
   }
 
+  star_time = () => {
+    let min = 0 
+    let sec = 0 
+    clearInterval(myReg)
+    myReg = setInterval(() => {
+      sec = (sec + 1) % 60 
+      min += Math.floor(sec / 59)
+
+      let sec_s = sec < 10 ? '0' + sec : sec 
+      let min_s = min < 10 ? '0' + min : min 
+      let time =  " " + min_s + " min " + " : " + sec_s + " sec"
+      this.setState({time})
+    }, 1000);
+  }
+
   render(){
-    let {width , height , select_solve_algorithims , dispay_draw_button} = this.state
+    let {width , height , select_solve_algorithims , dispay_draw_button , time} = this.state
     let {draw_maze_algorithims , solve_maze_algorithims} = this.props
     let speed = ["Slow", "Normal", "Fast" , "Very Fast"]
     let start_x = this.state.start_location.x
@@ -101,6 +119,7 @@ class App extends Component{
 
     let end_x = this.state.end_location.x
     let end_y = this.state.end_location.y
+
     return(
       <div className="mt-3">
         <div className="container border-right border-bottom p-3 border-secondary shadow-sm p-3 mb-5">
@@ -151,6 +170,8 @@ class App extends Component{
                   className="btn btn-outline-dark w-100" 
                   onClick={() => {
                     if(dispay_draw_button){
+                      clearInterval(myReg)
+                      this.setState({time: "00 min : 00 sec"})
                       this.updateCanvas()
                       this.run_set_point()
                     }
@@ -198,17 +219,22 @@ class App extends Component{
                 </button>
               </div>
               <label className="mb-3 text-info">
-                {select_solve_algorithims === "★ Self-Solve ★" ? "Use W / S to control forward and backward A / D for left and right." : ""}
+                {select_solve_algorithims === "★ Self-Solve ★" ? "Use W | S to control forward and backward A | D for left and right." : ""}
               </label>
               <div className="input-group-append">
                 <button 
                   className="btn btn-outline-dark w-100" 
                   type="button"
-                  onClick={() => run_solve_maze(select_solve_algorithims)}
+                  onClick={() => {
+                    this.star_time()
+                    run_solve_maze(select_solve_algorithims)
+                  }}
                 >
                   Solve Maze
                 </button>
               </div>
+
+              <p className="m-3 text-info text-right">Time: {time}</p>
             </div>
           </div>
         </div>
