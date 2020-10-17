@@ -95,7 +95,7 @@ class App extends Component{
 
   render(){
     let {width , height , select_solve_algorithims , dispay_draw_button} = this.state
-    let {draw_maze_algorithims , solve_maze_algorithims} = this.props
+    let {solve_maze_algorithims , draw_maze_algorithims} = this.props
     let speed = ["Slow", "Normal", "Fast" , "Very Fast"]
     let start_x = this.state.start_location.x
     let start_y = this.state.start_location.y
@@ -108,6 +108,7 @@ class App extends Component{
         <div className="container border-right border-bottom p-3 border-secondary shadow-sm p-3 mb-5">
           <h2 className="ml-2">The Maze Generatetor</h2>
           <div className="row">
+            {/* Generate maze controller */}
             <div className="col border-right">
               <div class="form-group">
                 <label>Algorithms</label>
@@ -160,8 +161,10 @@ class App extends Component{
                 >
                   Generate Maze
                 </button>
+              </div>
             </div>
-            </div>
+            
+            {/* Solve maze controller */}
             <div className="col">
               <div class="form-group">
                 <label>Algorithms</label>
@@ -200,6 +203,7 @@ class App extends Component{
                 >
                   <i class="fas fa-star" style={{color: select_start ? 'black' :'white'}}></i> Start Point
                 </button>
+
                 <button 
                   className="btn m-2" 
                   style={{color: select_end ? 'black' :'white'}}
@@ -211,8 +215,9 @@ class App extends Component{
                 >
                   <i class="fas fa-bullseye" style={{color: select_end ? 'black' :'white'}}></i> End Point
                 </button>
+
               </div>
-              <label className="mb-3 text-info">
+              <label className="text-info">
                 {select_solve_algorithims === "★ Self-Solve ★" ? "Use W | S to control forward and backward A | D for left and right." : ""}
               </label>
               <div className="input-group-append">
@@ -220,6 +225,7 @@ class App extends Component{
                   className="btn btn-outline-dark w-100" 
                   type="button"
                   onClick={() => {
+                    this.run_set_point()
                     run_solve_maze(select_solve_algorithims , this.state.solve_speed)
                   }}
                 >
@@ -229,6 +235,8 @@ class App extends Component{
             </div>
           </div>
         </div>
+
+        {/* Maze canvas */}
         <div className="m-5">
           {display_points ? 
             <i 
