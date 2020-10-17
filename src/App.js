@@ -225,7 +225,6 @@ class App extends Component{
                   className="btn btn-outline-dark w-100" 
                   type="button"
                   onClick={() => {
-                    this.run_set_point()
                     run_solve_maze(select_solve_algorithims , this.state.solve_speed)
                   }}
                 >

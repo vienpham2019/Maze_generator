@@ -1,4 +1,4 @@
-import { Block } from '../helper_method'
+import { Block , Stack } from '../helper_method'
 import {get_top_right_bottom_left , add_to_heap , remove_from_heap} from './helper_method/algorithms_helper_method'
 
 let start_node , end_node , nodes , c , canvas , size , speed  
@@ -19,10 +19,10 @@ const bidirectional_dijkstra = props => {
     speed = props.speed 
     
     open_list_1 = [start_node]
-    close_list_1 = []
+    close_list_1 = new Stack()
 
     open_list_2 = [end_node]
-    close_list_2 = []
+    close_list_2 = new Stack()
 
     current_node_1 = start_node
     current_node_2 = end_node 
@@ -47,8 +47,8 @@ const run_solve_maze = () => {
     }, speed);
     c.clearRect(0,0,canvas.width, canvas.height)
 
-    for(let i = 0 ; i < nodes.length ; i ++){
-        nodes[i].draw()
+    for(let node of nodes){
+        node.draw()
     }
 
     print_close_and_open_list(close_list_1 , open_list_1 , 'MediumBlue' , 'LightSkyBlue' )
@@ -56,13 +56,13 @@ const run_solve_maze = () => {
 
     if(open_list_2.length > 0 && !finish_search){
         current_node_2 = open_list_2[0] 
-        close_list_2.push(current_node_2)
+        close_list_2.push(`${current_node_2.x} , ${current_node_2.y}` , current_node_2)
         open_list_2 = find_child_node(current_node_2 , open_list_2 , close_list_2 , close_list_1)
     }
 
     if(open_list_1.length > 0 && !finish_search){
         current_node_1 = open_list_1[0] 
-        close_list_1.push(current_node_1)
+        close_list_1.push(`${current_node_1.x} , ${current_node_1.y}` , current_node_1)
         open_list_1 = find_child_node(current_node_1 , open_list_1 , close_list_1 , close_list_2)
     }
 
@@ -85,25 +85,25 @@ const run_solve_maze = () => {
 
 const print_close_and_open_list = (close_list , open_list , close_color , open_color ) => {
     if(!finish_search){
-        for(let i = 0 ; i < open_list.length ; i ++){
-            open_list[i].color = open_color
-            open_list[i].draw()
+        for(let open_node of open_list){
+            open_node.color = open_color
+            open_node.draw()
         }
     }
 
-    for(let i = 0 ; i < close_list.length ; i ++){
+    for(let close_node of close_list.values()){
         if(!finish_search){
-            close_list[i].color = close_color 
+            close_node.color = close_color 
         }
-        close_list[i].draw()
+        close_node.draw()
     }
 }
 
 const check_for_mix_node = (next_close_list , x , y) => {
-    let node = next_close_list.find(node => node.x === x && node.y === y)
+    let node = next_close_list.has(`${x} , ${y}`)
     if(node){
         finish_search = true 
-        if(close_list_1.find(node => node.x === x  && node.y === y)){
+        if(close_list_1.has(`${x} , ${y}`)){
             current_node_1 = node
         }else{
             current_node_2 = node
@@ -133,7 +133,11 @@ const find_child_node = (c_node , open_list , close_list , next_close_list) => {
 }
 
 const add_node = (neighbor_node , c_node , wall_num , close_list , open_list , neighbor_close_list) => {
-    if(neighbor_node && !neighbor_node.walls[wall_num] &&!close_list.find(node => node.x === neighbor_node.x && node.y === neighbor_node.y)){
+    if(
+        neighbor_node 
+        && !neighbor_node.walls[wall_num] 
+        &&!close_list.has(`${neighbor_node.x} , ${neighbor_node.y}`)
+        ){
         let {x , y} = neighbor_node
         let node_in_open = open_list.find(n => n.x === x  && n.y === y)
         
@@ -168,11 +172,9 @@ const create_new_node = (node , c_node) => {
 
 const find_distance = (node , c_node) => {
     // find distance from current node to next node 
-    let x_1 = c_node.x 
-    let y_1 = c_node.y
+    let [ x_1 , y_1 ]= [ c_node.x , c_node.y ] 
 
-    let x_2 = node.x 
-    let y_2 = node.y
+    let [ x_2 , y_2 ] = [ node.x , node.y ] 
 
    return ((Math.abs(x_1 - x_2) + Math.abs(y_1 - y_2)) * size ) + c_node.distance
 }
