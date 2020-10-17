@@ -1,4 +1,4 @@
-import { Block } from '../helper_method'
+import { Block , Stack} from '../helper_method'
 
 import {get_top_right_bottom_left , add_to_heap , remove_from_heap} from './helper_method/algorithms_helper_method'
 
@@ -19,7 +19,7 @@ const dijkstra = props => {
     end_node.prev_node = null
     
     open_list = [start_node]
-    close_list = []
+    close_list = new Stack()
     current_node = null 
     finish_path = false 
 
@@ -40,22 +40,22 @@ const run_solve_maze = () => {
     }, speed);
     c.clearRect(0,0,canvas.width, canvas.height)
 
-    for(let i = 0 ; i < nodes.length ; i ++){
-        nodes[i].draw()
+    for(let node of nodes){
+        node.draw()
     }
 
-    for(let i = 0 ; i < close_list.length ; i ++){
+    for(let node of close_list.values()){
         if(!end_node.prev_node){
-            close_list[i].color = 'MediumBlue'
+            node.color = 'MediumBlue'
         }
-        close_list[i].draw()
+        node.draw()
     }
 
-    for(let i = 0 ; i < open_list.length ; i ++){
+    for(let node of open_list){
         if(!end_node.prev_node){
-            open_list[i].color = 'LightSkyBlue' 
+            node.color = 'LightSkyBlue' 
         }
-        open_list[i].draw()
+        node.draw()
     }
 
     if(current_node && end_node.x === current_node.x && end_node.y === current_node.y){
@@ -64,7 +64,7 @@ const run_solve_maze = () => {
 
     if(open_list.length > 0 && !end_node.prev_node){
         current_node = open_list[0] 
-        close_list.push(current_node)
+        close_list.push(`${current_node.x} , ${current_node.y}` , current_node)
         find_child_node()
     }
 
@@ -103,7 +103,7 @@ const add_node = (neighbor_node , wall_num) => {
     if(
         neighbor_node 
         && !neighbor_node.walls[wall_num] 
-        &&!close_list.find(node => node.x === neighbor_node.x && node.y === neighbor_node.y)
+        &&!close_list.has(`${neighbor_node.x} , ${neighbor_node.y}`)
     ){
         let {x , y} = neighbor_node
         let node_in_open = open_list.find(n => n.x === x  && n.y === y)
@@ -137,11 +137,9 @@ const create_new_node = (node) => {
 
 const find_distance = (node) => {
     // find distance from current node to next node 
-    let x_1 = current_node.x 
-    let y_1 = current_node.y 
+    let [x_1 , y_1] = [current_node.x , current_node.y ]
 
-    let x_2 = node.x 
-    let y_2 = node.y
+    let [x_2 , y_2] = [node.x , node.y]
 
    return ((Math.abs(x_1 - x_2) + Math.abs(y_1 - y_2)) * size ) + current_node.distance
 }
