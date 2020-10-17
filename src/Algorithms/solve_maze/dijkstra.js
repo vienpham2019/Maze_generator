@@ -2,7 +2,7 @@ import { Block } from '../helper_method'
 
 import {get_top_right_bottom_left , add_to_heap , remove_from_heap} from './helper_method/algorithms_helper_method'
 
-let start_node , end_node , nodes , c , canvas , size 
+let start_node , end_node , nodes , c , canvas , size , speed 
 
 let open_list , close_list , current_node , myReq , finish_path
 
@@ -14,6 +14,7 @@ const dijkstra = props => {
     c = props.c 
     canvas = props.canvas 
     size = props.size 
+    speed = props.speed 
 
     end_node.prev_node = null
     
@@ -22,16 +23,21 @@ const dijkstra = props => {
     current_node = null 
     finish_path = false 
 
-    cancelAnimationFrame(myReq)
+    // cancelAnimationFrame(myReq)
+    clearTimeout(myReq)
     run_solve_maze()
 }
 
 const stop_dijkstra = () => {
-    cancelAnimationFrame(myReq)
+    // cancelAnimationFrame(myReq)
+    clearTimeout(myReq)
 }
 
 const run_solve_maze = () => {
-    myReq = requestAnimationFrame(run_solve_maze)
+    // myReq = requestAnimationFrame(run_solve_maze)
+    myReq = setTimeout(() => {
+        run_solve_maze()
+    }, speed);
     c.clearRect(0,0,canvas.width, canvas.height)
 
     for(let i = 0 ; i < nodes.length ; i ++){
@@ -69,7 +75,8 @@ const run_solve_maze = () => {
     }
 
     if(finish_path){
-        cancelAnimationFrame(myReq)
+        // cancelAnimationFrame(myReq)
+        clearTimeout(myReq)
     }
 }
 

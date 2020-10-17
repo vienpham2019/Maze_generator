@@ -1,7 +1,7 @@
 import {Block} from '../helper_method'
 import {get_top_right_bottom_left} from './helper_method/algorithms_helper_method'
 
-let c , canvas , size , nodes , start_node , end_node 
+let c , canvas , size , nodes , start_node , end_node , speed 
     
 let visited_nodes ,  quere , current_node , finish_path , myReq
 
@@ -20,17 +20,24 @@ const breadth_first_search = (props) => {
 
     end_node.prev_node = null
 
+    speed = props.speed 
+
     quere.push(start_node)
-    cancelAnimationFrame(myReq)
+    // cancelAnimationFrame(myReq)
+    clearTimeout(myReq)
     run_solve_maze()
 }
 
 const stop_breadth_first_search = () => {
-    cancelAnimationFrame(myReq)
+    // cancelAnimationFrame(myReq)
+    clearTimeout(myReq)
 }
 
 const run_solve_maze = () => {
-    myReq = requestAnimationFrame(run_solve_maze)
+    // myReq = requestAnimationFrame(run_solve_maze)
+    myReq = setTimeout(() => {
+        run_solve_maze()
+    }, speed);
     c.clearRect(0,0,canvas.width, canvas.height)
 
     for(let i = 0; i < nodes.length; i ++){
@@ -48,7 +55,8 @@ const run_solve_maze = () => {
     }
     
     if(finish_path){
-        cancelAnimationFrame(myReq)
+        // cancelAnimationFrame(myReq)
+        clearTimeout(myReq)
     }
     if(!end_node.prev_node && !finish_path){
         solve_maze()

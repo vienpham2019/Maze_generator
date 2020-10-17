@@ -130,7 +130,7 @@ const default_grid = () => {
   }
 }
 
-const run_solve_maze = (algorithms) => {
+const run_solve_maze = (algorithms , speed) => {
   stop_greedy_best_first_search()
   stop_a_star()
   stop_dijkstra()
@@ -143,25 +143,25 @@ const run_solve_maze = (algorithms) => {
 
   switch (algorithms) {
     case "A star":
-      a_star({start_node , end_node , nodes , c , canvas , size})
+      a_star({start_node , end_node , nodes , c , canvas , size , speed})
       break
     case "Depth first search": 
-      depth_first_search({nodes , start_node , end_node , c , canvas , size})
+      depth_first_search({nodes , start_node , end_node , c , canvas , size , speed})
       break
     case "Breadth first search": 
-      breadth_first_search({c , canvas , size , nodes , start_node , end_node })
+      breadth_first_search({c , canvas , size , nodes , start_node , end_node , speed})
       break 
     case "Dijkstra's": 
-      dijkstra({start_node , end_node , nodes , c , canvas , size})
+      dijkstra({start_node , end_node , nodes , c , canvas , size , speed})
       break 
     case "Greedy best first search": 
-      greedy_best_first_search({start_node , end_node , nodes , c , canvas , size})
+      greedy_best_first_search({start_node , end_node , nodes , c , canvas , size , speed})
       break 
     case "Bidirectional a star": 
-      bidirectional_a_star({start_node , end_node , nodes , c , canvas , size})
+      bidirectional_a_star({start_node , end_node , nodes , c , canvas , size , speed})
       break 
     case "Bidirectional dijkstra's": 
-      bidirectional_dijkstra({start_node , end_node , nodes , c , canvas , size})
+      bidirectional_dijkstra({start_node , end_node , nodes , c , canvas , size , speed})
       break 
     default: 
       self_solve({nodes , start_node , end_node , c , canvas , size})

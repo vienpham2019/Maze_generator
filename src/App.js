@@ -7,8 +7,6 @@ let select_start = false
 let select_end = false 
 let display_points = false 
 
-let myReg 
-
 class App extends Component{
   constructor(){
     super()
@@ -19,11 +17,11 @@ class App extends Component{
       select_solve_algorithims: "A star",
       rows: 15, 
       dispay_draw_button: true , 
-      speed: "Normal", 
+      generate_speed: "Normal", 
       start_location: {x: 40 , y: 170}, 
       end_location: {x: 40 , y: 170}, 
-
-      time: "00 min : 00 sec"
+      speeds: {"Slow": 200 , "Normal": 100 , "Fast": 50, "Very Fast": 10}, 
+      solve_speed: 50 
     }
   }
 
@@ -69,7 +67,7 @@ class App extends Component{
     display_points = true
     let {rows , height , width } = this.state
 
-    let speed = this.props.speed[select_draw_algorithims][this.state.speed]
+    let speed = this.props.speed[select_draw_algorithims][this.state.generate_speed]
 
     if(select_draw_algorithims === "Recursive Division"){
       this.check_recursive_delay(false)
@@ -95,23 +93,8 @@ class App extends Component{
     check_recursive_delay: this.check_recursive_delay , speed })
   }
 
-  star_time = () => {
-    let min = 0 
-    let sec = 0 
-    clearInterval(myReg)
-    myReg = setInterval(() => {
-      sec = (sec + 1) % 60 
-      min += Math.floor(sec / 59)
-
-      let sec_s = sec < 10 ? '0' + sec : sec 
-      let min_s = min < 10 ? '0' + min : min 
-      let time =  " " + min_s + " min " + " : " + sec_s + " sec"
-      this.setState({time})
-    }, 1000);
-  }
-
   render(){
-    let {width , height , select_solve_algorithims , dispay_draw_button , time} = this.state
+    let {width , height , select_solve_algorithims , dispay_draw_button} = this.state
     let {draw_maze_algorithims , solve_maze_algorithims} = this.props
     let speed = ["Slow", "Normal", "Fast" , "Very Fast"]
     let start_x = this.state.start_location.x
@@ -142,7 +125,7 @@ class App extends Component{
                 <label for="exampleInputPassword1">Speed</label>
                 <select 
                   className="custom-select" 
-                  onChange={(e) => this.setState({speed: e.target.value})}
+                  onChange={(e) => this.setState({generate_speed: e.target.value})}
                 >
                   {speed.map(s => 
                     s === "Normal"
@@ -170,8 +153,6 @@ class App extends Component{
                   className="btn btn-outline-dark w-100" 
                   onClick={() => {
                     if(dispay_draw_button){
-                      clearInterval(myReg)
-                      this.setState({time: "00 min : 00 sec"})
                       this.updateCanvas()
                       this.run_set_point()
                     }
@@ -190,6 +171,19 @@ class App extends Component{
                 >
                   {solve_maze_algorithims.map(algorithm => 
                     <option value={algorithm}>{algorithm}</option>
+                  )}
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="exampleInputPassword1">Speed</label>
+                <select 
+                  className="custom-select" 
+                  onChange={(e) => this.setState({solve_speed: this.state.speeds[e.target.value]})}
+                >
+                  {speed.map(s => 
+                    s === "Normal"
+                      ? <option value={s} selected>{s}</option>
+                      : <option value={s} >{s}</option>
                   )}
                 </select>
               </div>
@@ -226,15 +220,12 @@ class App extends Component{
                   className="btn btn-outline-dark w-100" 
                   type="button"
                   onClick={() => {
-                    this.star_time()
-                    run_solve_maze(select_solve_algorithims)
+                    run_solve_maze(select_solve_algorithims , this.state.solve_speed)
                   }}
                 >
                   Solve Maze
                 </button>
               </div>
-
-              <p className="m-3 text-info text-right">Time: {time}</p>
             </div>
           </div>
         </div>
