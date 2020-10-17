@@ -128,6 +128,20 @@ class Stack {
     values(){
         return Object.values(this.items)
     }
+
+    delete(key){
+        delete this.items[key]
+        this.count-- 
+        this.keys = this.keys.filter(k => k !== key )
+    }
+
+    get_index(index){
+        return this.items[this.keys[index]]
+    }
+
+    size(){
+        return this.count
+    }
 }
 
 export {Node , Block , Stack}

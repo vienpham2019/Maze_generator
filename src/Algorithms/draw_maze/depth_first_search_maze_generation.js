@@ -37,8 +37,8 @@ const draw_maze = () => {
     }, frame_per_second / speed);
     c.clearRect(0,0,canvas.width, canvas.height)
 
-    for(let i = 0; i < nodes.length; i ++){
-        nodes[i].draw()
+    for(let node of nodes){
+        node.draw()
     }
 
     if(stack.length === 0){

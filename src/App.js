@@ -64,7 +64,6 @@ class App extends Component{
 
   updateCanvas = (select_draw_algorithims = this.state.select_draw_algorithims) => {
     // rows == min 15 and max 50
-    display_points = true
     let {rows , height , width } = this.state
 
     let speed = this.props.speed[select_draw_algorithims][this.state.generate_speed]
@@ -97,11 +96,10 @@ class App extends Component{
     let {width , height , select_solve_algorithims , dispay_draw_button} = this.state
     let {solve_maze_algorithims , draw_maze_algorithims} = this.props
     let speed = ["Slow", "Normal", "Fast" , "Very Fast"]
-    let start_x = this.state.start_location.x
-    let start_y = this.state.start_location.y
+    
+    let [start_x , start_y] = [this.state.start_location.x , this.state.start_location.y]
 
-    let end_x = this.state.end_location.x
-    let end_y = this.state.end_location.y
+    let [end_x , end_y]  = [this.state.end_location.x , this.state.end_location.y]
 
     return(
       <div className="mt-3">
@@ -151,8 +149,9 @@ class App extends Component{
               </div>
               <div className="input-group-append">
                 <button 
-                  className="btn btn-outline-dark w-100" 
+                  className="btn btn-outline-dark w-100 my-3" 
                   onClick={() => {
+                    display_points = true
                     if(dispay_draw_button){
                       this.updateCanvas()
                       this.run_set_point()
@@ -193,7 +192,7 @@ class App extends Component{
               <div className = "form-group">
                 <label>Select start and end points</label><br/>
                 <button 
-                  className="btn m-2" 
+                  className="btn mx-2" 
                   style={{color: select_start ? 'black' :'white'}}
                   onClick={() => {
                     select_end = false
@@ -205,7 +204,7 @@ class App extends Component{
                 </button>
 
                 <button 
-                  className="btn m-2" 
+                  className="btn mx-2" 
                   style={{color: select_end ? 'black' :'white'}}
                   onClick={() => {
                     select_start = false
@@ -215,11 +214,10 @@ class App extends Component{
                 >
                   <i class="fas fa-bullseye" style={{color: select_end ? 'black' :'white'}}></i> End Point
                 </button>
-
+                <label className="text-info">
+                  {select_solve_algorithims === "★ Self-Solve ★" ? "Use W | S to control forward and backward A | D for left and right." : ""}
+                </label>
               </div>
-              <label className="text-info">
-                {select_solve_algorithims === "★ Self-Solve ★" ? "Use W | S to control forward and backward A | D for left and right." : ""}
-              </label>
               <div className="input-group-append">
                 <button 
                   className="btn btn-outline-dark w-100" 
@@ -239,12 +237,12 @@ class App extends Component{
         <div className="m-5">
           {display_points ? 
             <i 
-              class="fas fa-star" 
+              class="fas fa-star text-white" 
               style={{position: "absolute", width: 10 , height: 10, top: start_y - 10, left: start_x - 10 , backgroundColor: 'transparent'}}></i>
           : null } 
           {display_points ? 
             <i 
-              class="fas fa-bullseye" 
+              class="fas fa-bullseye text-white" 
               style={{position: "absolute", width: 6, height: 6, top: end_y - 6, left: end_x - 6 , backgroundColor: 'transparent'}}></i>
           : null }
           <canvas ref="maze" style={{width, height}}></canvas>

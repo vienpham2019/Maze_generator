@@ -14,8 +14,8 @@ const prims_maze = props => {
     frame_per_second = props.frame_per_second
     speed = props.speed
 
-    neighbors_node = []
-    visited_neighbors_node = []
+    neighbors_node = new Stack()
+    visited_neighbors_node = new Stack()
     current_neighbor_node = null 
     
     clearInterval(myReqDraw)
@@ -30,8 +30,8 @@ const setup_prims_maze = (nodes_array , w , h) => {
     let midd_x =  Math.floor(w / 2) * size + (size / 2)
     let midd_y =  Math.floor(h / 2) * size + (size / 2)
     let center_node = nodes_array.find(node => node.x === midd_x && node.y === midd_y)
-    neighbors_node.push(center_node)
-    visited_neighbors_node.push(center_node)
+    neighbors_node.push(`${center_node.x} , ${center_node.y}` , center_node)
+    visited_neighbors_node.push(`${center_node.x} , ${center_node.y}` , center_node)
     current_neighbor_node = center_node
 
     draw_prims_maze()
@@ -47,7 +47,7 @@ const draw_prims_maze = () => {
         node.draw()
     }
 
-    if(neighbors_node.length === 0){
+    if(neighbors_node.count === 0){
         clearInterval(myReqDraw)
     }
 
@@ -70,7 +70,7 @@ const add_neighbor_node = () => {
     //left 
     create_neighbor_node(left)
 
-    neighbors_node = neighbors_node.filter(node => node.x === x && node.y === y ? false : true )
+    neighbors_node.delete(`${x} , ${y}`)
 
     link_node_with_random_neighbor()
 }
@@ -78,19 +78,20 @@ const add_neighbor_node = () => {
 const create_neighbor_node = (neighbor_node) => {
     if(
         neighbor_node 
-        && !visited_neighbors_node.find(node => node.x === neighbor_node.x && node.y === neighbor_node.y)
-        && !neighbors_node.find(node => node.x === neighbor_node.x && node.y === neighbor_node.y)
+        && !visited_neighbors_node.has(`${neighbor_node.x} , ${neighbor_node.y}`)
+        && !neighbors_node.has(`${neighbor_node.x} , ${neighbor_node.y}`)
     ){
-        neighbors_node.push(neighbor_node)
+        neighbors_node.push(`${neighbor_node.x} , ${neighbor_node.y}` , neighbor_node)
         neighbor_node.prev_node = current_neighbor_node
     }
 }
 
 const link_node_with_random_neighbor = () => {
-    if(neighbors_node.length === 0) return
-    let random_num = getRandom(0 , neighbors_node.length)
-    let random_neighbor = neighbors_node[random_num]
-    let {top , right , bottom , left} = get_top_right_bottom_left(random_neighbor,visited_neighbors_node , size)
+    if(neighbors_node.count <= 0) return
+    let random_num = getRandom(0 , neighbors_node.count)
+    let random_neighbor = neighbors_node.get_index(random_num)
+    
+    let {top , right , bottom , left} = get_top_right_bottom_left(random_neighbor, visited_neighbors_node.values(), size)
 
     if(top && top.x === random_neighbor.prev_node.x && top.y === random_neighbor.prev_node.y){
         random_neighbor.walls[0] = false 
@@ -111,9 +112,8 @@ const link_node_with_random_neighbor = () => {
         random_neighbor.walls[3] = false 
         left.walls[1] = false
     }
-
     current_neighbor_node = random_neighbor
-    visited_neighbors_node.push(random_neighbor)
+    visited_neighbors_node.push(`${random_neighbor.x} , ${random_neighbor.y}` , random_neighbor)
 }
 
 const getRandom = (min,max) => {
