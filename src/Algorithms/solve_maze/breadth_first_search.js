@@ -1,4 +1,4 @@
-import {Block} from '../helper_method'
+import {Block , Stack} from '../helper_method'
 import {get_top_right_bottom_left} from './helper_method/algorithms_helper_method'
 
 let c , canvas , size , nodes , start_node , end_node , speed 
@@ -9,7 +9,7 @@ const breadth_first_search = (props) => {
     c = props.c
     canvas = props.canvas 
     size = props.size 
-    visited_nodes = []
+    visited_nodes = new Stack()
     nodes = props.nodes 
 
     quere = []
@@ -40,12 +40,12 @@ const run_solve_maze = () => {
     }, speed);
     c.clearRect(0,0,canvas.width, canvas.height)
 
-    for(let i = 0; i < nodes.length; i ++){
-        nodes[i].draw()
+    for(let node of nodes){
+        node.draw()
     }
 
-    for(let i = 0; i < visited_nodes.length; i ++){
-        visited_nodes[i].draw()
+    for(let v_node of visited_nodes.values()){
+        v_node.draw()
     }
 
     if(end_node.prev_node && !finish_path){
@@ -64,14 +64,14 @@ const run_solve_maze = () => {
 }
   
 const solve_maze = () => {
-    let quere_nodes = [...quere]
+    let quere_nodes = quere.slice()
     quere.shift()
     // visited_nodes_for_path.push(current_node)
     if(end_node.prev_node){
         return
     }
-    for(let i = 0; i < quere_nodes.length ; i ++){
-        check_neighbor_node(quere_nodes[i])
+    for(let node of quere_nodes){
+        check_neighbor_node(node)
     }
 }
   
@@ -93,7 +93,11 @@ const check_neighbor_node = (node) => {
 
 const add_node = (neighbor_node , node , wall_num , current_find_node) => {
     let color = 'MediumBlue' 
-    if(neighbor_node && !current_find_node.walls[wall_num] && !visited_nodes.find(n => n.x === neighbor_node.x && n.y === neighbor_node.y)){
+    if(
+        neighbor_node 
+        && !current_find_node.walls[wall_num] 
+        && !visited_nodes.has(`${neighbor_node.x} , ${neighbor_node.y}`)
+        ){
         let {x , y} = neighbor_node
         if(x === end_node.x && y === end_node.y){
             end_node.prev_node = node 
@@ -101,7 +105,7 @@ const add_node = (neighbor_node , node , wall_num , current_find_node) => {
         }else{
             let new_block = new Block(x, y , c , size , color, node)
             quere.push(new_block)
-            visited_nodes.push(new_block)
+            visited_nodes.push(`${new_block.x} , ${new_block.y}` , new_block)
         }
     }
     return 
