@@ -22,17 +22,17 @@ const draw_maze = (nodes_array , x_max, y_max, x_min , y_min) => {
     delay ++
   
     setTimeout(() => {
-      for(let i = 0; i < nodes_array.length; i ++){
+      for(let node of nodes_array){
           if(x_or_y > 0) { // x
               if (
-                  nodes_array[i].x === random_x * size + (size / 2) 
-                  && nodes_array[i].y <= y_max * size + (size / 2)
-                  && nodes_array[i].y >= y_min * size + (size / 2)
-                  && nodes_array[i].x !== (cols - 1) * size + (size / 2)
+                  node.x === random_x * size + (size / 2) 
+                  && node.y <= y_max * size + (size / 2)
+                  && node.y >= y_min * size + (size / 2)
+                  && node.x !== (cols - 1) * size + (size / 2)
                   ){
-                  if (nodes_array[i].y !== random_y * size + (size / 2)){
-                      nodes_array[i].walls[1] = true
-                      let {x , y} = nodes_array[i]
+                  if (node.y !== random_y * size + (size / 2)){
+                      node.walls[1] = true
+                      let {x , y} = node
                       let neightbor_node = nodes_array.find(node => node.x === (x + size) && node.y === y) 
                       if(neightbor_node){
                           neightbor_node.walls[3] = true
@@ -41,13 +41,13 @@ const draw_maze = (nodes_array , x_max, y_max, x_min , y_min) => {
               }
           }else{
               if(
-                  nodes_array[i].y === random_y * size + (size / 2)
-                  && nodes_array[i].x <= x_max * size + (size / 2)
-                  && nodes_array[i].x >= x_min * size + (size / 2)
+                  node.y === random_y * size + (size / 2)
+                  && node.x <= x_max * size + (size / 2)
+                  && node.x >= x_min * size + (size / 2)
                   ){
-                  if(nodes_array[i].x !== random_x * size + (size / 2)){
-                      nodes_array[i].walls[2] = true
-                      let {x , y} = nodes_array[i]
+                  if(node.x !== random_x * size + (size / 2)){
+                      node.walls[2] = true
+                      let {x , y} = node
                       let neightbor_node = nodes_array.find(node => node.x === x && node.y === (y + size)) 
                       if(neightbor_node){
                         neightbor_node.walls[0] = true
@@ -55,7 +55,7 @@ const draw_maze = (nodes_array , x_max, y_max, x_min , y_min) => {
                   }
               }
           }
-            nodes_array[i].draw()
+            node.draw()
         }
     }, delay * speed)
   
