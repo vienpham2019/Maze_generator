@@ -1,4 +1,4 @@
-import {Block} from '../helper_method'
+import {Block , Stack} from '../helper_method'
 import {get_top_right_bottom_left} from './helper_method/algorithms_helper_method'
 
 let c , canvas , size ,  nodes , start_node , end_node , speed
@@ -18,11 +18,12 @@ const depth_first_search = (props) => {
 
     end_node.prev_node = null
 
-    stack = [start_node]
-    visited_nodes = [start_node]
+    stack = new Stack()
+    visited_nodes = new Stack()
+    visited_nodes.push(`${start_node.x} , ${start_node.y}` , start_node)
     current_node = start_node 
 
-    stack.push(start_node)
+    stack.push(`${start_node.x} , ${start_node.y}` , start_node)
     // cancelAnimationFrame(myReq)
     clearTimeout(myReq)
     run_solve_maze()
@@ -40,28 +41,28 @@ const run_solve_maze = () => {
     }, speed);
     c.clearRect(0,0,canvas.width, canvas.height)
 
-    for(let i = 0; i < nodes.length; i ++){
-        nodes[i].draw()
+    for(let node of nodes){
+        node.draw()
     }
 
-    for(let i = 0 ; i < visited_nodes.length; i ++){
+    for(let v_node of visited_nodes.values()){
         if(!end_node.prev_node){
-            visited_nodes[i].color = 'MediumBlue' 
+            v_node.color = 'MediumBlue' 
         }
-        visited_nodes[i].draw()
+        v_node.draw()
     }
 
     if(!end_node.prev_node){
-        for(let i = 0 ; i < stack.length ; i ++){
-            stack[i].color = 'LightSkyBlue' 
-            stack[i].draw()
+        for(let node of stack.values()){
+            node.color = 'LightSkyBlue' 
+            node.draw()
         }
     }
 
-    if(stack.length > 0 && !end_node.prev_node){
-        current_node = stack[0]
+    if(stack.count > 0 && !end_node.prev_node){
+        current_node = stack.peek()
         if(!check_neighbor_node()){
-            stack.shift()
+            stack.pop()
         }
     }
 
@@ -114,15 +115,15 @@ const add_node = (neighbor_node , current_find_node , wall_num) => {
     if(
         neighbor_node 
         && !current_find_node.walls[wall_num] 
-        && !visited_nodes.find(n => n.x === neighbor_node.x  && n.y === neighbor_node.y)
+        && !visited_nodes.has(`${neighbor_node.x} , ${neighbor_node.y}`)
     ){
         let {x , y} = neighbor_node
         if(x === end_node.x && y === end_node.y){
             end_node.prev_node = current_node
         }else{
             let new_block = new Block(x, y, c , size ,color , current_node)
-            stack = [new_block,...stack]
-            visited_nodes.push(new_block)
+            stack.push(`${new_block.x} , ${new_block.y}` , new_block)
+            visited_nodes.push(`${new_block.x} , ${new_block.y}` , new_block)
         }
         return true 
     }
