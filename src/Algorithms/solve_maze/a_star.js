@@ -1,4 +1,4 @@
-import { Block } from '../helper_method'
+import { Block , Stack } from '../helper_method'
 import {get_top_right_bottom_left , add_to_heap , remove_from_heap} from './helper_method/algorithms_helper_method'
 
 let start_node , end_node , nodes , c , canvas , size , speed 
@@ -6,7 +6,7 @@ let start_node , end_node , nodes , c , canvas , size , speed
 let open_list , close_list , current_node , myReq
 
 const a_star = props => {
-    start_node = props.start_node
+    start_node   = props.start_node 
     end_node = props.end_node 
     nodes = props.nodes
     c = props.c 
@@ -17,7 +17,7 @@ const a_star = props => {
     end_node.prev_node = null
 
     open_list = add_to_heap(start_node , [] , (a,b) => a.f < b.f)
-    close_list = []
+    close_list = new Stack()
     current_node = null 
 
     // cancelAnimationFrame(myReq)
@@ -37,20 +37,20 @@ const run_solve_maze = () => {
     }, speed);
     c.clearRect(0,0,canvas.width, canvas.height)
 
-    for(let i = 0 ; i < nodes.length ; i ++){
-        nodes[i].draw()
+    for(let node of nodes){
+        node.draw()
     }
 
-    for(let i = 0 ; i < close_list.length ; i ++){
+    for(let node of close_list.values()){
         if(!end_node.prev_node){
-            close_list[i].color = 'MediumBlue'
+            node.color = 'MediumBlue'
         }
-        close_list[i].draw()
+        node.draw()
     }
 
-    for(let i = 0 ; i < open_list.length ; i ++){
-        open_list[i].color = 'LightSkyBlue'
-        open_list[i].draw()
+    for(let node of open_list){
+        node.color = 'LightSkyBlue'
+        node.draw()
     }
 
     if(current_node && end_node.x === current_node.x && end_node.y === current_node.y){
@@ -59,7 +59,7 @@ const run_solve_maze = () => {
 
     if(open_list.length > 0 && !end_node.prev_node){
         current_node = open_list[0]
-        close_list.push(current_node)
+        close_list.push(`${current_node.x} , ${current_node.y}` , current_node)
         find_child_node()
     }
 
@@ -97,7 +97,7 @@ const add_node = (neighbor_node , wall_num) => {
     if(
         neighbor_node 
         && !neighbor_node.walls[wall_num] 
-        &&  !close_list.find(node => node.x === neighbor_node.x && node.y === neighbor_node.y)
+        &&  !close_list.has(`${neighbor_node.x} , ${neighbor_node.y}`)
     ){
         let {x , y} = neighbor_node
         let node_in_open = open_list.find(n => n.x === x  && n.y === y)
@@ -114,10 +114,8 @@ const add_node = (neighbor_node , wall_num) => {
 
 const set_node = (node, g) => {
     let color = 'MediumBlue'
-    let x_1 = node.x 
-    let y_1 = node.y 
-    let x_2 = end_node.x 
-    let y_2 = end_node.y    
+    let [x_1 , y_1] = [node.x , node.y] 
+    let [x_2 , y_2] = [end_node.x , end_node.y] 
     let h = (Math.abs(x_1 - x_2) + Math.abs(y_1 - y_2)) * size 
     let f = h + g 
     let new_node = new Block(x_1 , y_1 , c , size , color , current_node , g , h , f)
