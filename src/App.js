@@ -5,6 +5,7 @@ import swal from '@sweetalert/with-react'
 
 let select_start = false
 let select_end = false 
+let select_wall = false 
 let display_points = false 
 
 class App extends Component{
@@ -93,7 +94,7 @@ class App extends Component{
   }
 
   render(){
-    let {width , height , select_solve_algorithims , dispay_draw_button} = this.state
+    let {width , height , select_solve_algorithims , select_draw_algorithims , dispay_draw_button} = this.state
     let {solve_maze_algorithims , draw_maze_algorithims} = this.props
     let speed = ["Slow", "Normal", "Fast" , "Very Fast"]
     
@@ -191,11 +192,13 @@ class App extends Component{
               </div>
               <div className = "form-group">
                 <label>Select start and end points</label><br/>
+
+              {/* Start point button */}
                 <button 
                   className="btn mx-2" 
                   style={{color: select_start ? 'black' :'white'}}
                   onClick={() => {
-                    select_end = false
+                    select_end = select_wall = false
                     select_start = !select_start
                     this.setState({})
                   }}
@@ -203,17 +206,33 @@ class App extends Component{
                   <i class="fas fa-star" style={{color: select_start ? 'black' :'white'}}></i> Start Point
                 </button>
 
+              {/* End point button */}
                 <button 
                   className="btn mx-2" 
                   style={{color: select_end ? 'black' :'white'}}
                   onClick={() => {
-                    select_start = false
+                    select_start = select_wall = false
                     select_end = !select_end 
                     this.setState({})
                   }}
                 >
                   <i class="fas fa-bullseye" style={{color: select_end ? 'black' :'white'}}></i> End Point
                 </button>
+                
+              {/* Wall button */}
+              {select_draw_algorithims === "★ Default Grid ★" ? 
+                <button 
+                  className="btn mx-2" 
+                  style={{color: select_wall ? 'black' :'white'}}
+                  onClick={() => {
+                    select_end = select_start = false
+                    select_wall = !select_wall
+                    this.setState({})
+                  }}
+                >
+                  <i class="fas fa-square" style={{color: select_wall ? 'black' :'white'}}></i> Walls
+                </button>
+              : null} 
                 <label className="text-info">
                   {select_solve_algorithims === "★ Self-Solve ★" ? "Use W | S to control forward and backward A | D for left and right." : ""}
                 </label>
