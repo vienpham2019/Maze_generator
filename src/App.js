@@ -26,7 +26,7 @@ class App extends Component{
   }
 
   componentDidMount(){
-    this.updateCanvas("")
+    this.updateCanvas("Default Grid")
   }
 
   run_set_point = () => {

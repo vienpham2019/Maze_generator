@@ -15,7 +15,7 @@ import { depth_first_search_maze , stop_depth_first_search_draw_maze } from './d
 
 let size , width , height , cols , rows , select_draw_algorithims , speed 
 
-let delay, canvas , c , start_node, end_node , nodes , stack , frame_per_second , maze_speed , myTimeOut , start_location , end_location 
+let delay, canvas , c , start_node, end_node , nodes , default_nodes , stack , frame_per_second , maze_speed , myTimeOut , start_location , end_location 
 
 const setUp = (props) => {
   stop_breadth_first_search()
@@ -55,23 +55,28 @@ const setUp = (props) => {
   canvas.width = width
   canvas.height = height
 
-  nodes = []
+  nodes = create_node(
+        select_draw_algorithims === "Recursive Division" 
+    ||  select_draw_algorithims === "Default Grid"
+  )
+  default_nodes = create_node(false)
   draw_divide_maze(props)
   clearTimeout(myTimeOut)
   return nodes
 }
 
-const draw_divide_maze = (props) => {
+const create_node = (not_walls) => {
+  let store = []
   for(let i = 0; i < rows ; i ++){
     for(let j = 0; j < cols ; j ++){
-      let walls = select_draw_algorithims === "Recursive Division" 
+      let walls = not_walls
         ? [false , false , false ,false]  
         : [true , true , true , true]
 
       let x = j * size + (size / 2)
       let y = i * size + (size / 2)
       let node = new Node(x, y , c , size , walls)
-      if(select_draw_algorithims !== ""){
+      if(select_draw_algorithims !== "Default Grid"){
         if(i === 0){
           node.walls[0] = true
         }else if(i === rows - 1){
@@ -95,12 +100,20 @@ const draw_divide_maze = (props) => {
             stack.push(node)
         }
       }
-      nodes.push(node)
+      store.push(node)
     }
   }
+  return store
+}
+
+const draw_divide_maze = (props) => {
 
   start_node = new Block(start_location.x , start_location.y , c , size , "blue")
   end_node = new Block(end_location.x , end_location.y , c , size , "green" )
+
+  for(let node of default_nodes){
+    node.draw('silver')
+  }
 
   switch (select_draw_algorithims) {
     case "Depth first search":
@@ -117,17 +130,8 @@ const draw_divide_maze = (props) => {
           }, draw_delay * speed);
         }
       break 
-    default:
-      default_grid()
-      break 
   }
 
-}
-
-const default_grid = () => {
-  for(let i = 0 ; i < nodes.length ; i ++){
-    nodes[i].draw()
-  }
 }
 
 const run_solve_maze = (algorithms , speed) => {
@@ -143,28 +147,28 @@ const run_solve_maze = (algorithms , speed) => {
 
   switch (algorithms) {
     case "A star":
-      a_star({start_node , end_node , nodes , c , canvas , size , speed})
+      a_star({start_node , end_node , nodes , default_nodes , c , canvas , size , speed})
       break
     case "Depth first search": 
-      depth_first_search({nodes , start_node , end_node , c , canvas , size , speed})
+      depth_first_search({nodes , default_nodes , start_node , end_node , c , canvas , size , speed})
       break
     case "Breadth first search": 
-      breadth_first_search({c , canvas , size , nodes , start_node , end_node , speed})
+      breadth_first_search({c , canvas , size , nodes , default_nodes , start_node , end_node , speed})
       break 
     case "Dijkstra's": 
-      dijkstra({start_node , end_node , nodes , c , canvas , size , speed})
+      dijkstra({start_node , end_node , nodes, default_nodes , c , canvas , size , speed})
       break 
     case "Greedy best first search": 
-      greedy_best_first_search({start_node , end_node , nodes , c , canvas , size , speed})
+      greedy_best_first_search({start_node , end_node , nodes , default_nodes , c , canvas , size , speed})
       break 
     case "Bidirectional a star": 
-      bidirectional_a_star({start_node , end_node , nodes , c , canvas , size , speed})
+      bidirectional_a_star({start_node , end_node , nodes , default_nodes , c , canvas , size , speed})
       break 
     case "Bidirectional dijkstra's": 
-      bidirectional_dijkstra({start_node , end_node , nodes , c , canvas , size , speed})
+      bidirectional_dijkstra({start_node , end_node , nodes, default_nodes , c , canvas , size , speed})
       break 
     default: 
-      self_solve({nodes , start_node , end_node , c , canvas , size})
+      self_solve({nodes , default_nodes , start_node , end_node , c , canvas , size})
       break 
   }
 }

@@ -1,7 +1,7 @@
 import { Block , Stack } from '../helper_method'
 import {get_top_right_bottom_left , add_to_heap , remove_from_heap} from './helper_method/algorithms_helper_method'
 
-let start_node , end_node , nodes , c , canvas , size , speed  
+let start_node , end_node , nodes , default_nodes , c , canvas , size , speed  
 
 let close_list_1 , close_list_2 , open_list_1 , current_node_1 , open_list_2, current_node_2 , myReq , finish_path , finish_search 
 
@@ -13,6 +13,7 @@ const bidirectional_dijkstra = props => {
     end_node.distance = 0
 
     nodes = props.nodes
+    default_nodes = props.default_nodes
     c = props.c 
     canvas = props.canvas 
     size = props.size 
@@ -46,6 +47,10 @@ const run_solve_maze = () => {
         run_solve_maze()
     }, speed);
     c.clearRect(0,0,canvas.width, canvas.height)
+
+    for(let node of default_nodes){
+        node.draw('silver')
+    }
 
     for(let node of nodes){
         node.draw()

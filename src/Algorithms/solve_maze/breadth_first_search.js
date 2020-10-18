@@ -1,7 +1,7 @@
 import {Block , Stack} from '../helper_method'
 import {get_top_right_bottom_left} from './helper_method/algorithms_helper_method'
 
-let c , canvas , size , nodes , start_node , end_node , speed 
+let c , canvas , size , nodes, default_nodes , start_node , end_node , speed 
     
 let visited_nodes ,  quere , current_node , finish_path , myReq
 
@@ -11,6 +11,7 @@ const breadth_first_search = (props) => {
     size = props.size 
     visited_nodes = new Stack()
     nodes = props.nodes 
+    default_nodes = props.default_nodes
 
     quere = []
     finish_path = false 
@@ -40,6 +41,9 @@ const run_solve_maze = () => {
     }, speed);
     c.clearRect(0,0,canvas.width, canvas.height)
 
+    for(let node of default_nodes){
+        node.draw('silver')
+    }
     for(let node of nodes){
         node.draw()
     }
