@@ -1,7 +1,7 @@
 import { Block , Stack} from './helper_method'
 import {get_top_right_bottom_left} from './solve_maze/helper_method/algorithms_helper_method'
 
-let start_node , end_node , nodes , c , canvas , size 
+let start_node , end_node , nodes , default_nodes , c , canvas , size 
 
 let current_node , current_path , myReq , find_path 
 
@@ -10,6 +10,7 @@ const self_solve = props => {
     current_node = start_node 
     end_node = props.end_node 
     nodes = props.nodes
+    default_nodes = props.default_nodes
     c = props.c 
     canvas = props.canvas 
     size = props.size 
@@ -26,6 +27,9 @@ const stop_self_solve = () => {
 
 const set_up = () => {
     c.clearRect(0,0,canvas.width, canvas.height)
+    for(let node of default_nodes){
+        node.draw('silver')
+    }
     for(let node of nodes){
         node.draw()
     }
@@ -50,6 +54,9 @@ const run_solve_maze = e => {
             case "s":
                 find_next_step(bottom , 0)
                 break 
+        }
+        for(let node of default_nodes){
+            node.draw('silver')
         }
         for(let node of nodes){
             node.draw()
