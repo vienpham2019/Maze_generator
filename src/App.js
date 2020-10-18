@@ -26,7 +26,7 @@ class App extends Component{
   }
 
   componentDidMount(){
-    this.updateCanvas("Default Grid")
+    this.updateCanvas("★ Default Grid ★")
   }
 
   run_set_point = () => {
@@ -176,7 +176,7 @@ class App extends Component{
                   )}
                 </select>
               </div>
-              <div class="form-group">
+              <div className="form-group">
                 <label for="exampleInputPassword1">Speed</label>
                 <select 
                   className="custom-select" 

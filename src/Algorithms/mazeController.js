@@ -57,7 +57,7 @@ const setUp = (props) => {
 
   nodes = create_node(
         select_draw_algorithims === "Recursive Division" 
-    ||  select_draw_algorithims === "Default Grid"
+    ||  select_draw_algorithims === "★ Default Grid ★"
   )
   default_nodes = create_node(false)
   draw_divide_maze(props)
@@ -76,7 +76,7 @@ const create_node = (not_walls) => {
       let x = j * size + (size / 2)
       let y = i * size + (size / 2)
       let node = new Node(x, y , c , size , walls)
-      if(select_draw_algorithims !== "Default Grid"){
+      if(select_draw_algorithims !== "★ Default Grid ★"){
         if(i === 0){
           node.walls[0] = true
         }else if(i === rows - 1){
@@ -117,10 +117,10 @@ const draw_divide_maze = (props) => {
 
   switch (select_draw_algorithims) {
     case "Depth first search":
-      depth_first_search_maze({nodes , canvas , c , stack , size , cols , rows , frame_per_second , speed })
+      depth_first_search_maze({nodes , default_nodes , canvas , c , stack , size , cols , rows , frame_per_second , speed })
       break
     case "Prim's": 
-      prims_maze({size , nodes , cols , rows , canvas , c , frame_per_second , speed})
+      prims_maze({size , nodes , default_nodes , cols , rows , canvas , c , frame_per_second , speed})
       break 
     case "Recursive Division": 
       let draw_delay = recursive_dividion_maze({delay , speed , size , cols , rows , nodes})

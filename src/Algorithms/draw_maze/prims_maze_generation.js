@@ -1,11 +1,12 @@
 import {get_top_right_bottom_left} from '../solve_maze/helper_method/algorithms_helper_method'
 import { Stack } from '../helper_method'
 
-let size , nodes , cols , rows , canvas , c , frame_per_second , speed 
+let size , nodes , default_nodes , cols , rows , canvas , c , frame_per_second , speed 
 let neighbors_node , visited_neighbors_node , current_neighbor_node , myReqDraw 
 const prims_maze = props => {
     size = props.size
     nodes = props.nodes 
+    default_nodes = props.default_nodes
     cols = props.cols 
     rows = props.rows 
     canvas = props.canvas 
@@ -43,6 +44,10 @@ const draw_prims_maze = () => {
     }, frame_per_second / speed)
     c.clearRect(0,0,canvas.width, canvas.height)
 
+    for(let node of default_nodes){
+        node.draw('silver')
+    }
+    
     for(let node of nodes){
         node.draw()
     }

@@ -1,10 +1,11 @@
 import {Block} from '../helper_method'
-let nodes , canvas , c , stack , size , cols , rows , frame_per_second , speed 
+let nodes , default_nodes , canvas , c , stack , size , cols , rows , frame_per_second , speed 
 
 let block , myReq , visited_nodes , width , height 
 
 const depth_first_search_maze = props => {
     nodes = props.nodes 
+    default_nodes = props.default_nodes
     canvas = props.canvas 
     c = props.c 
     stack = props.stack
@@ -37,6 +38,10 @@ const draw_maze = () => {
     }, frame_per_second / speed);
     c.clearRect(0,0,canvas.width, canvas.height)
 
+    for(let node of default_nodes){
+        node.draw('silver')
+    }
+    
     for(let node of nodes){
         node.draw()
     }

@@ -1,5 +1,5 @@
 let init_state = {
-    draw_maze_algorithims: ["Depth first search" , "Prim's" , "Recursive Division" , "Default Grid"], 
+    draw_maze_algorithims: ["Depth first search" , "Prim's" , "Recursive Division" , "★ Default Grid ★"], 
     solve_maze_algorithims: ["A star" , "Depth first search" , "Breadth first search" , "Dijkstra's" , "Greedy best first search" , "Bidirectional a star" , "Bidirectional dijkstra's", "★ Self-Solve ★"], 
     rows: 15,
     speed: {
@@ -21,7 +21,7 @@ let init_state = {
             "Normal": 150, 
             "Slow": 300
         },
-        "Default Grid": {
+        "★ Default Grid ★": {
             "Very Fast": 0, 
             "Fast": 0, 
             "Normal": 0, 
