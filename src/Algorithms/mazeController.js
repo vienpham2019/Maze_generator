@@ -183,6 +183,12 @@ const update_info = props => {
     end_location = props.end_location
     end_node = new Block(end_location.x , end_location.y , c , size , "green" )
   }
+
+  if(props.set_walls){
+    let {x , y} = props.set_walls
+    let node = nodes.find(n => n.x === x && n.y === y)
+    node.walls = [!node.walls[0] , !node.walls[1] , !node.walls[2] , !node.walls[3]]
+  }
 }
 
 export {setUp , run_solve_maze , update_info}

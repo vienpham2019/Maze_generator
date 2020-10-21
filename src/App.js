@@ -55,6 +55,10 @@ class App extends Component{
           this.setState({start_location})
           update_info({start_location: {x: x - offsetLeft ,y: y - offsetTop}})
         }
+
+        if(select_wall){
+          update_info({set_walls: {x: x - offsetLeft ,y: y - offsetTop}})
+        }
       }
     })
   }
