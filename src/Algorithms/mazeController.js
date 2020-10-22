@@ -13,6 +13,8 @@ import { recursive_dividion_maze } from './draw_maze/recursive_division_maze_gen
 import { prims_maze , stop_prims_draw_maze} from './draw_maze/prims_maze_generation'
 import { depth_first_search_maze , stop_depth_first_search_draw_maze } from './draw_maze/depth_first_search_maze_generation'
 
+import {get_top_right_bottom_left} from './solve_maze/helper_method/algorithms_helper_method'
+
 let size , width , height , cols , rows , select_draw_algorithims , speed 
 
 let delay, canvas , c , start_node, end_node , nodes , default_nodes , stack , frame_per_second , maze_speed , myTimeOut , start_location , end_location 
@@ -187,7 +189,13 @@ const update_info = props => {
   if(props.set_walls){
     let {x , y} = props.set_walls
     let node = nodes.find(n => n.x === x && n.y === y)
-    node.walls = [!node.walls[0] , !node.walls[1] , !node.walls[2] , !node.walls[3]]
+    let {top , right , bottom , left} = get_top_right_bottom_left(node , nodes , size)
+    if(top) top.walls[2] = true 
+    if(right) right.walls[3] = true 
+    if(bottom) bottom.walls[0] = true 
+    if(left) left.walls[1] = true 
+    node.walls = [true , true , true , true ]
+    node.draw()
   }
 }
 
