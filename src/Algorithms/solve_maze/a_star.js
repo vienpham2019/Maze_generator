@@ -17,7 +17,8 @@ const a_star = props => {
 
     end_node.prev_node = null
 
-    open_list = add_to_heap(start_node , [] , (a,b) => a.f < b.f)
+    // open_list = add_to_heap(start_node , [] , (a,b) => a.f < b.f)
+    open_list = [start_node]
     close_list = new Stack()
     current_node = null 
 
@@ -63,7 +64,7 @@ const run_solve_maze = () => {
     }
 
     if(open_list.length > 0 && !end_node.prev_node){
-        current_node = open_list[0]
+        current_node = open_list.sort((a,b) => a.f - b.f)[0]
         close_list.push(`${current_node.x} , ${current_node.y}` , current_node)
         find_child_node()
     }
@@ -82,7 +83,8 @@ const run_solve_maze = () => {
 
 const find_child_node = () => {
 
-    open_list = remove_from_heap(open_list , (a,b) => a.f < b.f)
+    // remove_from_heap(open_list , (a,b) => a.f < b.f)
+    open_list.shift()
     let {top , right , bottom , left} = get_top_right_bottom_left(current_node , nodes , size)
 
     // right (x + size , y)
@@ -110,10 +112,14 @@ const add_node = (neighbor_node , wall_num) => {
 
         if(node_in_open && n_g < node_in_open.g){
             update_node(node_in_open, n_g , current_node )
+            // add_to_heap(current_node, open_list , (a,b) => a.f < b.f)
         }else{
             let new_node = set_node(neighbor_node, n_g)
-            open_list = add_to_heap(new_node, open_list , (a,b) => a.f < b.f)
+            // add_to_heap(new_node, open_list , (a,b) => a.f < b.f)
+            open_list.push(new_node)
         }
+        // let new_node = set_node(neighbor_node, n_g)
+        // add_to_heap(new_node, open_list , (a,b) => a.f < b.f)
     }
 }
 
@@ -128,9 +134,11 @@ const set_node = (node, g) => {
 }
 
 const update_node = (node , g , parent) => {
+    open_list = open_list.filter(n => n.x !== node.x && n.y !== node.y)
     node.g = g 
     node.f = g + node.h 
     node.parent = parent 
+    open_list.push(node)
 }
 
 export {a_star , stop_a_star}
