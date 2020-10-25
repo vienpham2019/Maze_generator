@@ -118,7 +118,7 @@ const add_node = (neighbor_node , wall_num) => {
         }else{
             let new_node = set_node(neighbor_node, n_g)
             // add_to_heap(new_node, open_list , (a,b) => a.f < b.f)
-            open_list.push(new_node)
+            // open_list.push(new_node)
         }
         // let new_node = set_node(neighbor_node, n_g)
         // add_to_heap(new_node, open_list , (a,b) => a.f < b.f)
@@ -129,7 +129,7 @@ const set_node = (node, g) => {
     let color = 'MediumBlue'
     let [x_1 , y_1] = [node.x , node.y] 
     let [x_2 , y_2] = [end_node.x , end_node.y] 
-    let h = Math.abs(x_1 - x_2) + Math.abs(y_1 - y_2) 
+    let h = Math.sqrt((x_1 - x_2) ** 2 + (y_1 - y_2) ** 2) 
     let f = h + g 
     let new_node = new Block(x_1 , y_1 , c , size , color , current_node , g , h , f)
     return new_node 
