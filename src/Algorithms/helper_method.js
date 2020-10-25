@@ -89,6 +89,10 @@ const Block = function(x , y , c , size, color = "red", prev_node = null , g = n
         this.c.arcTo(x,   y,   x+rect_size, y,   r)
         this.c.fillStyle = this.color
         this.c.fill()
+        this.c.fillStyle = 'black'
+        this.c.fillText(this.f , x , y)
+        this.c.fillText(this.h , x + 10 , y + 10)
+        this.c.fillText(this.g , x + 20 , y + 20)
         this.c.closePath()
     }
 }

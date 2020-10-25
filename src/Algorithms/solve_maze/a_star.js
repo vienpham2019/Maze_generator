@@ -64,7 +64,8 @@ const run_solve_maze = () => {
     }
 
     if(open_list.length > 0 && !end_node.prev_node){
-        current_node = open_list.sort((a,b) => a.f - b.f)[0]
+        current_node = open_list.sort((a,b) => a.f - b.f).shift()
+        // current_node = open_list[0]
         close_list.push(`${current_node.x} , ${current_node.y}` , current_node)
         find_child_node()
     }
@@ -84,7 +85,7 @@ const run_solve_maze = () => {
 const find_child_node = () => {
 
     // remove_from_heap(open_list , (a,b) => a.f < b.f)
-    open_list.shift()
+
     let {top , right , bottom , left} = get_top_right_bottom_left(current_node , nodes , size)
 
     // right (x + size , y)
@@ -108,10 +109,11 @@ const add_node = (neighbor_node , wall_num) => {
     ){
         let {x , y} = neighbor_node
         let node_in_open = open_list.find(n => n.x === x  && n.y === y)
-        let n_g = current_node.g + size 
+        let n_g = current_node.g + 10
 
-        if(node_in_open && n_g < node_in_open.g){
-            update_node(node_in_open, n_g , current_node )
+        if(node_in_open){
+            if(node_in_open.g > n_g) update_node(node_in_open, n_g , current_node )
+            return 
             // add_to_heap(current_node, open_list , (a,b) => a.f < b.f)
         }else{
             let new_node = set_node(neighbor_node, n_g)
@@ -127,13 +129,14 @@ const set_node = (node, g) => {
     let color = 'MediumBlue'
     let [x_1 , y_1] = [node.x , node.y] 
     let [x_2 , y_2] = [end_node.x , end_node.y] 
-    let h = (Math.abs(x_1 - x_2) + Math.abs(y_1 - y_2)) * size 
+    let h = Math.abs(x_1 - x_2) + Math.abs(y_1 - y_2) 
     let f = h + g 
     let new_node = new Block(x_1 , y_1 , c , size , color , current_node , g , h , f)
     return new_node 
 }
 
 const update_node = (node , g , parent) => {
+    console.log('new')
     open_list = open_list.filter(n => n.x !== node.x && n.y !== node.y)
     node.g = g 
     node.f = g + node.h 
