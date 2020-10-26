@@ -89,17 +89,18 @@ const find_child_node = () => {
     open_list = remove_from_heap(open_list , (a,b) => a.distance < b.distance)
     let {top , right , bottom , left} = get_top_right_bottom_left(current_node , nodes , size)
 
+    // top (x , y - size)
+    add_node(top , 2)
+
     // right (x + size , y)
     add_node(right , 3)
 
-    // top (x , y - size)
-    add_node(top , 2)
+    // bottom (x , y + size)
+    add_node(bottom , 0)
 
     // left (x - size , y )
     add_node(left , 1)
 
-    // bottom (x , y + size)
-    add_node(bottom , 0)
 
     open_list = open_list.filter(node => node.x === current_node.x && node.y === current_node.y ? false : true )
 }

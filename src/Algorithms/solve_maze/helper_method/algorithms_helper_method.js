@@ -1,4 +1,5 @@
 const get_top_right_bottom_left = (node , array , size) => {
+    if(!node) return null
     let {x , y} = node
     let top = array.find(n => n.x === x && n.y === y - size)
     let right = array.find(n => n.x === x + size && n.y === y)
