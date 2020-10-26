@@ -88,17 +88,17 @@ const find_child_node = () => {
 
     let {top , right , bottom , left} = get_top_right_bottom_left(current_node , nodes , size)
 
-    // right (x + size , y)
-    add_node(right , 3)
-
     // top (x , y - size)
     add_node(top , 2)
 
-    // left (x - size , y )
-    add_node(left , 1)
+    // right (x + size , y)
+    add_node(right , 3)
 
     // bottom (x , y + size)
     add_node(bottom , 0)
+
+    // left (x - size , y )
+    add_node(left , 1)
 }
 
 const add_node = (neighbor_node , wall_num) => {
@@ -109,16 +109,15 @@ const add_node = (neighbor_node , wall_num) => {
     ){
         let {x , y} = neighbor_node
         let node_in_open = open_list.find(n => n.x === x  && n.y === y)
-        let n_g = current_node.g + 10
+        let n_g = current_node.g + size
 
         if(node_in_open){
-            if(node_in_open.g > n_g) update_node(node_in_open, n_g , current_node )
-            return 
+            if(node_in_open.g > n_g) update_node(node_in_open, n_g , current_node ) 
             // add_to_heap(current_node, open_list , (a,b) => a.f < b.f)
         }else{
             let new_node = set_node(neighbor_node, n_g)
             // add_to_heap(new_node, open_list , (a,b) => a.f < b.f)
-            // open_list.push(new_node)
+            open_list.push(new_node)
         }
         // let new_node = set_node(neighbor_node, n_g)
         // add_to_heap(new_node, open_list , (a,b) => a.f < b.f)
@@ -129,19 +128,20 @@ const set_node = (node, g) => {
     let color = 'MediumBlue'
     let [x_1 , y_1] = [node.x , node.y] 
     let [x_2 , y_2] = [end_node.x , end_node.y] 
-    let h = Math.sqrt((x_1 - x_2) ** 2 + (y_1 - y_2) ** 2) 
+    // let h = Math.floor(Math.sqrt((x_1 - x_2) ** 2 + (y_1 - y_2) ** 2))
+    let h = Math.abs(x_1 - x_2) + Math.abs(y_1 - y_2)
     let f = h + g 
     let new_node = new Block(x_1 , y_1 , c , size , color , current_node , g , h , f)
     return new_node 
 }
 
 const update_node = (node , g , parent) => {
-    console.log('new')
-    open_list = open_list.filter(n => n.x !== node.x && n.y !== node.y)
+    // console.log('new')
+    // open_list = open_list.filter(n => n.x !== node.x && n.y !== node.y)
     node.g = g 
     node.f = g + node.h 
     node.parent = parent 
-    open_list.push(node)
+    // open_list.push(node)
 }
 
 export {a_star , stop_a_star}
