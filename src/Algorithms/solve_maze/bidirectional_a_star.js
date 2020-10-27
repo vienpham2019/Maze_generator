@@ -1,5 +1,5 @@
 import { Block , Stack } from '../helper_method'
-import {get_top_right_bottom_left , add_to_heap , remove_from_heap} from './helper_method/algorithms_helper_method'
+import {get_top_right_bottom_left} from './helper_method/algorithms_helper_method'
 
 let start_node , end_node , nodes , default_nodes , c , canvas , size , speed 
 
@@ -27,18 +27,15 @@ const bidirectional_a_star = props => {
     finish_path = false 
     finish_search = false 
 
-    // cancelAnimationFrame(myReq)
     clearTimeout(myReq)
     run_solve_maze()
 }
 
 const stop_bidirectional_a_star = () => {
-    // cancelAnimationFrame(myReq)
     clearTimeout(myReq)
 }
 
 const run_solve_maze = () => {
-    // myReq = requestAnimationFrame(run_solve_maze)
     myReq = setTimeout(() => {
         run_solve_maze()
     }, speed);
@@ -56,13 +53,15 @@ const run_solve_maze = () => {
     print_close_and_open_list(close_list_2 , open_list_2 , 'CadetBlue' , 'LightCyan')
 
     if(open_list_1.length > 0 && !finish_search){
-        current_node_1= open_list_1[0]
+        find_current_node(open_list_1 , 1)
+
         close_list_1.push(`${current_node_1.x} , ${current_node_1.y}` , current_node_1)
         open_list_1 = find_child_node(current_node_1 , end_node, open_list_1 , close_list_1 , close_list_2)
     }
 
     if(open_list_2.length > 0 && !finish_search){
-        current_node_2= open_list_2[0]
+        find_current_node(open_list_2 , 2)
+
         close_list_2.push(`${current_node_2.x} , ${current_node_2.y}` , current_node_2)
         open_list_2 = find_child_node(current_node_2 , start_node, open_list_2 , close_list_2 , close_list_1)
     }
@@ -71,15 +70,31 @@ const run_solve_maze = () => {
         start_node.draw()
         end_node.draw()
 
-        if(!current_node_1 && !current_node_2){
-            finish_path = true
-        }
+        if(!current_node_1 && !current_node_2) finish_path = true
         find_path() 
     }
 
     if(finish_path){
-        // cancelAnimationFrame(myReq)
         clearTimeout(myReq)
+    }
+}
+
+const find_current_node = (list , list_num) => {
+    let c_node = list[0]
+    let remove_index = 0 
+    for(let i = 0 ; i < list.length ; i ++){
+        if(list[i].f < c_node.f){
+            c_node = list[i]
+            remove_index = i 
+        }
+    }
+    list.splice(remove_index , 1)
+    if(list_num === 1){
+        open_list_1 = list 
+        current_node_1 = c_node 
+    }else{
+        open_list_2 = list 
+        current_node_2 = c_node 
     }
 }
 
@@ -92,9 +107,7 @@ const print_close_and_open_list = (close_list , open_list , close_color , open_c
     }
 
     for(let close_node of close_list.values()){
-        if(!finish_search){
-            close_node.color = close_color 
-        }
+        if(!finish_search) close_node.color = close_color 
         close_node.draw()
     }
 }
@@ -114,20 +127,20 @@ const check_for_mix_node = (target_close_list , x , y) => {
 }
 
 const find_child_node = (c_node , target_node , open_list , close_list , target_close_list) => {
-    open_list = remove_from_heap(open_list , (a,b) => a.f < b.f)
+
     let {top , right , bottom , left} = get_top_right_bottom_left(c_node , nodes , size)
 
     // right (x + size , y)
-    open_list = add_node(c_node , right , 3 , close_list , open_list , target_close_list , target_node)
+    add_node(c_node , right , 3 , close_list , open_list , target_close_list , target_node)
 
     // top (x , y - size)
-    open_list = add_node(c_node , top , 2 , close_list , open_list , target_close_list , target_node)
+    add_node(c_node , top , 2 , close_list , open_list , target_close_list , target_node)
 
     // left (x - size , y )
-    open_list = add_node(c_node , left , 1 , close_list , open_list , target_close_list , target_node)
+    add_node(c_node , left , 1 , close_list , open_list , target_close_list , target_node)
 
     // bottom (x , y + size)
-    open_list = add_node(c_node , bottom , 0 , close_list , open_list , target_close_list , target_node)
+    add_node(c_node , bottom , 0 , close_list , open_list , target_close_list , target_node)
 
     return open_list
 }
@@ -143,11 +156,11 @@ const add_node = (c_node , neighbor_node , wall_num , close_list , open_list , t
         let n_g = c_node.g + size
 
         if(!check_for_mix_node(target_close_list , x , y)){
-            if(node_in_open && n_g < node_in_open.g){ 
-                update_node(node_in_open, n_g , c_node )
+            if(node_in_open){ 
+                if(n_g < node_in_open.g) update_node(node_in_open, n_g , c_node )
             }else{
                 let new_node = set_node(neighbor_node , n_g , c_node , target_node)
-                open_list = add_to_heap(new_node , open_list , (a,b) => a.f < b.f)
+                open_list.push(new_node)
             }
         }
     }
@@ -170,7 +183,7 @@ const set_node = (node, g , c_node , target_node) => {
     let color = "MediumBlue"
     let [x_1 , y_1] = [node.x , node.y] 
     let [x_2 , y_2] = [target_node.x , target_node.y]  
-    let h = (Math.abs(x_1 - x_2) + Math.abs(y_1 - y_2)) * size 
+    let h = Math.abs(x_1 - x_2) + Math.abs(y_1 - y_2) 
     let f = h + g 
     let new_node = new Block(x_1 , y_1 , c , size , color , c_node , g , h , f)
     return new_node 
