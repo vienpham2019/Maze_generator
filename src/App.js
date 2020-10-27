@@ -14,7 +14,7 @@ class App extends Component{
     this.state = {
       width: (window.innerWidth * .95),
       height: (window.innerHeight * .92),
-      select_draw_algorithims: "Depth first search", 
+      select_draw_algorithims: "★ Default Grid ★", 
       select_solve_algorithims: "A star",
       rows: 15, 
       dispay_draw_button: true , 
@@ -27,7 +27,10 @@ class App extends Component{
   }
 
   componentDidMount(){
-    this.updateCanvas("★ Default Grid ★")
+    display_points = true
+    this.setState({select_draw_algorithims: "★ Default Grid ★"})
+    this.updateCanvas()
+    this.run_set_point()
   }
 
   run_set_point = () => {
@@ -121,7 +124,9 @@ class App extends Component{
                   onChange={(e) => this.setState({select_draw_algorithims: e.target.value})}
                 >
                   {draw_maze_algorithims.map(algorithm => 
-                    <option value={algorithm}>{algorithm}</option>
+                    select_draw_algorithims === "★ Default Grid ★"
+                      ? <option value={algorithm} selected>{algorithm}</option>
+                      : <option value={algorithm}>{algorithm}</option>
                   )}
                 </select>
               </div>
@@ -158,6 +163,7 @@ class App extends Component{
                   onClick={() => {
                     display_points = true
                     if(dispay_draw_button){
+                      select_start = select_end = select_wall = false
                       this.updateCanvas()
                       this.run_set_point()
                     }

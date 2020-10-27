@@ -137,15 +137,7 @@ const draw_divide_maze = (props) => {
 }
 
 const run_solve_maze = (algorithms , speed) => {
-  stop_greedy_best_first_search()
-  stop_a_star()
-  stop_dijkstra()
-  stop_breadth_first_search()
-  stop_depth_first_search()
-  stop_bidirectional_dijkstra()
-  stop_bidirectional_a_star()
-
-  stop_self_solve()
+  clear_path()
 
   switch (algorithms) {
     case "A star":
@@ -187,16 +179,32 @@ const update_info = props => {
   }
 
   if(props.set_walls){
+    c.clearRect(0,0,canvas.width, canvas.height)
+    clear_path()
     let {x , y} = props.set_walls
-    let node = nodes.find(n => n.x === x && n.y === y)
-    let {top , right , bottom , left} = get_top_right_bottom_left(node , nodes , size)
-    if(top) top.walls[2] = true 
-    if(right) right.walls[3] = true 
-    if(bottom) bottom.walls[0] = true 
-    if(left) left.walls[1] = true 
-    node.walls = [true , true , true , true ]
-    node.draw()
+    for(let node of default_nodes) {
+      node.draw('silver')
+    }
+
+    for(let node of nodes) {
+      if(node.x === x && node.y === y){
+        node.walls = new Array(4).fill(!node.walls[0])
+      }
+      node.draw()
+    }
   }
+}
+
+const clear_path = () => {
+  stop_greedy_best_first_search()
+  stop_a_star()
+  stop_dijkstra()
+  stop_breadth_first_search()
+  stop_depth_first_search()
+  stop_bidirectional_dijkstra()
+  stop_bidirectional_a_star()
+
+  stop_self_solve()
 }
 
 export {setUp , run_solve_maze , update_info}
