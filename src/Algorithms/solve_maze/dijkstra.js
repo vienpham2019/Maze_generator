@@ -1,6 +1,6 @@
 import { Block , Stack} from '../helper_method'
 
-import {get_top_right_bottom_left , add_to_heap , remove_from_heap} from './helper_method/algorithms_helper_method'
+import {get_top_right_bottom_left } from './helper_method/algorithms_helper_method'
 
 let start_node , end_node , nodes , default_nodes, c , canvas , size , speed 
 
@@ -24,18 +24,15 @@ const dijkstra = props => {
     current_node = null 
     finish_path = false 
 
-    // cancelAnimationFrame(myReq)
     clearTimeout(myReq)
     run_solve_maze()
 }
 
 const stop_dijkstra = () => {
-    // cancelAnimationFrame(myReq)
     clearTimeout(myReq)
 }
 
 const run_solve_maze = () => {
-    // myReq = requestAnimationFrame(run_solve_maze)
     myReq = setTimeout(() => {
         run_solve_maze()
     }, speed);
@@ -68,7 +65,16 @@ const run_solve_maze = () => {
     }
 
     if(open_list.length > 0 && !end_node.prev_node){
-        current_node = open_list[0] 
+        let remove_index = 0 
+        current_node = open_list[0]
+        for(let i = 0 ; i < open_list.length ; i ++){
+            if(open_list[i].distance < current_node.distance) {
+                current_node = open_list[i] 
+                remove_index = i 
+            }
+        }
+        open_list.splice(remove_index , 1)
+
         close_list.push(`${current_node.x} , ${current_node.y}` , current_node)
         find_child_node()
     }
@@ -80,29 +86,25 @@ const run_solve_maze = () => {
     }
 
     if(finish_path){
-        // cancelAnimationFrame(myReq)
         clearTimeout(myReq)
     }
 }
 
 const find_child_node = () => {
-    open_list = remove_from_heap(open_list , (a,b) => a.distance < b.distance)
     let {top , right , bottom , left} = get_top_right_bottom_left(current_node , nodes , size)
-
-    // top (x , y - size)
-    add_node(top , 2)
 
     // right (x + size , y)
     add_node(right , 3)
 
-    // bottom (x , y + size)
-    add_node(bottom , 0)
+    // top (x , y - size)
+    add_node(top , 2)
 
     // left (x - size , y )
     add_node(left , 1)
+    
+    // bottom (x , y + size)
+    add_node(bottom , 0)
 
-
-    open_list = open_list.filter(node => node.x === current_node.x && node.y === current_node.y ? false : true )
 }
 
 const add_node = (neighbor_node , wall_num) => {
@@ -118,7 +120,7 @@ const add_node = (neighbor_node , wall_num) => {
             update_node(node_in_open)
         }else{
             let new_node = create_new_node(neighbor_node)
-            open_list = add_to_heap(new_node , open_list , (a,b) => a.distance < b.distance)
+            open_list.push(new_node)
         }
             
     }
@@ -147,7 +149,7 @@ const find_distance = (node) => {
 
     let [x_2 , y_2] = [node.x , node.y]
 
-   return ((Math.abs(x_1 - x_2) + Math.abs(y_1 - y_2)) * size ) + current_node.distance
+   return ((Math.abs(x_1 - x_2) + Math.abs(y_1 - y_2)) ) + current_node.distance
 }
 
 const update_node = node => {
