@@ -101,7 +101,7 @@ const find_child_node = () => {
 
     // left (x - size , y )
     add_node(left , 1)
-    
+
     // bottom (x , y + size)
     add_node(bottom , 0)
 
@@ -149,7 +149,7 @@ const find_distance = (node) => {
 
     let [x_2 , y_2] = [node.x , node.y]
 
-   return ((Math.abs(x_1 - x_2) + Math.abs(y_1 - y_2)) ) + current_node.distance
+   return Math.abs(x_1 - x_2) + Math.abs(y_1 - y_2) + current_node.distance
 }
 
 const update_node = node => {
