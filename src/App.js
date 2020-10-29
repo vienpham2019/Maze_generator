@@ -7,6 +7,7 @@ let select_start = false
 let select_end = false 
 let select_wall = false 
 let display_points = false 
+let add_evenet = false 
 
 class App extends Component{
   constructor(){
@@ -42,28 +43,32 @@ class App extends Component{
     let start_location = {x: offsetLeft + (size / 2) , y: offsetTop + (size / 2)}
     let end_location = {x: offsetLeft + ((cols - 1) * size + (size / 2)) , y: offsetTop + ((rows - 1) * size + (size / 2))}
     this.setState({start_location , end_location})
-    canvas.addEventListener('mousedown' , (e) => {
-      let {pageX , pageY} = e
-      let x = Math.floor(((pageX - offsetLeft) / size)) * (size) + (size / 2) + offsetLeft
-      let y = Math.floor(((pageY - offsetTop) / size)) * (size) + (size / 2) + offsetTop
-      if(x < (cols * size) + offsetLeft && y < (rows * size) + offsetTop){
-        if(select_end){
-          end_location = {x , y}
-          this.setState({end_location})
-          update_info({end_location: {x: x - offsetLeft ,y: y - offsetTop}})
-        }
 
-        if(select_start){
-          start_location = {x , y}
-          this.setState({start_location})
-          update_info({start_location: {x: x - offsetLeft ,y: y - offsetTop}})
+    if(!add_evenet){
+      canvas.addEventListener('mousedown' , e => {
+        add_evenet = true
+        let {pageX , pageY} = e
+        let x = Math.floor(((pageX - offsetLeft) / size)) * (size) + (size / 2) + offsetLeft
+        let y = Math.floor(((pageY - offsetTop) / size)) * (size) + (size / 2) + offsetTop
+        if(x < (cols * size) + offsetLeft && y < (rows * size) + offsetTop){
+          if(select_end){
+            end_location = {x , y}
+            this.setState({end_location})
+            update_info({end_location: {x: x - offsetLeft ,y: y - offsetTop}})
+          }
+    
+          if(select_start){
+            start_location = {x , y}
+            this.setState({start_location})
+            update_info({start_location: {x: x - offsetLeft ,y: y - offsetTop}})
+          }
+    
+          if(select_wall){
+            update_info({set_walls: {x: x - offsetLeft ,y: y - offsetTop}})
+          }
         }
-
-        if(select_wall){
-          update_info({set_walls: {x: x - offsetLeft ,y: y - offsetTop}})
-        }
-      }
-    })
+      })
+    }
   }
 
   check_recursive_delay = (value) => {
