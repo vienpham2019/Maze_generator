@@ -32,7 +32,6 @@ class App extends Component{
     this.setState({select_draw_algorithims: "★ Default Grid ★"})
     this.updateCanvas()
     this.run_set_point()
-    this.update_cursor()
   }
 
   run_set_point = () => {
@@ -71,19 +70,6 @@ class App extends Component{
         }
       })
     }
-  }
-
-  update_cursor = () => {
-    let canvas = this.refs.maze
-    let star = 'https://cur.cursors-4u.net/holidays/hol-4/hol399.cur'
-    let end = 'https://cur.cursors-4u.net/cursors/cur-4/cur381.cur'
-    // let end = 'https://cur.cursors-4u.net/games/gam-8/gam718.cur'
-    let wall = 'https://cur.cursors-4u.net/others/oth-1/oth19.cur'
-    let default_cursor = 'https://cur.cursors-4u.net/cursors/cur-9/cur266.cur'
-
-    let cursor = select_end ? end : select_start ? star : select_wall ? wall : default_cursor
-
-    canvas.style.cursor = `url(${cursor}) , auto`
   }
 
   check_recursive_delay = (value) => {
@@ -231,7 +217,6 @@ class App extends Component{
                     select_end = select_wall = false
                     select_start = !select_start
                     this.setState({})
-                    this.update_cursor()
                   }}
                 >
                   <i class="fas fa-star" style={{color: select_start ? 'black' :'white'}}></i> Start Point
@@ -245,7 +230,6 @@ class App extends Component{
                     select_start = select_wall = false
                     select_end = !select_end 
                     this.setState({})
-                    this.update_cursor()
                   }}
                 >
                   <i class="fas fa-bullseye" style={{color: select_end ? 'black' :'white'}}></i> End Point
@@ -260,7 +244,6 @@ class App extends Component{
                     select_end = select_start = false
                     select_wall = !select_wall
                     this.setState({})
-                    this.update_cursor()
                   }}
                 >
                   <i class="fas fa-square" style={{color: select_wall ? 'black' :'white'}}></i> Walls
