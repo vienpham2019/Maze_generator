@@ -36,7 +36,7 @@ class App extends Component{
 
   run_set_point = () => {
     let canvas = this.refs.maze
-    let {width , rows } = this.state 
+    let {width , rows} = this.state 
     let cols = Math.floor(rows * ((window.innerWidth * .95) / (window.innerHeight * .9))) 
     let size = Math.floor(width / cols)
     let {offsetLeft , offsetTop} = canvas
@@ -47,6 +47,10 @@ class App extends Component{
     if(!add_event){
       canvas.addEventListener('mousedown' , e => {
         add_event = true
+        
+        let {width , rows} = this.state 
+        let cols = Math.floor(rows * ((window.innerWidth * .95) / (window.innerHeight * .9))) 
+        let size = Math.floor(width / cols)
 
         let {pageX , pageY} = e
         let x = Math.floor(((pageX - offsetLeft) / size)) * (size) + (size / 2) + offsetLeft
@@ -158,8 +162,7 @@ class App extends Component{
                   placeholder="Minimum 15 and Maximum 50"
                   style={{minWidth: 100}}
                   onChange={(e) => {
-                    let rows = Math.floor(e.target.value)
-                    this.setState({rows})
+                    this.setState({rows: Math.floor(e.target.value)})
                   }}
                 ></input>
               </div>

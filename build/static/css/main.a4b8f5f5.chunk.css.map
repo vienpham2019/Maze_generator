@@ -1,0 +1,1 @@
+{"version":3,"sources":["index.css"],"names":[],"mappings":"AAAA,EACE,QAAS,CACT,SAAU,CAEV,aACF,CAEA,SAJE,wBAMF","file":"main.a4b8f5f5.chunk.css","sourcesContent":["*{\n  margin: 0;\n  padding: 0;\n  background-color: rgb(185, 185, 185);\n  color: rgb(7, 7, 7);\n}\n\ncanvas{\n  background-color: rgb(185, 185, 185);\n}\n"]}
