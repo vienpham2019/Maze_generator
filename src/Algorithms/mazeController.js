@@ -68,7 +68,7 @@ const setUp = (props) => {
 }
 
 const create_node = (not_walls) => {
-  let store = []
+  let store = new Map()
   for(let i = 0; i < rows ; i ++){
     for(let j = 0; j < cols ; j ++){
       let walls = not_walls
@@ -102,7 +102,8 @@ const create_node = (not_walls) => {
             stack.push(node)
         }
       }
-      store.push(node)
+      // store.push(node)
+      store.set(`${x} , ${y}` , node)
     }
   }
   return store
@@ -113,7 +114,7 @@ const draw_divide_maze = (props) => {
   start_node = new Block(start_location.x , start_location.y , c , size , "blue")
   end_node = new Block(end_location.x , end_location.y , c , size , "green" )
 
-  for(let node of default_nodes){
+  for(let node of default_nodes.values()){
     node.draw('silver')
   }
 
@@ -122,10 +123,10 @@ const draw_divide_maze = (props) => {
       depth_first_search_maze({nodes , default_nodes , canvas , c , stack , size , cols , rows , frame_per_second , speed })
       break
     case "Prim's": 
-      prims_maze({size , nodes , default_nodes , cols , rows , canvas , c , frame_per_second , speed})
+      prims_maze({size , nodes: nodes.values() , default_nodes: default_nodes.values() , cols , rows , canvas , c , frame_per_second , speed})
       break 
     case "Recursive Division": 
-      let draw_delay = recursive_dividion_maze({delay , speed , size , cols , rows , nodes})
+      let draw_delay = recursive_dividion_maze({delay , speed , size , cols , rows , nodes: nodes.values()})
       if(draw_delay){
         setTimeout(() => {
             props.check_recursive_delay(true)
@@ -144,25 +145,25 @@ const run_solve_maze = (algorithms , speed) => {
       a_star({start_node , end_node , nodes , default_nodes , c , canvas , size , speed})
       break
     case "Depth first search": 
-      depth_first_search({nodes , default_nodes , start_node , end_node , c , canvas , size , speed})
+      depth_first_search({nodes: nodes.values() , default_nodes: default_nodes.values() , start_node , end_node , c , canvas , size , speed})
       break
     case "Breadth first search": 
-      breadth_first_search({c , canvas , size , nodes , default_nodes , start_node , end_node , speed})
+      breadth_first_search({c , canvas , size , nodes: nodes.values() , default_nodes: default_nodes.values() , start_node , end_node , speed})
       break 
     case "Dijkstra's": 
       dijkstra({start_node , end_node , nodes, default_nodes , c , canvas , size , speed})
       break 
     case "Greedy best first search": 
-      greedy_best_first_search({start_node , end_node , nodes , default_nodes , c , canvas , size , speed})
+      greedy_best_first_search({start_node , end_node , nodes: nodes.values() , default_nodes: default_nodes.values() , c , canvas , size , speed})
       break 
     case "Bidirectional a star": 
-      bidirectional_a_star({start_node , end_node , nodes , default_nodes , c , canvas , size , speed})
+      bidirectional_a_star({start_node , end_node , nodes: nodes.values() , default_nodes: default_nodes.values() , c , canvas , size , speed})
       break 
     case "Bidirectional dijkstra's": 
-      bidirectional_dijkstra({start_node , end_node , nodes, default_nodes , c , canvas , size , speed})
+      bidirectional_dijkstra({start_node , end_node , nodes: nodes.values() , default_nodes: default_nodes.values() , c , canvas , size , speed})
       break 
     default: 
-      self_solve({nodes , default_nodes , start_node , end_node , c , canvas , size})
+      self_solve({nodes: nodes.values() , default_nodes: default_nodes.values() , start_node , end_node , c , canvas , size})
       break 
   }
 }

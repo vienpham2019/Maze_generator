@@ -1,4 +1,4 @@
-import { Block , Stack } from '../helper_method'
+import { Block } from '../helper_method'
 import {get_top_right_bottom_left} from './helper_method/algorithms_helper_method'
 
 let start_node , end_node , nodes , default_nodes , c , canvas , size , speed 
@@ -17,9 +17,12 @@ const a_star = props => {
 
     end_node.prev_node = null
 
-    open_list = [start_node]
-    close_list = new Stack()
-    current_node = null 
+    // open_list = [start_node]
+    open_list = new Map([
+        [`${start_node.x} , ${start_node.y}` , start_node]
+    ])
+    close_list = new Map()
+    current_node = null
 
     clearTimeout(myReq)
     run_solve_maze()
@@ -35,11 +38,11 @@ const run_solve_maze = () => {
     }, speed);
     c.clearRect(0,0,canvas.width, canvas.height)
 
-    for(let node of default_nodes) {
+    for(let node of default_nodes.values()) {
         node.draw('silver')
     }
 
-    for(let node of nodes){
+    for(let node of nodes.values()){
         node.draw()
     }
 
@@ -50,7 +53,7 @@ const run_solve_maze = () => {
         node.draw()
     }
 
-    for(let node of open_list){
+    for(let node of open_list.values()){
         node.color = 'LightSkyBlue'
         node.draw()
     }
@@ -59,18 +62,20 @@ const run_solve_maze = () => {
         end_node.prev_node = current_node.prev_node
     }
 
-    if(open_list.length > 0 && !end_node.prev_node){
-        let remove_index = 0 
-        current_node = open_list[0]
-        for(let i = 0 ; i < open_list.length ; i ++){
-            if(open_list[i].f < current_node.f) {
-                current_node = open_list[i] 
-                remove_index = i 
+    if(open_list.size > 0 && !end_node.prev_node){
+        let remove_key = null
+        for(let [key , node] of open_list){
+            if(remove_key === null) {
+                remove_key = key 
+                current_node = open_list.get(key)
+            }else if(node.f < current_node.f) {
+                current_node = node 
+                remove_key = key
             }
         }
-        open_list.splice(remove_index , 1)
+        open_list.delete(remove_key)
 
-        close_list.push(`${current_node.x} , ${current_node.y}` , current_node)
+        close_list.set(`${current_node.x} , ${current_node.y}` , current_node)
         find_child_node()
     }
 
@@ -109,14 +114,14 @@ const add_node = (neighbor_node , wall_num) => {
         &&  !close_list.has(`${neighbor_node.x} , ${neighbor_node.y}`)
     ){
         let {x , y} = neighbor_node
-        let node_in_open = open_list.find(n => n.x === x  && n.y === y)
+        let node_in_open = open_list.get(`${x} , ${y}`)
         let n_g = current_node.g + size
 
         if(node_in_open){
             if(node_in_open.g > n_g) update_node(node_in_open, n_g , current_node ) 
         }else{
             let new_node = set_node(neighbor_node, n_g)
-            open_list.push(new_node)
+            open_list.set(`${new_node.x} , ${new_node.y}` , new_node)
         }
     }
 }

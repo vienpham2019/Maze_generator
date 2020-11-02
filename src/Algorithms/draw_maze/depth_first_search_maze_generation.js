@@ -1,4 +1,5 @@
 import {Block} from '../helper_method'
+
 let nodes , default_nodes , canvas , c , stack , size , cols , rows , frame_per_second , speed 
 
 let block , myReq , visited_nodes , width , height 
@@ -20,9 +21,11 @@ const depth_first_search_maze = props => {
     width = cols * size 
     height = rows * size  
 
-    let start_node = nodes.find(n => n.x === (size / 2) && n.y === (size / 2))
+    let start_node = nodes.get(`${size / 2} , ${size / 2}`)
 
-    visited_nodes = [start_node]
+    visited_nodes = new Map([
+        [`${start_node.x} , ${start_node.y}`, start_node]
+    ])
 
     clearInterval(myReq)
     draw_maze()
@@ -38,11 +41,11 @@ const draw_maze = () => {
     }, frame_per_second / speed);
     c.clearRect(0,0,canvas.width, canvas.height)
 
-    for(let node of default_nodes){
+    for(let node of default_nodes.values()){
         node.draw('silver')
     }
     
-    for(let node of nodes){
+    for(let node of nodes.values()){
         node.draw()
     }
 
@@ -60,33 +63,33 @@ const move_block = () => {
     let y = current_node.y
 
     // top
-    if(y - size > 0 && !visited_nodes.find(n => n.x === x && n.y === y - size)){
-        let top = nodes.find(n => n.x === x && n.y === y - size)
+    if(y - size > 0 && !visited_nodes.has(`${x} , ${y - size}`)){
+        let top = nodes.get(`${x} , ${y - size}`)
         neighbor_nodes.push(top)
     }
 
     // right 
-    if(x + size < width && !visited_nodes.find(n => n.x === x + size && n.y === y)){
-        let right = nodes.find(n => n.x === x + size && n.y === y)
+    if(x + size < width && !visited_nodes.has(`${x + size} , ${y}`)){
+        let right = nodes.get(`${x + size} , ${y}`)
         neighbor_nodes.push(right)
     }
 
     // bottom
-    if(y + size < height && !visited_nodes.find(n => n.x === x && n.y === y + size)){
-        let bottom = nodes.find(n => n.x === x && n.y === y + size)
+    if(y + size < height && !visited_nodes.has(`${x} , ${y + size}`)){
+        let bottom = nodes.get(`${x} , ${y + size}`)
         neighbor_nodes.push(bottom)
     }
 
     // left
-    if(x - size > 0 && !visited_nodes.find(n => n.x === x - size && n.y === y)){
-        let left = nodes.find(n => n.x === x - size && n.y === y)
+    if(x - size > 0 && !visited_nodes.has(`${x - size} , ${y}`)){
+        let left = nodes.get(`${x - size} , ${y}`)
         neighbor_nodes.push(left)
     }
 
     if(neighbor_nodes.length > 0){
         let next_node = neighbor_nodes[Math.floor(Math.random() * neighbor_nodes.length)]
         stack.unshift(next_node)
-        visited_nodes.push(next_node)
+        visited_nodes.set(`${next_node.x} , ${next_node.y}` , next_node)
         let left_right = next_node.x - current_node.x
         let up_down = next_node.y - current_node.y
 
