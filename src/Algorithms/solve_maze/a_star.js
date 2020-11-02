@@ -67,7 +67,7 @@ const run_solve_maze = () => {
         for(let [key , node] of open_list){
             if(remove_key === null) {
                 remove_key = key 
-                current_node = open_list.get(key)
+                current_node = node
             }else if(node.f < current_node.f) {
                 current_node = node 
                 remove_key = key
