@@ -1,4 +1,4 @@
-import {Block , Stack} from '../helper_method'
+import {Block} from '../helper_method'
 import {get_top_right_bottom_left} from './helper_method/algorithms_helper_method'
 
 let c , canvas , size , nodes, default_nodes , start_node , end_node , speed 
@@ -9,7 +9,7 @@ const breadth_first_search = (props) => {
     c = props.c
     canvas = props.canvas 
     size = props.size 
-    visited_nodes = new Stack()
+    visited_nodes = new Map()
     nodes = props.nodes 
     default_nodes = props.default_nodes
 
@@ -41,10 +41,10 @@ const run_solve_maze = () => {
     }, speed);
     c.clearRect(0,0,canvas.width, canvas.height)
 
-    for(let node of default_nodes){
+    for(let node of default_nodes.values()){
         node.draw('silver')
     }
-    for(let node of nodes){
+    for(let node of nodes.values()){
         node.draw()
     }
 
@@ -80,7 +80,7 @@ const solve_maze = () => {
 }
   
 const check_neighbor_node = (node) => {
-    let current_find_node = nodes.find(c_n => c_n.x === node.x && c_n.y === node.y )
+    let current_find_node = nodes.get(`${node.x} , ${node.y}`)
     let { top , right , bottom , left } = get_top_right_bottom_left(node , nodes , size)
     // top 
     add_node(top , node , 0 , current_find_node)
@@ -109,7 +109,7 @@ const add_node = (neighbor_node , node , wall_num , current_find_node) => {
         }else{
             let new_block = new Block(x, y , c , size , color, node)
             quere.push(new_block)
-            visited_nodes.push(`${new_block.x} , ${new_block.y}` , new_block)
+            visited_nodes.set(`${new_block.x} , ${new_block.y}` , new_block)
         }
     }
     return 

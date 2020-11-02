@@ -145,25 +145,25 @@ const run_solve_maze = (algorithms , speed) => {
       a_star({start_node , end_node , nodes , default_nodes , c , canvas , size , speed})
       break
     case "Depth first search": 
-      depth_first_search({nodes: nodes.values() , default_nodes: default_nodes.values() , start_node , end_node , c , canvas , size , speed})
+      depth_first_search({nodes , default_nodes , start_node , end_node , c , canvas , size , speed})
       break
     case "Breadth first search": 
-      breadth_first_search({c , canvas , size , nodes: nodes.values() , default_nodes: default_nodes.values() , start_node , end_node , speed})
+      breadth_first_search({c , canvas , size , nodes , default_nodes , start_node , end_node , speed})
       break 
     case "Dijkstra's": 
       dijkstra({start_node , end_node , nodes, default_nodes , c , canvas , size , speed})
       break 
     case "Greedy best first search": 
-      greedy_best_first_search({start_node , end_node , nodes: nodes.values() , default_nodes: default_nodes.values() , c , canvas , size , speed})
+      greedy_best_first_search({start_node , end_node , nodes , default_nodes , c , canvas , size , speed})
       break 
     case "Bidirectional a star": 
-      bidirectional_a_star({start_node , end_node , nodes: nodes.values() , default_nodes: default_nodes.values() , c , canvas , size , speed})
+      bidirectional_a_star({start_node , end_node , nodes , default_nodes , c , canvas , size , speed})
       break 
     case "Bidirectional dijkstra's": 
-      bidirectional_dijkstra({start_node , end_node , nodes: nodes.values() , default_nodes: default_nodes.values() , c , canvas , size , speed})
+      bidirectional_dijkstra({start_node , end_node , nodes , default_nodes , c , canvas , size , speed})
       break 
     default: 
-      self_solve({nodes: nodes.values() , default_nodes: default_nodes.values() , start_node , end_node , c , canvas , size})
+      self_solve({nodes , default_nodes , start_node , end_node , c , canvas , size})
       break 
   }
 }

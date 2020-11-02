@@ -20,8 +20,8 @@ const depth_first_search = (props) => {
     end_node.prev_node = null
 
     stack = new Stack()
-    visited_nodes = new Stack()
-    visited_nodes.push(`${start_node.x} , ${start_node.y}` , start_node)
+    visited_nodes = new Map()
+    visited_nodes.set(`${start_node.x} , ${start_node.y}` , start_node)
     current_node = start_node 
 
     stack.push(`${start_node.x} , ${start_node.y}` , start_node)
@@ -41,11 +41,11 @@ const run_solve_maze = () => {
         run_solve_maze()
     }, speed);
     c.clearRect(0,0,canvas.width, canvas.height)
-    for(let node of default_nodes){
+    for(let node of default_nodes.values()){
         node.draw('silver')
     }
     
-    for(let node of nodes){
+    for(let node of nodes.values()){
         node.draw()
     }
 
@@ -77,7 +77,6 @@ const run_solve_maze = () => {
     }
 
     if(finish_path){
-        // cancelAnimationFrame(myReq)
         clearTimeout(myReq)
     }
 }
@@ -96,7 +95,7 @@ const find_path = () => {
 const check_neighbor_node = () => {
     let {x , y} = current_node // block 
     // let color = "MidnightBlue"
-    let current_find_node = nodes.find(c_n => c_n.x === x && c_n.y === y )
+    let current_find_node = nodes.get(`${x} , ${y}`)
     let {top , right , bottom , left } = get_top_right_bottom_left(current_node , nodes , size)
 
     // bottom
@@ -127,7 +126,7 @@ const add_node = (neighbor_node , current_find_node , wall_num) => {
         }else{
             let new_block = new Block(x, y, c , size ,color , current_node)
             stack.push(`${new_block.x} , ${new_block.y}` , new_block)
-            visited_nodes.push(`${new_block.x} , ${new_block.y}` , new_block)
+            visited_nodes.set(`${new_block.x} , ${new_block.y}` , new_block)
         }
         return true 
     }
