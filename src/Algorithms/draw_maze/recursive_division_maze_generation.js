@@ -22,7 +22,7 @@ const draw_maze = (nodes_array , x_max, y_max, x_min , y_min) => {
     delay ++
   
     setTimeout(() => {
-      for(let node of nodes_array){
+      for(let node of nodes_array.values()){
           if(x_or_y > 0) { // x
               if (
                   node.x === random_x * size + (size / 2) 
@@ -33,7 +33,7 @@ const draw_maze = (nodes_array , x_max, y_max, x_min , y_min) => {
                   if (node.y !== random_y * size + (size / 2)){
                       node.walls[1] = true
                       let {x , y} = node
-                      let neightbor_node = nodes_array.find(node => node.x === (x + size) && node.y === y) 
+                      let neightbor_node = nodes_array.get(`${x + size} , ${y}`) 
                       if(neightbor_node){
                           neightbor_node.walls[3] = true
                       } 
@@ -48,7 +48,7 @@ const draw_maze = (nodes_array , x_max, y_max, x_min , y_min) => {
                   if(node.x !== random_x * size + (size / 2)){
                       node.walls[2] = true
                       let {x , y} = node
-                      let neightbor_node = nodes_array.find(node => node.x === x && node.y === (y + size)) 
+                      let neightbor_node = nodes_array.get(`${x} , ${y + size}`) 
                       if(neightbor_node){
                         neightbor_node.walls[0] = true
                       } 
