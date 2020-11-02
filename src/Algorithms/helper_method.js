@@ -125,26 +125,8 @@ class Stack {
       return this.items[this.keys[this.count - 1]];
     }
 
-    has(key){
-        return this.items[key]
-    }
-
     values(){
         return Object.values(this.items)
-    }
-
-    delete(key){
-        delete this.items[key]
-        this.count-- 
-        this.keys = this.keys.filter(k => k !== key )
-    }
-
-    get_index(index){
-        return this.items[this.keys[index]]
-    }
-
-    size(){
-        return this.count
     }
 }
 

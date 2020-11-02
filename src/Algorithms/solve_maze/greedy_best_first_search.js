@@ -66,8 +66,6 @@ const run_solve_maze = () => {
     }
 
     if(open_list.size > 0 && !end_node.prev_node){
-        // h is the distance between current node to end node 
-        // current_node = open_list.sort((a,b) => a.h - b.h)[0] 
         current_node = null
         for(let node of open_list.values()){
             if(current_node === null || node.h < current_node.h) current_node = node

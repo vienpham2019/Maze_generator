@@ -171,28 +171,33 @@ const run_solve_maze = (algorithms , speed) => {
 const update_info = props => {
   if(props.start_location){
     start_location = props.start_location
+    let c_node = nodes.get(`${start_node.x} , ${start_node.y}`)
+    if(c_node.walls.every(n => n === true)) c_node.walls = new Array(4).fill(!c_node.walls[0])
+    
     start_node = new Block(start_location.x , start_location.y , c , size , "blue")
   }
 
   if(props.end_location){
     end_location = props.end_location
+    let c_node = nodes.get(`${end_location.x} , ${end_location.y}`)
+    if(c_node.walls.every(n => n === true)) c_node.walls = new Array(4).fill(!c_node.walls[0])
+      
     end_node = new Block(end_location.x , end_location.y , c , size , "green" )
   }
 
   if(props.set_walls){
-    c.clearRect(0,0,canvas.width, canvas.height)
-    clear_path()
     let {x , y} = props.set_walls
-    for(let node of default_nodes) {
-      node.draw('silver')
-    }
+    nodes.get(`${x} , ${y}`).walls = new Array(4).fill(!nodes.get(`${x} , ${y}`).walls[0])
+  }
 
-    for(let node of nodes) {
-      if(node.x === x && node.y === y){
-        node.walls = new Array(4).fill(!node.walls[0])
-      }
-      node.draw()
-    }
+  c.clearRect(0,0,canvas.width, canvas.height)
+  clear_path()
+  for(let node of default_nodes.values()) {
+    node.draw('silver')
+  }
+
+  for(let node of nodes.values()) {
+    node.draw()
   }
 }
 

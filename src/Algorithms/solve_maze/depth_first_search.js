@@ -95,29 +95,29 @@ const find_path = () => {
 const check_neighbor_node = () => {
     let {x , y} = current_node // block 
     // let color = "MidnightBlue"
-    let current_find_node = nodes.get(`${x} , ${y}`)
+    // let current_find_node = nodes.get(`${x} , ${y}`)
     let {top , right , bottom , left } = get_top_right_bottom_left(current_node , nodes , size)
 
     // bottom
-    if(add_node(bottom , current_find_node , 2)) return true 
+    if(add_node(bottom , 0)) return true 
 
     // right
-    if(add_node(right , current_find_node , 1)) return true 
+    if(add_node(right , 3)) return true 
 
     // top 
-    if(add_node(top , current_find_node , 0)) return true 
+    if(add_node(top , 2)) return true 
 
     // left 
-    if(add_node(left , current_find_node , 3)) return true 
+    if(add_node(left , 1)) return true 
 
     return false 
 }
 
-const add_node = (neighbor_node , current_find_node , wall_num) => {
+const add_node = (neighbor_node, wall_num) => {
     let color = 'MediumBlue'
     if(
         neighbor_node 
-        && !current_find_node.walls[wall_num] 
+        && !neighbor_node.walls[wall_num] 
         && !visited_nodes.has(`${neighbor_node.x} , ${neighbor_node.y}`)
     ){
         let {x , y} = neighbor_node

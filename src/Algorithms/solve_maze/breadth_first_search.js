@@ -24,18 +24,15 @@ const breadth_first_search = (props) => {
     speed = props.speed 
 
     quere.push(start_node)
-    // cancelAnimationFrame(myReq)
     clearTimeout(myReq)
     run_solve_maze()
 }
 
 const stop_breadth_first_search = () => {
-    // cancelAnimationFrame(myReq)
     clearTimeout(myReq)
 }
 
 const run_solve_maze = () => {
-    // myReq = requestAnimationFrame(run_solve_maze)
     myReq = setTimeout(() => {
         run_solve_maze()
     }, speed);
@@ -59,7 +56,6 @@ const run_solve_maze = () => {
     }
     
     if(finish_path){
-        // cancelAnimationFrame(myReq)
         clearTimeout(myReq)
     }
     if(!end_node.prev_node && !finish_path){
@@ -70,7 +66,6 @@ const run_solve_maze = () => {
 const solve_maze = () => {
     let quere_nodes = quere.slice()
     quere.shift()
-    // visited_nodes_for_path.push(current_node)
     if(end_node.prev_node){
         return
     }
@@ -80,26 +75,25 @@ const solve_maze = () => {
 }
   
 const check_neighbor_node = (node) => {
-    let current_find_node = nodes.get(`${node.x} , ${node.y}`)
     let { top , right , bottom , left } = get_top_right_bottom_left(node , nodes , size)
     // top 
-    add_node(top , node , 0 , current_find_node)
+    add_node(top , node , 2)
 
     // right
-    add_node(right , node , 1 , current_find_node)
+    add_node(right , node , 3)
 
     // bottom
-    add_node(bottom , node , 2 , current_find_node)
+    add_node(bottom , node , 0)
 
     // left 
-    add_node(left , node , 3 , current_find_node)
+    add_node(left , node , 1)
 }
 
-const add_node = (neighbor_node , node , wall_num , current_find_node) => {
+const add_node = (neighbor_node , node , wall_num) => {
     let color = 'MediumBlue' 
     if(
         neighbor_node 
-        && !current_find_node.walls[wall_num] 
+        && !neighbor_node.walls[wall_num] 
         && !visited_nodes.has(`${neighbor_node.x} , ${neighbor_node.y}`)
         ){
         let {x , y} = neighbor_node
