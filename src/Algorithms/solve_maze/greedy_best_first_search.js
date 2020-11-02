@@ -1,4 +1,4 @@
-import { Block , Stack} from '../helper_method'
+import { Block} from '../helper_method'
 import {get_top_right_bottom_left} from './helper_method/algorithms_helper_method'
 
 let start_node , end_node , nodes , default_nodes , c , canvas , size , speed 
@@ -17,9 +17,11 @@ const greedy_best_first_search = props => {
 
     end_node.prev_node = null
     
-    open_list = [start_node]
-    close_list = new Stack()
-    current_node = null 
+    open_list = new Map([ 
+        [`${start_node.x} , ${start_node.y}` , start_node]
+    ])
+    close_list = new Map()
+    current_node = null
     finish_path = false 
 
     // cancelAnimationFrame(myReq)
@@ -39,11 +41,11 @@ const run_solve_maze = () => {
     }, speed);
     c.clearRect(0,0,canvas.width, canvas.height)
     
-    for(let node of default_nodes){
+    for(let node of default_nodes.values()){
         node.draw('silver')
     }
 
-    for(let node of nodes){
+    for(let node of nodes.values()){
         node.draw()
     }
 
@@ -54,7 +56,7 @@ const run_solve_maze = () => {
         node.draw()
     }
 
-    for(let node of open_list){
+    for(let node of open_list.values()){
         node.color = 'LightSkyBlue' 
         node.draw()
     }
@@ -63,10 +65,14 @@ const run_solve_maze = () => {
         end_node.prev_node = current_node.prev_node
     }
 
-    if(open_list.length > 0 && !end_node.prev_node){
+    if(open_list.size > 0 && !end_node.prev_node){
         // h is the distance between current node to end node 
-        current_node = open_list.sort((a,b) => a.h - b.h)[0] 
-        close_list.push(`${current_node.x} , ${current_node.y}` , current_node)
+        // current_node = open_list.sort((a,b) => a.h - b.h)[0] 
+        current_node = null
+        for(let node of open_list.values()){
+            if(current_node === null || node.h < current_node.h) current_node = node
+        }
+        close_list.set(`${current_node.x} , ${current_node.y}` , current_node)
         find_child_node()
     }
 
@@ -97,7 +103,8 @@ const find_child_node = () => {
     // bottom (x , y + size)
     add_node(bottom , 0)
 
-    open_list = open_list.filter(node => node.x === current_node.x && node.y === current_node.y ? false : true )
+    // open_list = open_list.filter(node => node.x === current_node.x && node.y === current_node.y ? false : true )
+    open_list.delete(`${current_node.x} , ${current_node.y}`)
 }
 
 const add_node = (neighbor_node , wall_num) => {
@@ -107,8 +114,7 @@ const add_node = (neighbor_node , wall_num) => {
         &&!close_list.has(`${neighbor_node.x} , ${neighbor_node.y}`)
     ){
         let {x , y} = neighbor_node
-        let node_in_open = open_list.find(n => n.x === x  && n.y === y)
-        if(!node_in_open) open_list.push(set_node(neighbor_node))
+        if(!open_list.has(`${x} , ${y}`)) open_list.set(`${x} , ${y}` , set_node(neighbor_node))
     }
 }
 
@@ -128,7 +134,7 @@ const set_node = (node) => {
     let color = 'MediumBlue'
     let [x_1 , y_1] = [node.x , node.y]
     let [x_2 , y_2] = [end_node.x , end_node.y]   
-    let h = (Math.abs(x_1 - x_2) + Math.abs(y_1 - y_2)) * size
+    let h = Math.abs(x_1 - x_2) + Math.abs(y_1 - y_2)
     let new_node = new Block(x_1 , y_1 , c , size , color , current_node , null , h )
     return new_node 
 }

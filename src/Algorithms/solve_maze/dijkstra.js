@@ -69,12 +69,9 @@ const run_solve_maze = () => {
     if(open_list.size > 0 && !end_node.prev_node){
         let remove_key = null 
         for(let [key , node] of open_list){
-            if(remove_key === null) {
+            if(remove_key === null || node.distance < current_node.distance) {
                 remove_key = key 
                 current_node = node
-            }else if(node.distance < current_node.distance) {
-                current_node = node 
-                remove_key = key 
             }
         }
         open_list.delete(remove_key)

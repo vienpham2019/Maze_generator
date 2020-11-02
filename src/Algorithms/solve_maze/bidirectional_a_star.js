@@ -15,11 +15,15 @@ const bidirectional_a_star = props => {
     size = props.size 
     speed = props.speed 
 
-    open_list_1 = [start_node]
-    close_list_1 = new Stack()
+    open_list_1 = new Map([  
+        [`${start_node.x} , ${start_node.y}` , start_node]
+    ])
+    close_list_1 = new Map()
 
-    open_list_2 = [end_node]
-    close_list_2 = new Stack()
+    open_list_2 = new Map([
+        [`${end_node.x} , ${end_node.y}` , end_node]
+    ])
+    close_list_2 = new Map()
 
     current_node_1 = null 
     current_node_2 = null 
@@ -41,28 +45,28 @@ const run_solve_maze = () => {
     }, speed);
     c.clearRect(0,0,canvas.width, canvas.height)
     
-    for(let node of default_nodes) {
+    for(let node of default_nodes.values()) {
         node.draw('silver')
     }
 
-    for(let node of nodes ){
+    for(let node of nodes.values()){
         node.draw()
     }
 
     print_close_and_open_list(close_list_1 , open_list_1 , 'MediumBlue' , 'LightSkyBlue' )
     print_close_and_open_list(close_list_2 , open_list_2 , 'CadetBlue' , 'LightCyan')
 
-    if(open_list_1.length > 0 && !finish_search){
+    if(open_list_1.size > 0 && !finish_search){
         find_current_node(open_list_1 , 1)
 
-        close_list_1.push(`${current_node_1.x} , ${current_node_1.y}` , current_node_1)
+        close_list_1.set(`${current_node_1.x} , ${current_node_1.y}` , current_node_1)
         open_list_1 = find_child_node(current_node_1 , end_node, open_list_1 , close_list_1 , close_list_2)
     }
 
-    if(open_list_2.length > 0 && !finish_search){
+    if(open_list_2.size > 0 && !finish_search){
         find_current_node(open_list_2 , 2)
 
-        close_list_2.push(`${current_node_2.x} , ${current_node_2.y}` , current_node_2)
+        close_list_2.set(`${current_node_2.x} , ${current_node_2.y}` , current_node_2)
         open_list_2 = find_child_node(current_node_2 , start_node, open_list_2 , close_list_2 , close_list_1)
     }
 
@@ -80,15 +84,17 @@ const run_solve_maze = () => {
 }
 
 const find_current_node = (list , list_num) => {
-    let c_node = list[0]
-    let remove_index = 0 
-    for(let i = 0 ; i < list.length ; i ++){
-        if(list[i].f < c_node.f){
-            c_node = list[i]
-            remove_index = i 
+    let c_node = null 
+    let remove_key = null
+    for(let [key , node] of list){
+        if(c_node === null || node.f < c_node.f){
+            c_node = node 
+            remove_key = key 
         }
     }
-    list.splice(remove_index , 1)
+
+    list.delete(remove_key)
+
     if(list_num === 1){
         open_list_1 = list 
         current_node_1 = c_node 
@@ -100,7 +106,7 @@ const find_current_node = (list , list_num) => {
 
 const print_close_and_open_list = (close_list , open_list , close_color , open_color) => {
     if(!finish_search){
-        for(let open_node of open_list){
+        for(let open_node of open_list.values()){
             open_node.color = open_color
             open_node.draw()
         }
@@ -113,7 +119,7 @@ const print_close_and_open_list = (close_list , open_list , close_color , open_c
 }
 
 const check_for_mix_node = (target_close_list , x , y) => {
-    let node = target_close_list.has(`${x} , ${y}`)
+    let node = target_close_list.get(`${x} , ${y}`)
     if(node){
         finish_search = true 
         if(close_list_1.has(`${x} , ${y}`)){
@@ -152,7 +158,7 @@ const add_node = (c_node , neighbor_node , wall_num , close_list , open_list , t
         && !close_list.has(`${neighbor_node.x} , ${neighbor_node.y}`)
     ){
         let {x , y} = neighbor_node 
-        let node_in_open = open_list.find(n => n.x === x  && n.y === y)
+        let node_in_open = open_list.get(`${x} , ${y}`)
         let n_g = c_node.g + size
 
         if(!check_for_mix_node(target_close_list , x , y)){
@@ -160,7 +166,7 @@ const add_node = (c_node , neighbor_node , wall_num , close_list , open_list , t
                 if(n_g < node_in_open.g) update_node(node_in_open, n_g , c_node )
             }else{
                 let new_node = set_node(neighbor_node , n_g , c_node , target_node)
-                open_list.push(new_node)
+                open_list.set(`${new_node.x} , ${new_node.y}` , new_node)
             }
         }
     }
