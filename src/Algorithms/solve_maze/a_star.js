@@ -82,7 +82,8 @@ const run_solve_maze = () => {
         current_node = current_node.prev_node
     }
 
-    if(!current_node){
+    if(!current_node || open_list.size === 0){
+        alert('finish path')
         clearTimeout(myReq)
     }
 }

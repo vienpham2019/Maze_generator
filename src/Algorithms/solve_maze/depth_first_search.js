@@ -76,7 +76,8 @@ const run_solve_maze = () => {
         find_path() 
     }
 
-    if(finish_path){
+    if(finish_path || stack.count === 0){
+        alert('Finish path')
         clearTimeout(myReq)
     }
 }
@@ -93,9 +94,6 @@ const find_path = () => {
 }
 
 const check_neighbor_node = () => {
-    let {x , y} = current_node // block 
-    // let color = "MidnightBlue"
-    // let current_find_node = nodes.get(`${x} , ${y}`)
     let {top , right , bottom , left } = get_top_right_bottom_left(current_node , nodes , size)
 
     // bottom
