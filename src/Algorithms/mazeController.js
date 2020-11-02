@@ -123,10 +123,10 @@ const draw_divide_maze = (props) => {
       depth_first_search_maze({nodes , default_nodes , canvas , c , stack , size , cols , rows , frame_per_second , speed })
       break
     case "Prim's": 
-      prims_maze({size , nodes: nodes.values() , default_nodes: default_nodes.values() , cols , rows , canvas , c , frame_per_second , speed})
+      prims_maze({size , nodes , default_nodes , cols , rows , canvas , c , frame_per_second , speed})
       break 
     case "Recursive Division": 
-      let draw_delay = recursive_dividion_maze({delay , speed , size , cols , rows , nodes: nodes.values()})
+      let draw_delay = recursive_dividion_maze({delay , speed , size , cols , rows , nodes})
       if(draw_delay){
         setTimeout(() => {
             props.check_recursive_delay(true)
