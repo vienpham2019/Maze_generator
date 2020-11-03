@@ -9,21 +9,23 @@ const breadth_first_search = (props) => {
     c = props.c
     canvas = props.canvas 
     size = props.size 
-    visited_nodes = new Map()
     nodes = props.nodes 
     default_nodes = props.default_nodes
 
-    quere = []
     finish_path = false 
     current_node = null  
     start_node = props.start_node
     end_node = props.end_node
+    start_node.color = 'MediumBlue' 
+    quere = [start_node]
+    visited_nodes = new Map([
+        [`${start_node.x} , ${start_node.y}` , start_node]
+    ])
 
     end_node.prev_node = null
 
     speed = props.speed 
 
-    quere.push(start_node)
     clearTimeout(myReq)
     run_solve_maze()
 }
@@ -54,12 +56,13 @@ const run_solve_maze = () => {
         end_node.draw()
         find_path()
     }
+
+    if(!end_node.prev_node && !finish_path){
+        solve_maze()
+    }
     
     if(finish_path){
         clearTimeout(myReq)
-    }
-    if(!end_node.prev_node && !finish_path){
-        solve_maze()
     }
 }
   

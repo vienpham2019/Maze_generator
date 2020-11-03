@@ -17,7 +17,6 @@ const a_star = props => {
 
     end_node.prev_node = null
 
-    // open_list = [start_node]
     open_list = new Map([
         [`${start_node.x} , ${start_node.y}` , start_node]
     ])
@@ -82,8 +81,7 @@ const run_solve_maze = () => {
         current_node = current_node.prev_node
     }
 
-    if(!current_node || open_list.size === 0){
-        alert('finish path')
+    if(current_node === null){
         clearTimeout(myReq)
     }
 }

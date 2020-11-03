@@ -76,8 +76,7 @@ const run_solve_maze = () => {
         find_path() 
     }
 
-    if(finish_path || stack.count === 0){
-        alert('Finish path')
+    if(finish_path){
         clearTimeout(myReq)
     }
 }
