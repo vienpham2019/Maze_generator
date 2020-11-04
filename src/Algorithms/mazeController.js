@@ -187,7 +187,10 @@ const update_info = props => {
 
   if(props.set_walls){
     let {x , y} = props.set_walls
-    nodes.get(`${x} , ${y}`).walls = new Array(4).fill(!nodes.get(`${x} , ${y}`).walls[0])
+    let in_start_position = x === start_location.x && y === start_location.y
+    let in_end_position = x === end_location.x && y === end_location.y
+    if(!in_start_position && !in_end_position)
+      nodes.get(`${x} , ${y}`).walls = new Array(4).fill(!nodes.get(`${x} , ${y}`).walls[0])
   }
 
   c.clearRect(0,0,canvas.width, canvas.height)
